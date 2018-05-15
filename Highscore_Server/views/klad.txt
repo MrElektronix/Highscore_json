@@ -1,0 +1,12 @@
+<table>
+	<th>Team Names</th>
+	<th>Scores</th>
+	
+	<% for (let i = 0; i < scoreArray.length; i++) {%>
+		<% for (let j = 0; j < teamNameArray[i].length; j++) {%>
+			<tr>
+				<td><%= teamNameArray[j]%></td>
+				<td><%= scoreArray[i] %></td>
+			</tr>
+	<% } } %>
+</table>
