@@ -1,7 +1,6 @@
 class Dictionary {
     constructor(){
         this.dict = undefined;
-        this.Start();
     }
 
     Start(){
@@ -13,20 +12,24 @@ class Dictionary {
     }
 
     CheckDictionary(arrayName){
-        let tempArray = [];
+        let times = [];
+        let teams = [];
+        
         for (let i = 0; i < arrayName.length; i++){
-            for (let key in this.dict){
-                let value = this.dict[key];
-                if (arrayName[i] == value){
-                    tempArray.push(key);
+            times.push(arrayName[i]);
+        }
+
+        for (let key in this.dict){
+            let value = this.dict[key];
+            for (let t = 0; t < times.length; t++){
+                if (times[t] == value){
+                    teams.push(value);
                 }
             }
         }
 
-        if(tempArray.length == arrayName.length) {
-            return tempArray;
-        }
     }
 }
+
 
 module.exports = Dictionary;

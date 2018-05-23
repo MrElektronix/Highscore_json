@@ -63,8 +63,3 @@ app.get("/createhighscorestable", (req, res)=>{
 		res.send("Main table created")
 	});
 });
-
-
-
-
-

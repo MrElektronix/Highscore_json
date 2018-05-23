@@ -1,0 +1,44 @@
+/*
+aqua: 00abcd
+drkblue: 0e2031
+red:e83f4b
+ltblue: d5deea
+*/
+
+body {
+    background-image: url("https://upevents.nl/wp-content/blogs.dir/1/files/2017/12/Lasergamen-Amsterdam-a-2100x1050.jpg");
+    background-size: cover;
+    background-attachment: fixed;
+    color: #0e2031;
+}
+
+#header {
+    font-family: arial, sans-serif;
+    color: #0e2031;
+}
+
+table {
+    opacity: 0.98;
+    background-color: #e83f4b;
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 80%;
+    border-radius: 7px;
+    -webkit-box-shadow: 10px 13px 37px 5px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 10px 13px 37px 5px rgba(0, 0, 0, 0.75);
+    box-shadow: 10px 13px 37px 5px rgba(0, 0, 0, 0.75);
+}
+
+table td:first-child {
+    width: 1rem !important;
+}
+
+td {
+    text-align: left;
+    padding: 12px;
+    width: 100px;
+}
+
+tr:nth-child(even) {
+    background-color: #d5deea;
+}

@@ -31,13 +31,22 @@ app.get('/table', (req, res)=>{
 	Score.findOne({}, (err, results)=>{
 		if (err) throw err;
 		if (results) {
+			highDict.Start();
+
 			for (let i = 0; i < results.Scores.length; i++){
+
 				highDict.Add(results.TeamNames[i], results.Scores[i]);
 			}
 			
 			SortScores(results.Scores);
+			//console.log("Scores: " + results.Scores);
+			//console.log("Teams: " + highDict.CheckDictionary(results.Scores));
+			highDict.CheckDictionary(results.Scores);
 
-			res.render('home.ejs', {scoreArray: results.Scores, teamNameArray: highDict.CheckDictionary(results.Scores)});
+			
+
+
+			res.render('home.ejs', {scoreArray: results.Scores, teamNameArray: "penis"});
 			
 		} else{
 			res.render('home.ejs', {scoreArray: "Nope", teamNameArray: "Nope"});
@@ -68,7 +77,7 @@ io.on("connection", (socket)=>{
 		}
 
 	});
-	
+
 	socket.on("newERTeam", (data)=>{
 		MakeTeam(data.TeamName, CheckDate());
 	});
@@ -87,10 +96,26 @@ io.on("connection", (socket)=>{
 	});
 
 	socket.on("newTime", (data)=>{
-		RemoveSchemaData(Score);
-		//CheckHighscore(teamNames[Math.floor(Math.random() * teamNames.length)], data.Minutes, data.Seconds);
-		socket.emit("catchdata", {hello: "hello"});
+		let randomName = teamNames[Math.floor(Math.random() * teamNames.length)];
+		
+		CheckTeamName(randomName);
+		CheckHighscore(randomName, data.Minutes, data.Seconds);
 	});
+
+	socket.on("deleteTime", ()=>{
+		RemoveSchemaData(Score);
+	});
+
+	let CheckTeamName = (teamname)=> {
+		Score.findOne({TeamNames: teamname}, (err, result)=>{
+			if (err) throw err;
+			if (result) {
+				socket.emit("catchdata", {alert: teamname});
+			} else{
+				socket.emit("catchdata", {alert: "name NOT taken"});
+			}
+		});
+	}
 });
 
 let CheckDay = (date)=>{
@@ -105,6 +130,7 @@ let CheckDay = (date)=>{
 		}
 	})
 }
+
 
 let CheckHighscore = (team, minutes, seconds)=>{
 	console.log("checking...");
@@ -230,8 +256,8 @@ let CheckDate = () =>{
 }
 
 
-http.listen(3000, ()=>{
-	console.log("listening on *:3000");
+http.listen(2500, ()=>{
+	console.log("listening on *:2500");
 });
 
 /* ----------------------Email -------------------------------------------------------------------------*/
