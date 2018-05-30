@@ -1,12 +1,11 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
-const TeamSchema = require("./Team.Schema.js").schema;
+let mongoose = require("mongoose");
+let Schema = mongoose.Schema;
+let Team = require("./Team.Schema.js").schema;
 
 let EventSchema = new Schema({
-    eventName: String,
-    eventGamemode: String,
-    eventTeams: [TeamSchema],
-    TeamIndex: Number
+	Name: String,
+	Gamemode: String,
+	Teams: [Team]
 });
 
-module.exports = mongoose.model("EventSchema", EventSchema);
+module.exports = mongoose.model("Event", EventSchema);

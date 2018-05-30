@@ -1,11 +1,13 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
-const EventSchema = require("./Event.Schema.js").schema;
+let mongoose = require("mongoose");
+let Schema = mongoose.Schema;
+let Event = require("./Event.Schema.js").schema;
 
 let DaySchema = new Schema({
-    currentDate: String,
-	Events: [EventSchema],
+	currentDate: String,
+	Events: [Event],
 	EventIndex: Number,
+	TeamIndex: Number
 });
 
-module.exports = mongoose.model("DaySchema", DaySchema);
+
+module.exports = mongoose.model("Day", DaySchema);
