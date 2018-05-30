@@ -23,7 +23,7 @@ class Dictionary {
             let value = this.dict[key];
             for (let t = 0; t < times.length; t++){
                 if (times[t] == value){
-                    teams.push(value);
+                    console.log(teams[t]);
                 }
             }
         }

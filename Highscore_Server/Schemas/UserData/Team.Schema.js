@@ -1,12 +1,12 @@
 let mongoose = require("mongoose");
 let Schema = mongoose.Schema;
-let Player = require("./Player.Schema.js").schema;
+let PlayerSchema = require("./Player.Schema.js").schema;
 
 let TeamSchema = new Schema({
 	TeamName: String,
-	Players: [Player],
+	Players: [PlayerSchema],
 	PlayerIndex: Number,
 	Score: Number
 });
 
-module.exports = mongoose.model("Team", TeamSchema);
+module.exports = mongoose.model("TeamSchema", TeamSchema);

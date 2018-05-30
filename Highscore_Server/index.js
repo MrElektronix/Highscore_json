@@ -1,81 +1,58 @@
-const express = require("express");
-const app = express();
-const mongoose = require("mongoose");
-const http = require("http").Server(app);
 const path = require("path");
+const express = require('express');
+const app = express();
+const http = require("http").Server(app);
 const io = require("socket.io")(http);
+const mongoose = require("mongoose");
+const port = 3000;
 
-app.set("view engine", "ejs");
-app.set('views', path.join(__dirname, 'views'));
-app.use(express.static(__dirname + '/public'));
 
-/* Schemas */
-const Day = require("./Schemas/UserData/Day.Schema");
-const Event = require("./Schemas/UserData/Event.Schema");
-const Team = require("./Schemas/UserData/Team.Schema");
-const Player = require("./Schemas/UserData/Player.Schema");
-const Score = require("./Schemas/UserData/Highscore.Schema");
-const teamNames = ["Apple", "Banana", "Blueberry", "Cherry", "Coconut", "Cranberry", "Fig", "Grape", "Kiwi", "Lemon", "Mango", "Orange", "Peach", "Pear", "Pineapple", "Raspberry", "Strawberry", "Watermelon"];
-const Dictionary = require("./js/Classes/Dictionary");
+/* SCHEMA'S   */
 
-let highDict = new Dictionary();
+const DaySchema = require("./schemas/userdata/Day.Schema");
+const EventSchema = require("./schemas/userdata/Event.Schema");
+const TeamSchema = require("./schemas/userdata/Team.Schema");
+const PlayerSchema = require("./schemas/userdata/Player.Schema");
+const HighscoreSchema = require("./schemas/userdata/escaperoom/Highscore.Schema");
+
+/*-------------------------------------------------------------------------------------*/
+/* CONNECTIONS  */
 mongoose.connect("mongodb://localhost/database");
 
-/*
+app.set("view engine", "ejs"); 
+app.set("views", path.join(__dirname, "views"));
 app.get("/", (req, res)=>{
-	res.sendFile(__dirname + "/views/" + "home.html");
-});
-*/
-
-app.get('/table', (req, res)=>{
-	Score.findOne({}, (err, results)=>{
-		if (err) throw err;
-		if (results) {
-			highDict.Start();
-
-			for (let i = 0; i < results.Scores.length; i++){
-
-				highDict.Add(results.TeamNames[i], results.Scores[i]);
-			}
-			
-			SortScores(results.Scores);
-			//console.log("Scores: " + results.Scores);
-			//console.log("Teams: " + highDict.CheckDictionary(results.Scores));
-			highDict.CheckDictionary(results.Scores);
-
-			
-
-
-			res.render('home.ejs', {scoreArray: results.Scores, teamNameArray: "penis"});
-			
-		} else{
-			res.render('home.ejs', {scoreArray: "Nope", teamNameArray: "Nope"});
-		}
-	});
+    res.send("Hello World !");
 });
 
-let SortScores = (arrayName)=>{
-    arrayName.sort(function(a,b){
-        return b-a;
-    });
-}
+// Page where the highscoreTable is displayed
+app.get("/Highscore_Table", (req, res)=>{ 
+    
+});
 
+
+http.listen(port, "5.157.85.78", (err)=>{
+    if (err){return console.log("Error Occured: ", err)}
+
+    console.log(`server is listening on ${port}`);
+});
+
+
+// Connection with SOCKET.IO//
 io.on("connection", (socket)=>{
-	console.log("a user connected");
-	
-	socket.on("newDay", ()=>{
-		RemoveSchemaData(Day);
+    console.log("user connected");
+
+    socket.on("newDay", ()=>{ 
+		RemoveSchemaData(DaySchema);
 		CheckDay(CheckDate());
 	})
 	
 	socket.on("newEvent", (data)=>{
-		
 		if (data.EventName == "Laser Gamen"){
 			MakeEvent(data.EventName, "Team Deathmatch", CheckDate());
 		} else{
 			MakeEvent(data.EventName, data.GameMode, CheckDate());
 		}
-
 	});
 
 	socket.on("newERTeam", (data)=>{
@@ -91,7 +68,7 @@ io.on("connection", (socket)=>{
 		AddPlayers(data.PlayerInfo_names, data.PlayerInfo_email, CheckDate());
 	});
 	
-	socket.on("sendMail", ()=>{
+	socket.on("sendMail", ()=>{ 
 		ER_EmailData(CheckDate());
 	});
 
@@ -107,7 +84,7 @@ io.on("connection", (socket)=>{
 	});
 
 	let CheckTeamName = (teamname)=> {
-		Score.findOne({TeamNames: teamname}, (err, result)=>{
+		HighscoreSchema.findOne({TeamNames: teamname}, (err, result)=>{
 			if (err) throw err;
 			if (result) {
 				socket.emit("catchdata", {alert: teamname});
@@ -116,14 +93,15 @@ io.on("connection", (socket)=>{
 			}
 		});
 	}
-});
+})
+/*-------------------------------------------------------------------------------------*/
+/* MAKE DAY */
 
-let CheckDay = (date)=>{
-	Day.findOne({currentDate: date}, (err, day)=>{
+let CheckDay = (date)=>{ // Check if the day exists with the date of today
+    DaySchema.findOne({currentDate: date}, (err, day)=>{
 		if (err) throw err;
 		
 		if (!day){
-			console.log("no day");
 			MakeDay(date);
 		} else{
 			console.log("Day exists");
@@ -131,10 +109,78 @@ let CheckDay = (date)=>{
 	})
 }
 
+let MakeDay = (date)=>{
+	let newDay = new DaySchema();
+	newDay.currentDate = date;
+	newDay.EventIndex = -1;
+	SaveData(newDay);
+}
+/*-------------------------------------------------------------------------------------*/
+/* MAKE EVENT */
 
+let MakeEvent = (eventname, gamemode, date)=>{
+	DaySchema.findOne({currentDate: date}, (err, day)=>{
+		if (err) throw err;
+		
+		if (day) {
+			let newEvent = new EventSchema();
+			newEvent.eventName = eventname;
+			newEvent.eventGamemode = gamemode;
+			newEvent.TeamIndex = -1;
+			day.EventIndex += 1;
+			day.Events.push(newEvent);
+
+			SaveData(day);
+		}
+	});
+}
+
+/*-------------------------------------------------------------------------------------*/
+/* MAKE TEAM */
+
+let MakeTeam = (teamname, date)=>{
+	DaySchema.findOne({currentDate: date}, (err, day)=>{
+		if (err) throw err;
+		
+		if (day){
+			let newTeam = new TeamSchema();
+			newTeam.TeamName = teamname;
+			//newTeam.PlayerIndex = -1;
+			day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].PlayerIndex = -1;
+			SaveData(newTeam);
+
+			day.Events[day.EventIndex].TeamIndex += 1;
+			day.Events[day.EventIndex].eventTeams.push(newTeam);
+			
+			SaveData(day);
+		}
+	});
+}
+
+/*-------------------------------------------------------------------------------------*/
+/* ADD PLAYERS */
+let AddPlayers = (name, email, date)=>{
+	DaySchema.findOne({currentDate: date}, (err, day)=>{
+		if (err) throw err;
+
+		if (day){
+			let newPlayer = new PlayerSchema();
+			newPlayer.playerName = name;
+			newPlayer.playerEmail = email;
+			newPlayer.playerSubscribed = true;
+
+			console.log(day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].PlayerIndex);
+			day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].PlayerIndex += 1;
+			day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players.push(newPlayer);
+			SaveData(day);
+		}
+	});
+};
+
+/*-------------------------------------------------------------------------------------*/
+/* SAVE HIGHSCORES */
 let CheckHighscore = (team, minutes, seconds)=>{
-	console.log("checking...");
-	Score.findOne({}, (err, results)=>{
+	HighscoreSchema.findOne({}, (err, results)=>{
 		if (err) throw err;
 		let score = minutes + " min " + seconds + " sec";
 		if (!results) {
@@ -151,87 +197,16 @@ let CheckHighscore = (team, minutes, seconds)=>{
 			SaveData(results);
 		}
 	});
-
 }
 
-/*
-let MakeERTable = (size)=>{
-    table.CreateTable();
-    table.AddHeader("Team Name");
-    table.AddHeader("Scores");
-
-    for (let i = 0; i < size; i++){
-        table.AddCell(i + 1, "hello");
-    }
-}
-*/
-
-let MakeDay = (date)=>{
-	let newDay = new Day();
-	newDay.currentDate = date;
-	newDay.EventIndex = -1;
-	newDay.TeamIndex = -1;
-	SaveData(newDay);
-}
-
-let MakeEvent = (eventname, gamemode, date)=>{
-	Day.findOne({currentDate: date}, (err, day)=>{
-		if (err) throw err;
-		
-		if (day) {
-			let newEvent = new Event();
-			console.log(eventname);
-			newEvent.Name = eventname;
-			newEvent.Gamemode = gamemode;
-			
-			day.EventIndex += 1;
-			day.Events.push(newEvent);
-			SaveData(day);
-		}
-	});
-}
-
-let MakeTeam = (teamname, date)=>{
-	Day.findOne({currentDate: date}, (err, day)=>{
-		if (err) throw err;
-		
-		if (day){
-			let newTeam = new Team();
-			newTeam.TeamName = teamname;
-			newTeam.PlayerIndex = -1;
-			
-			day.TeamIndex += 1;
-			day.Events[day.EventIndex].Teams.push(newTeam);
-			
-			SaveData(day);
-		}
-	});
-}
-
-
-let AddPlayers = (name, email, date)=>{
-	Day.findOne({currentDate: date}, (err, day)=>{
-		if (err) throw err;
-
-		if (day){
-			let newPlayer = new Player();
-			newPlayer.Name = name;
-			newPlayer.Email = email;
-
-			day.Events[day.EventIndex].Teams[day.TeamIndex].PlayerIndex += 1;
-			day.Events[day.EventIndex].Teams[day.TeamIndex].Players.push(newPlayer);
-
-			SaveData(day);
-		}
-	});
-};
-
-
+/*-------------------------------------------------------------------------------------*/
+/* SCHEMA FUNCTIONS */
 let SaveData = (data) =>{
 	data.save((err)=>{
 		if (err) throw err;
 		console.log("Saved !" + data);
 	});
+	process.stdout.write('\033c');
 }
 
 let RemoveSchemaData = (schemaName)=>{
@@ -241,12 +216,14 @@ let RemoveSchemaData = (schemaName)=>{
 	});
 }
 
-let CheckDate = () =>{
+/*-------------------------------------------------------------------------------------*/
+/* MISC */
+
+let CheckDate = () =>{ // Get the date of today
 	let today = new Date();
 	let dd = today.getDate();
 	let mm = today.getMonth();
-	let yyyy = today.getYear();
-	
+	let yyyy = today.getFullYear();
 	if (mm < 10 ){mm = "0" + mm;}
 	if (dd < 10){dd = "0" + dd;}
 	
@@ -255,25 +232,29 @@ let CheckDate = () =>{
 	return today.toString();
 }
 
-
-http.listen(2500, ()=>{
-	console.log("listening on *:2500");
-});
-
+let SortArray = (arrayName, sortingWay)=>{ // Sort an array from small to big or big to small
+    arrayName.sort(function(a,b){
+		if (sortingWay == "small"){
+			return a - b;
+		} else if (sortingWay == "big"){
+			return b-a;
+		} 
+    });
+}
 /* ----------------------Email -------------------------------------------------------------------------*/
 /* -----------------------------------------------------------------------------------------------------*/
 
 const nodemailer = require('nodemailer'),
-    creds = require('./creds'),
-    transporter = nodemailer.createTransport({
-        service: "gmail", 
-        auth: {
-            user: creds.user,
-            pass: creds.pass,
-        },
-    }),
-    EmailTemplate = require('email-templates').EmailTemplate,
-    Promise = require('bluebird');
+creds = require('./creds'),
+transporter = nodemailer.createTransport({
+	service: "gmail", 
+	auth: {
+		user: creds.user,
+		pass: creds.pass,
+	},
+}),
+EmailTemplate = require('email-templates').EmailTemplate,
+Promise = require('bluebird');
 
 let ERUsers = [
 	{
@@ -285,18 +266,17 @@ let ERUsers = [
 		sec: '8',
 	}
 ];
-   
+
 let ER_EmailData = (date)=>{
-	Day.findOne({currentDate: date}, (err, day)=>{
+	DaySchema.findOne({currentDate: date}, (err, day)=>{
 		if (err) throw err;
 		
 		if (day){
-			
-
-
-			ERUsers[0].name = day.Events[day.EventIndex].Teams[day.TeamIndex].Players[0].Name;
-			ERUsers[0].email = day.Events[day.EventIndex].Teams[day.TeamIndex].Players[0].Email;
-			
+			console.log(day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].PlayerIndex);
+			//ERUsers[0].name = day.Events[day.EventIndex].eventTeams[day.TeamIndex].Players[].playerName;
+			//ERUsers[0].email = day.Events[day.EventIndex].eventTeams[day.TeamIndex].Players[0].playerEmail;
+			//ERUsers[0].name = day.Events[day.EventIndex].eventTeams[day.TeamIndex].Players[].playerName;;
+			//ERUsers[0].email = day.Events[day.EventIndex].eventTeams[day.TeamIndex].Players[].playerEmail;
 			loadTemplate('mail-escape-room', ERUsers).then((results) => {
 				return Promise.all(results.map((result) => {
 				sendEmail({
@@ -315,81 +295,26 @@ let ER_EmailData = (date)=>{
 	});
 }
 
-
-let LTUsers = [
-	/*
-    {
-        name: 'casper',
-        email: 'casper-heringa@hotmail.com',
-        fotoLink: "http://milovanpelt.nl/Casper/img-01.jpg",
-        score: '125',
-        kills: 45,
-        deaths: 8,
-        kd: 1.73,
-    },
-	*/
-    // {
-        // name: 'noag',
-        // email: '19668@ma-web.nl',
-        // fotoLink: "https://s3.amazonaws.com/gs-geo-images/10ccde09-8e2b-44fc-baa1-6c8673a6717e_l.jpg",
-        // score: '120',
-        // kills: 45,
-        // deaths: 8,
-    //     kd: 1.73,
-    // },
-    {
-        name: 'milo',
-        email: 'milovanpelt@gmail.com',
-        fotoLink: "http://milovanpelt.nl/Casper/img-01.jpg",
-        score: '159',
-        kills: 45,
-        deaths: 8,
-        kd: 1.73,
-    },
-    // {
-    //     name: 'Nabil',
-    //     email: 'cheriqui.nabil@gmail.com',
-    //     fotoLink: "http://milovanpelt.nl/Casper/img-01.jpg",
-    //     score: '159',
-    //     kills: 45,
-    //     deaths: 8,
-    //     kd: 1.73,
-    // }
-];
+	
 function sendEmail (obj) {
-    return transporter.sendMail(obj);
+	return transporter.sendMail(obj);
 }
 
 function loadTemplate (templateName, contexts) {
-    let template = new EmailTemplate(path.join(__dirname, 'templates', templateName));
-    return Promise.all(contexts.map((context) => {
-        return new Promise((resolve, reject) => {
-            template.render(context, (err, result) => {
-                if (err) reject(err);
-                else resolve({
-                    email: result,
-                    context,
-                });
-            });
-        });
-    }));
+	let template = new EmailTemplate(path.join(__dirname, 'templates', templateName));
+	return Promise.all(contexts.map((context) => {
+		return new Promise((resolve, reject) => {
+			template.render(context, (err, result) => {
+				if (err) reject(err);
+				else resolve({
+					email: result,
+					context,
+				});
+			});
+		});
+	}));
 }
 
-let SendLT_Email = (users)=>{
-	loadTemplate('mail-laser-tag', users).then((results) => {
-		return Promise.all(results.map((result) => {
-			sendEmail({
-				to: result.context.email,
-				from: "UpEvents",
-				subject: result.email.subject,
-				html: result.email.html,
-				text: result.email.text,
-			});
-		}));
-	}).then(() => {
-		console.log('send LT mail!');
-	});
-}
 
 let SendER_Email = ()=>{
 	loadTemplate('mail-escape-room', ERUsers).then((results) => {
@@ -406,4 +331,3 @@ let SendER_Email = ()=>{
 		console.log('send ER mail!');
 	});
 }
-

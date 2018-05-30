@@ -1,11 +1,10 @@
-let mongoose = require("mongoose");
-let Schema = mongoose.Schema;
-
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
 let PlayerSchema = new Schema({
-	Name: String,
-	Email: String,
-	Subscribed: Boolean
+    playerName: String,
+    playerEmail: String,
+    playerSubscribed: Boolean
 });
 
-module.exports = mongoose.model("Player", PlayerSchema);
+module.exports = mongoose.model("PlayerSchema", PlayerSchema);
