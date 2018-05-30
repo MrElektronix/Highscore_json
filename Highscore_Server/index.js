@@ -1,0 +1,333 @@
+const path = require("path");
+const express = require('express');
+const app = express();
+const http = require("http").Server(app);
+const io = require("socket.io")(http);
+const mongoose = require("mongoose");
+const port = 3000;
+
+
+/* SCHEMA'S   */
+
+const DaySchema = require("./schemas/userdata/Day.Schema");
+const EventSchema = require("./schemas/userdata/Event.Schema");
+const TeamSchema = require("./schemas/userdata/Team.Schema");
+const PlayerSchema = require("./schemas/userdata/Player.Schema");
+const HighscoreSchema = require("./schemas/userdata/escaperoom/Highscore.Schema");
+
+/*-------------------------------------------------------------------------------------*/
+/* CONNECTIONS  */
+mongoose.connect("mongodb://localhost/database");
+
+app.set("view engine", "ejs"); 
+app.set("views", path.join(__dirname, "views"));
+app.get("/", (req, res)=>{
+    res.send("Hello World !");
+});
+
+// Page where the highscoreTable is displayed
+app.get("/Highscore_Table", (req, res)=>{ 
+    
+});
+
+
+http.listen(port, "5.157.85.78", (err)=>{
+    if (err){return console.log("Error Occured: ", err)}
+
+    console.log(`server is listening on ${port}`);
+});
+
+
+// Connection with SOCKET.IO//
+io.on("connection", (socket)=>{
+    console.log("user connected");
+
+    socket.on("newDay", ()=>{ 
+		RemoveSchemaData(DaySchema);
+		CheckDay(CheckDate());
+	})
+	
+	socket.on("newEvent", (data)=>{
+		if (data.EventName == "Laser Gamen"){
+			MakeEvent(data.EventName, "Team Deathmatch", CheckDate());
+		} else{
+			MakeEvent(data.EventName, data.GameMode, CheckDate());
+		}
+	});
+
+	socket.on("newERTeam", (data)=>{
+		MakeTeam(data.TeamName, CheckDate());
+	});
+	
+	socket.on("newLGTeam", (data)=>{
+		MakeTeam(data.TeamNameOne, CheckDate());
+		MakeTeam(data.TeamNameTwo, CheckDate());
+	})
+	
+	socket.on("newERPlayers", (data)=>{
+		AddPlayers(data.PlayerInfo_names, data.PlayerInfo_email, CheckDate());
+	});
+	
+	socket.on("sendMail", ()=>{ 
+		ER_EmailData(CheckDate());
+	});
+
+	socket.on("newTime", (data)=>{
+		let randomName = teamNames[Math.floor(Math.random() * teamNames.length)];
+		
+		CheckTeamName(randomName);
+		CheckHighscore(randomName, data.Minutes, data.Seconds);
+	});
+
+	socket.on("deleteTime", ()=>{
+		RemoveSchemaData(Score);
+	});
+
+	let CheckTeamName = (teamname)=> {
+		HighscoreSchema.findOne({TeamNames: teamname}, (err, result)=>{
+			if (err) throw err;
+			if (result) {
+				socket.emit("catchdata", {alert: teamname});
+			} else{
+				socket.emit("catchdata", {alert: "name NOT taken"});
+			}
+		});
+	}
+})
+/*-------------------------------------------------------------------------------------*/
+/* MAKE DAY */
+
+let CheckDay = (date)=>{ // Check if the day exists with the date of today
+    DaySchema.findOne({currentDate: date}, (err, day)=>{
+		if (err) throw err;
+		
+		if (!day){
+			MakeDay(date);
+		} else{
+			console.log("Day exists");
+		}
+	})
+}
+
+let MakeDay = (date)=>{
+	let newDay = new DaySchema();
+	newDay.currentDate = date;
+	newDay.EventIndex = -1;
+	SaveData(newDay);
+}
+/*-------------------------------------------------------------------------------------*/
+/* MAKE EVENT */
+
+let MakeEvent = (eventname, gamemode, date)=>{
+	DaySchema.findOne({currentDate: date}, (err, day)=>{
+		if (err) throw err;
+		
+		if (day) {
+			let newEvent = new EventSchema();
+			newEvent.eventName = eventname;
+			newEvent.eventGamemode = gamemode;
+			newEvent.TeamIndex = -1;
+			day.EventIndex += 1;
+			day.Events.push(newEvent);
+
+			SaveData(day);
+		}
+	});
+}
+
+/*-------------------------------------------------------------------------------------*/
+/* MAKE TEAM */
+
+let MakeTeam = (teamname, date)=>{
+	DaySchema.findOne({currentDate: date}, (err, day)=>{
+		if (err) throw err;
+		
+		if (day){
+			let newTeam = new TeamSchema();
+			newTeam.TeamName = teamname;
+			//newTeam.PlayerIndex = -1;
+			day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].PlayerIndex = -1;
+			SaveData(newTeam);
+
+			day.Events[day.EventIndex].TeamIndex += 1;
+			day.Events[day.EventIndex].eventTeams.push(newTeam);
+			
+			SaveData(day);
+		}
+	});
+}
+
+/*-------------------------------------------------------------------------------------*/
+/* ADD PLAYERS */
+let AddPlayers = (name, email, date)=>{
+	DaySchema.findOne({currentDate: date}, (err, day)=>{
+		if (err) throw err;
+
+		if (day){
+			let newPlayer = new PlayerSchema();
+			newPlayer.playerName = name;
+			newPlayer.playerEmail = email;
+			newPlayer.playerSubscribed = true;
+
+			console.log(day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].PlayerIndex);
+			day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].PlayerIndex += 1;
+			day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players.push(newPlayer);
+			SaveData(day);
+		}
+	});
+};
+
+/*-------------------------------------------------------------------------------------*/
+/* SAVE HIGHSCORES */
+let CheckHighscore = (team, minutes, seconds)=>{
+	HighscoreSchema.findOne({}, (err, results)=>{
+		if (err) throw err;
+		let score = minutes + " min " + seconds + " sec";
+		if (!results) {
+			
+			let high = new Score();
+
+			high.Scores.push(score);
+			high.TeamNames.push(team);
+			SaveData(high);
+			
+		} else{
+			results.Scores.push(score);
+			results.TeamNames.push(team);
+			SaveData(results);
+		}
+	});
+}
+
+/*-------------------------------------------------------------------------------------*/
+/* SCHEMA FUNCTIONS */
+let SaveData = (data) =>{
+	data.save((err)=>{
+		if (err) throw err;
+		console.log("Saved !" + data);
+	});
+	process.stdout.write('\033c');
+}
+
+let RemoveSchemaData = (schemaName)=>{
+	schemaName.remove({}, (err, data)=>{
+		if (err) throw err;
+		console.log("Removed: " + data);
+	});
+}
+
+/*-------------------------------------------------------------------------------------*/
+/* MISC */
+
+let CheckDate = () =>{ // Get the date of today
+	let today = new Date();
+	let dd = today.getDate();
+	let mm = today.getMonth();
+	let yyyy = today.getFullYear();
+	if (mm < 10 ){mm = "0" + mm;}
+	if (dd < 10){dd = "0" + dd;}
+	
+	today = (dd + "/" + mm + "/" + yyyy);
+	 
+	return today.toString();
+}
+
+let SortArray = (arrayName, sortingWay)=>{ // Sort an array from small to big or big to small
+    arrayName.sort(function(a,b){
+		if (sortingWay == "small"){
+			return a - b;
+		} else if (sortingWay == "big"){
+			return b-a;
+		} 
+    });
+}
+/* ----------------------Email -------------------------------------------------------------------------*/
+/* -----------------------------------------------------------------------------------------------------*/
+
+const nodemailer = require('nodemailer'),
+creds = require('./creds'),
+transporter = nodemailer.createTransport({
+	service: "gmail", 
+	auth: {
+		user: creds.user,
+		pass: creds.pass,
+	},
+}),
+EmailTemplate = require('email-templates').EmailTemplate,
+Promise = require('bluebird');
+
+let ERUsers = [
+	{
+		name: "",
+		email: "",
+		fotoLink: "http://milovanpelt.nl/Casper/img-01.jpg",
+		score: '159',
+		min: '45',
+		sec: '8',
+	}
+];
+
+let ER_EmailData = (date)=>{
+	DaySchema.findOne({currentDate: date}, (err, day)=>{
+		if (err) throw err;
+		
+		if (day){
+			console.log(day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].PlayerIndex);
+			//ERUsers[0].name = day.Events[day.EventIndex].eventTeams[day.TeamIndex].Players[].playerName;
+			//ERUsers[0].email = day.Events[day.EventIndex].eventTeams[day.TeamIndex].Players[0].playerEmail;
+			//ERUsers[0].name = day.Events[day.EventIndex].eventTeams[day.TeamIndex].Players[].playerName;;
+			//ERUsers[0].email = day.Events[day.EventIndex].eventTeams[day.TeamIndex].Players[].playerEmail;
+			loadTemplate('mail-escape-room', ERUsers).then((results) => {
+				return Promise.all(results.map((result) => {
+				sendEmail({
+				to: result.context.email,
+				from: "UpEvents",
+				subject: result.email.subject,
+				html: result.email.html,
+				text: result.email.text,
+				});
+				}));
+				
+			}).then(() => {
+				console.log('send ER mail!');
+			});
+		}
+	});
+}
+
+	
+function sendEmail (obj) {
+	return transporter.sendMail(obj);
+}
+
+function loadTemplate (templateName, contexts) {
+	let template = new EmailTemplate(path.join(__dirname, 'templates', templateName));
+	return Promise.all(contexts.map((context) => {
+		return new Promise((resolve, reject) => {
+			template.render(context, (err, result) => {
+				if (err) reject(err);
+				else resolve({
+					email: result,
+					context,
+				});
+			});
+		});
+	}));
+}
+
+
+let SendER_Email = ()=>{
+	loadTemplate('mail-escape-room', ERUsers).then((results) => {
+		return Promise.all(results.map((result) => {
+			sendEmail({
+				to: result.context.email,
+				from: "UpEvents",
+				subject: result.email.subject,
+				html: result.email.html,
+				text: result.email.text,
+			});
+		}));
+	}).then(() => {
+		console.log('send ER mail!');
+	});
+}
