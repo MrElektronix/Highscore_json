@@ -31,7 +31,7 @@ app.get("/Highscore_Table", (req, res)=>{
 });
 
 
-http.listen(port, (err)=>{
+http.listen(port, ipadress, (err)=>{
     if (err){return console.log("Error Occured: ", err)}
 
     console.log(`server is listening on ${port}`);
