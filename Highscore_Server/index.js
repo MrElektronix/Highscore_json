@@ -5,7 +5,7 @@ const http = require("http").Server(app);
 const io = require("socket.io")(http);
 const mongoose = require("mongoose");
 const port = 3000;
-
+const ipadress = "5.157.85.78";
 
 /* SCHEMA'S   */
 
@@ -31,7 +31,7 @@ app.get("/Highscore_Table", (req, res)=>{
 });
 
 
-http.listen(port, "5.157.85.78", (err)=>{
+http.listen(port, (err)=>{
     if (err){return console.log("Error Occured: ", err)}
 
     console.log(`server is listening on ${port}`);
@@ -40,7 +40,7 @@ http.listen(port, "5.157.85.78", (err)=>{
 
 // Connection with SOCKET.IO//
 io.on("connection", (socket)=>{
-    console.log("user connected");
+    console.log("user connected !");
 
     socket.on("newDay", ()=>{ 
 		RemoveSchemaData(DaySchema);
@@ -73,14 +73,16 @@ io.on("connection", (socket)=>{
 	});
 
 	socket.on("newTime", (data)=>{
+		/*
 		let randomName = teamNames[Math.floor(Math.random() * teamNames.length)];
 		
 		CheckTeamName(randomName);
 		CheckHighscore(randomName, data.Minutes, data.Seconds);
+		*/
 	});
 
 	socket.on("deleteTime", ()=>{
-		RemoveSchemaData(Score);
+		RemoveSchemaData(HighscoreSchema);
 	});
 
 	let CheckTeamName = (teamname)=> {
@@ -145,13 +147,9 @@ let MakeTeam = (teamname, date)=>{
 		if (day){
 			let newTeam = new TeamSchema();
 			newTeam.TeamName = teamname;
-			//newTeam.PlayerIndex = -1;
-			day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].PlayerIndex = -1;
-			SaveData(newTeam);
 
 			day.Events[day.EventIndex].TeamIndex += 1;
 			day.Events[day.EventIndex].eventTeams.push(newTeam);
-			
 			SaveData(day);
 		}
 	});
@@ -160,17 +158,15 @@ let MakeTeam = (teamname, date)=>{
 /*-------------------------------------------------------------------------------------*/
 /* ADD PLAYERS */
 let AddPlayers = (name, email, date)=>{
+	ClearConsole();
 	DaySchema.findOne({currentDate: date}, (err, day)=>{
 		if (err) throw err;
-
 		if (day){
 			let newPlayer = new PlayerSchema();
 			newPlayer.playerName = name;
 			newPlayer.playerEmail = email;
 			newPlayer.playerSubscribed = true;
-
-			console.log(day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].PlayerIndex);
-			day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].PlayerIndex += 1;
+			
 			day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players.push(newPlayer);
 			SaveData(day);
 		}
@@ -206,7 +202,6 @@ let SaveData = (data) =>{
 		if (err) throw err;
 		console.log("Saved !" + data);
 	});
-	process.stdout.write('\033c');
 }
 
 let RemoveSchemaData = (schemaName)=>{
@@ -241,6 +236,10 @@ let SortArray = (arrayName, sortingWay)=>{ // Sort an array from small to big or
 		} 
     });
 }
+
+let ClearConsole = ()=>{
+	process.stdout.write('\033c');
+}
 /* ----------------------Email -------------------------------------------------------------------------*/
 /* -----------------------------------------------------------------------------------------------------*/
 
@@ -268,30 +267,20 @@ let ERUsers = [
 ];
 
 let ER_EmailData = (date)=>{
+	ClearConsole();
 	DaySchema.findOne({currentDate: date}, (err, day)=>{
 		if (err) throw err;
 		
 		if (day){
-			console.log(day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].PlayerIndex);
-			//ERUsers[0].name = day.Events[day.EventIndex].eventTeams[day.TeamIndex].Players[].playerName;
-			//ERUsers[0].email = day.Events[day.EventIndex].eventTeams[day.TeamIndex].Players[0].playerEmail;
-			//ERUsers[0].name = day.Events[day.EventIndex].eventTeams[day.TeamIndex].Players[].playerName;;
-			//ERUsers[0].email = day.Events[day.EventIndex].eventTeams[day.TeamIndex].Players[].playerEmail;
-			loadTemplate('mail-escape-room', ERUsers).then((results) => {
-				return Promise.all(results.map((result) => {
-				sendEmail({
-				to: result.context.email,
-				from: "UpEvents",
-				subject: result.email.subject,
-				html: result.email.html,
-				text: result.email.text,
-				});
-				}));
-				
-			}).then(() => {
-				console.log('send ER mail!');
-			});
+
+			for (let p = 0; p < day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players.length; p++){
+				ERUsers[0].name = day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players[p].playerName;
+				ERUsers[0].email = day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players[p].playerEmail;
+
+				SendER_Email(ERUsers);
+			}
 		}
+		
 	});
 }
 
@@ -316,8 +305,8 @@ function loadTemplate (templateName, contexts) {
 }
 
 
-let SendER_Email = ()=>{
-	loadTemplate('mail-escape-room', ERUsers).then((results) => {
+let SendER_Email = (obj)=>{
+	loadTemplate('mail-escape-room', obj).then((results) => {
 		return Promise.all(results.map((result) => {
 			sendEmail({
 				to: result.context.email,
