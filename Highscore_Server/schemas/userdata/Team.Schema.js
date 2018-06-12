@@ -5,6 +5,7 @@ let PlayerSchema = require("./Player.Schema.js").schema;
 let TeamSchema = new Schema({
 	TeamName: String,
 	Players: [PlayerSchema],
+	Score: String
 });
 
 module.exports = mongoose.model("TeamSchema", TeamSchema);

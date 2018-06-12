@@ -6,6 +6,11 @@ const io = require("socket.io")(http);
 const mongoose = require("mongoose");
 const port = 3000;
 const ipadress = "5.157.85.78";
+const teamNames = ["Apple", "Banana", "Blueberry", 
+"Cherry", "Coconut", "Cranberry", "Fig", "Grape", 
+"Kiwi", "Lemon", "Mango", "Orange", "Peach", "Pear", 
+"Pineapple", "Raspberry", "Strawberry", "Watermelon"];
+let imagething;
 
 /* SCHEMA'S   */
 
@@ -19,19 +24,41 @@ const HighscoreSchema = require("./schemas/userdata/escaperoom/Highscore.Schema"
 /* CONNECTIONS  */
 mongoose.connect("mongodb://localhost/database");
 
+app.use(express.static("public"));
+
 app.set("view engine", "ejs"); 
 app.set("views", path.join(__dirname, "views"));
 app.get("/", (req, res)=>{
     res.send("Hello World !");
 });
 
+
+
 // Page where the highscoreTable is displayed
 app.get("/Highscore_Table", (req, res)=>{ 
-    
+    HighscoreSchema.findOne({}, (err, results)=>{
+		if (err) throw err;
+		if (results) {
+			let scores = [];
+			
+			for (let i = 0; i < results.Scores.length; i++){
+				scores.push({name: results.TeamNames[i], score: results.Scores[i]});
+			}
+
+			scores.sort((a, b)=>{
+				//return b.score - a.score;
+				return ('' + b.score).localeCompare(a.score);
+			});
+
+			res.render('highscore.ejs', {scoreArray: scores, teamNameArray: scores, image: imagething});
+		} else{
+			res.render('highscore.ejs', {scoreArray: "", teamNameArray: ""});
+		}
+	});
 });
 
 
-http.listen(port, ipadress, (err)=>{
+http.listen(port, (err)=>{
     if (err){return console.log("Error Occured: ", err)}
 
     console.log(`server is listening on ${port}`);
@@ -40,9 +67,10 @@ http.listen(port, ipadress, (err)=>{
 
 // Connection with SOCKET.IO//
 io.on("connection", (socket)=>{
-    console.log("user connected !");
+    console.log("user connected");
 
-    socket.on("newDay", ()=>{ 
+    socket.on("newDay", ()=>{
+		RemoveSchemaData(HighscoreSchema);
 		RemoveSchemaData(DaySchema);
 		CheckDay(CheckDate());
 	})
@@ -73,17 +101,21 @@ io.on("connection", (socket)=>{
 	});
 
 	socket.on("newTime", (data)=>{
-		/*
 		let randomName = teamNames[Math.floor(Math.random() * teamNames.length)];
 		
 		CheckTeamName(randomName);
 		CheckHighscore(randomName, data.Minutes, data.Seconds);
-		*/
 	});
 
+	socket.on("newPhoto", (data)=>{
+		imagething = "data:image/png;base64," + data.Photo;
+	});
+
+	/*
 	socket.on("deleteTime", ()=>{
 		RemoveSchemaData(HighscoreSchema);
 	});
+	*/
 
 	let CheckTeamName = (teamname)=> {
 		HighscoreSchema.findOne({TeamNames: teamname}, (err, result)=>{
@@ -178,19 +210,29 @@ let AddPlayers = (name, email, date)=>{
 let CheckHighscore = (team, minutes, seconds)=>{
 	HighscoreSchema.findOne({}, (err, results)=>{
 		if (err) throw err;
-		let score = minutes + " min " + seconds + " sec";
+		let score = minutes + " min " + "& " + seconds + " sec";
 		if (!results) {
 			
-			let high = new Score();
+			let high = new HighscoreSchema();
 
 			high.Scores.push(score);
 			high.TeamNames.push(team);
+			high.scoreCount = 0;
+			high.maxScores = 10;
+			high.scoreCount += 1;
 			SaveData(high);
 			
 		} else{
-			results.Scores.push(score);
-			results.TeamNames.push(team);
-			SaveData(results);
+			results.scoreCount += 1;
+			if (results.scoreCount < results.maxScores){
+
+				results.Scores.push(score);
+				results.TeamNames.push(team);
+				SaveData(results);
+				
+			} else{
+				results.maxScores = 10;
+			}
 		}
 	});
 }
@@ -200,14 +242,14 @@ let CheckHighscore = (team, minutes, seconds)=>{
 let SaveData = (data) =>{
 	data.save((err)=>{
 		if (err) throw err;
-		console.log("Saved !" + data);
+		console.log("Saved !");
 	});
 }
 
 let RemoveSchemaData = (schemaName)=>{
 	schemaName.remove({}, (err, data)=>{
 		if (err) throw err;
-		console.log("Removed: " + data);
+		console.log("Removed: ");
 	});
 }
 
@@ -259,15 +301,13 @@ let ERUsers = [
 	{
 		name: "",
 		email: "",
-		fotoLink: "http://milovanpelt.nl/Casper/img-01.jpg",
-		score: '159',
-		min: '45',
-		sec: '8',
+		fotoLink: "http://milovanpelt.nl/Casper/1myp3r5geyyy.jpg",
+		time: ""
 	}
 ];
 
 let ER_EmailData = (date)=>{
-	ClearConsole();
+	//ClearConsole();
 	DaySchema.findOne({currentDate: date}, (err, day)=>{
 		if (err) throw err;
 		
@@ -276,14 +316,27 @@ let ER_EmailData = (date)=>{
 			for (let p = 0; p < day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players.length; p++){
 				ERUsers[0].name = day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players[p].playerName;
 				ERUsers[0].email = day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players[p].playerEmail;
-
-				SendER_Email(ERUsers);
 			}
 		}
 		
 	});
+
+	GoNext();
 }
 
+let GoNext = ()=>{
+	HighscoreSchema.findOne({}, (err, results)=>{
+		if (err) throw err;
+
+		if (results){
+			ERUsers[0].time = results.Scores[results.scoreCount - 1];
+		}
+
+		SendER_Email(ERUsers);
+	});
+
+	
+}
 	
 function sendEmail (obj) {
 	return transporter.sendMail(obj);
