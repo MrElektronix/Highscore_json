@@ -10,7 +10,7 @@ const teamNames = ["Apple", "Banana", "Blueberry",
 "Cherry", "Coconut", "Cranberry", "Fig", "Grape", 
 "Kiwi", "Lemon", "Mango", "Orange", "Peach", "Pear", 
 "Pineapple", "Raspberry", "Strawberry", "Watermelon"];
-
+let photoImage;
 /* SCHEMA'S   */
 
 const DaySchema = require("./schemas/userdata/Day.Schema");
@@ -49,7 +49,7 @@ app.get("/Highscore_Table", (req, res)=>{
 				return ('' + b.score).localeCompare(a.score);
 			});
 
-			res.render('highscore.ejs', {scoreArray: scores, teamNameArray: scores, image: "http://milovanpelt.nl/Casper/1myp3r5geyyy.jpg"});
+			res.render('highscore.ejs', {scoreArray: scores, teamNameArray: scores, image: photoImage});
 		} else{
 			res.render('highscore.ejs', {scoreArray: "", teamNameArray: ""});
 		}
@@ -107,7 +107,7 @@ io.on("connection", (socket)=>{
 	});
 
 	socket.on("newPhoto", (data)=>{
-		imagething = "data:image/png;base64," + data.Photo;
+		photoImage = "data:image/png;base64," + data.Photo;
 	});
 
 	/*
