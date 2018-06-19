@@ -108,7 +108,7 @@ io.on("connection", (socket)=>{
 
 	socket.on("newPhoto", (data)=>{
 		photoImage = "data:image/png;base64," + data.Photo;
-		console.log(data.Photo.length);
+		console.log(data.Photo);
 	});
 
 	/*
