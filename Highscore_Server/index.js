@@ -301,13 +301,14 @@ let ERUsers = [
 	{
 		name: "",
 		email: "",
-		fotoLink: "http://milovanpelt.nl/Casper/1myp3r5geyyy.jpg",
+		fotoLink: "",
 		time: ""
 	}
 ];
 
 let ER_EmailData = (date)=>{
 	//ClearConsole();
+	ERUsers[0].fotoLink = photoImage;
 	DaySchema.findOne({currentDate: date}, (err, day)=>{
 		if (err) throw err;
 		
