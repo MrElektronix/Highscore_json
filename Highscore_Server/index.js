@@ -308,7 +308,7 @@ let ERUsers = [
 
 let ER_EmailData = (date)=>{
 	//ClearConsole();
-	ERUsers[0].fotoLink = "http://milovanpelt.nl/Casper/1myp3r5geyyy.jpg";
+	ERUsers[0].fotoLink = "data:image/png;base64," + photoImage.toString();
 	DaySchema.findOne({currentDate: date}, (err, day)=>{
 		if (err) throw err;
 		
