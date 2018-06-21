@@ -107,7 +107,7 @@ io.on("connection", (socket)=>{
 	});
 
 	socket.on("newPhoto", (data)=>{
-		photoImage = "data:image/png;base64," + data.Photo;
+		photoImage = "http://milovanpelt.nl/Casper/1myp3r5geyyy.jpg";
 		console.log("photo taken");
 	});
 
