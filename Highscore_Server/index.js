@@ -49,7 +49,7 @@ app.get("/Highscore_Table", (req, res)=>{
 				return ('' + b.score).localeCompare(a.score);
 			});
 
-			res.render('highscore.ejs', {scoreArray: scores, teamNameArray: scores, image: photoImage});
+			res.render('highscore.ejs', {scoreArray: scores, teamNameArray: scores, image: "data:image/png;base64," + photoImage.toString()});
 		} else{
 			res.render('highscore.ejs', {scoreArray: "", teamNameArray: ""});
 		}
@@ -107,7 +107,7 @@ io.on("connection", (socket)=>{
 	});
 
 	socket.on("newPhoto", (data)=>{
-		photoImage = "http://milovanpelt.nl/Casper/1myp3r5geyyy.jpg";
+		photoImage = data.Photo;
 		console.log("photo taken");
 	});
 
