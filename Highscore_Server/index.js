@@ -100,7 +100,7 @@ io.on("connection", (socket)=>{
 	});
 	
 	socket.on("sendMail", ()=>{ 
-		//ER_EmailData(CheckDate());
+		ER_EmailData(CheckDate());
 	});
 
 	socket.on("newTime", (data)=>{
