@@ -75,7 +75,6 @@ io.on("connection", (socket)=>{
 		RemoveSchemaData(HighscoreSchema);
 		RemoveSchemaData(DaySchema);
 		CheckDay(CheckDate());
-		DeleteLocalImage("escape.png");
 	})
 	
 	socket.on("newEvent", (data)=>{
@@ -405,5 +404,6 @@ let SendER_Email = (obj)=>{
 		}));
 	}).then(() => {
 		console.log('send ER mail!');
+		DeleteLocalImage("escape.png");
 	});
 }
