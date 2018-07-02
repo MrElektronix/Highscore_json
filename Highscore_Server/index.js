@@ -115,6 +115,7 @@ io.on("connection", (socket)=>{
 		convertedEmailPhoto = "data:image/png;base64," + emailPhoto.toString();
 		SaveLocalImage(convertedEmailPhoto);
 		console.log("photo taken");
+		GetLocalImage("escape.png")
 	});
 
 	/*
@@ -305,9 +306,9 @@ let GetLocalImage = (imageName)=>{
 }
 
 let DeleteLocalImage = (imageName)=>{
-	fs.unlinkSync("./" + imageName.toString(), (err)=>{
+	fs.unlinkSync("./" + imageName.toString(), (err, data)=>{
 		if (err) throw err;
-		console.log("Deleted: " + imageName);
+		console.log("Deleted: " + data);
 	});
 }
 /* ----------------------Email -------------------------------------------------------------------------*/
@@ -359,7 +360,7 @@ let GoNext = ()=>{
 		if (results){
 			ERUsers[0].time = results.Scores[results.scoreCount - 1];
 		}
-		ERUsers[0].fotoLink = GetLocalImage("escape.png");
+		//ERUsers[0].fotoLink =
 		SendER_Email(ERUsers);
 	});
 
