@@ -75,6 +75,7 @@ io.on("connection", (socket)=>{
 		RemoveSchemaData(HighscoreSchema);
 		RemoveSchemaData(DaySchema);
 		CheckDay(CheckDate());
+		DeleteLocalImage("escape.png");
 	})
 	
 	socket.on("newEvent", (data)=>{
@@ -99,7 +100,7 @@ io.on("connection", (socket)=>{
 	});
 	
 	socket.on("sendMail", ()=>{ 
-		ER_EmailData(CheckDate());
+		//ER_EmailData(CheckDate());
 	});
 
 	socket.on("newTime", (data)=>{
@@ -292,16 +293,23 @@ let ClearConsole = ()=>{
 let SaveLocalImage = (base64Data)=>{
 	fs.writeFile("escape.png", base64Data, "base64", (err)=>{
 		if (err) throw err;
+		console.log("Photo saved !");
 	});
 }
 
 let GetLocalImage = (imageName)=>{
 	fs.readFile(imageName, (err, data)=>{
 		if (err) throw err;
-
-		return data;
+		console.log("Local Image: " + data);
 	});
-} 
+}
+
+let DeleteLocalImage = (imageName)=>{
+	fs.unlinkSync("./" + imageName.toString(), (err)=>{
+		if (err) throw err;
+		console.log("Deleted: " + imageName);
+	});
+}
 /* ----------------------Email -------------------------------------------------------------------------*/
 /* -----------------------------------------------------------------------------------------------------*/
 
