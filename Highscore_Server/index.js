@@ -14,6 +14,7 @@ let fs = require("fs");
 
 let emailPhoto;
 let convertedEmailPhoto;
+let finalEmailPhoto;
 /* SCHEMA'S   */
 
 const DaySchema = require("./schemas/userdata/Day.Schema");
@@ -51,7 +52,6 @@ app.get("/Highscore_Table", (req, res)=>{
 				//return b.score - a.score;
 				return ('' + b.score).localeCompare(a.score);
 			});
-
 			res.render('highscore.ejs', {scoreArray: scores, teamNameArray: scores, image: convertedEmailPhoto});
 		} else{
 			res.render('highscore.ejs', {scoreArray: "", teamNameArray: ""});
@@ -114,7 +114,7 @@ io.on("connection", (socket)=>{
 		convertedEmailPhoto = "data:image/png;base64," + emailPhoto.toString();
 		SaveLocalImage(convertedEmailPhoto);
 		console.log("photo taken");
-		//console.log(GetLocalImage("escape.png"));
+		GetLocalImage("escape.png");
 	});
 
 	/*
@@ -300,8 +300,7 @@ let SaveLocalImage = (base64Data)=>{
 let GetLocalImage = (imageName)=>{
 	fs.readFile(imageName, (err, data)=>{
 		if (err) throw err;
-
-		return data;
+		finalEmailPhoto = data;
 	});
 }
 
@@ -360,11 +359,9 @@ let GoNext = ()=>{
 		if (results){
 			ERUsers[0].time = results.Scores[results.scoreCount - 1];
 		}
-		fs.readFile("escape.png", (err, data)=>{
-			if (err) throw err;
-			
-			ERUsers[0].fotoLink = data;
-		});
+		
+
+		//ERUsers[0].fotoLink = data;
 		SendER_Email(ERUsers);
 	});
 
