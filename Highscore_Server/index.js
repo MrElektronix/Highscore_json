@@ -49,7 +49,7 @@ app.get("/Highscore_Table", (req, res)=>{
 				//return b.score - a.score;
 				return ('' + b.score).localeCompare(a.score);
 			});
-			res.render('highscore.ejs', {scoreArray: scores, teamNameArray: scores, image: "http://5.157.85.78:2000/images/ok_cat.jpg"});
+			res.render('highscore.ejs', {scoreArray: scores, teamNameArray: scores, image: "http://5.157.85.78:2000/images/escape.jpg"});
 		} else{
 			res.render('highscore.ejs', {scoreArray: "", teamNameArray: ""});
 		}
@@ -112,10 +112,10 @@ io.on("connection", (socket)=>{
 
 	socket.on("newPhoto", (data)=>{
 
-		convertedEmailPhoto = "data:image/png;base64," + data.Photo.toString();
+		convertedEmailPhoto = "data:image/jpg;base64," + data.Photo.toString();
 		SaveLocalImage(convertedEmailPhoto);
 		console.log("photo taken");
-		GetLocalImage("escape.png");
+		GetLocalImage("escape.jpg");
 	});
 
 	/*
@@ -292,9 +292,8 @@ let ClearConsole = ()=>{
 
 
 let SaveLocalImage = (base64Data)=>{
-	fs.writeFile("./public/images/escape.png", new Buffer(base64Data, "base64"), (err, data)=>{
+	fs.writeFile("./public/images/escape.jpg", new Buffer(base64Data, "base64"), (err, data)=>{
 		if (err) throw err;
-		console.log(data);
 	});
 }
 
@@ -361,7 +360,7 @@ let GoNext = ()=>{
 		}
 		
 
-		ERUsers[0].fotoLink = "http://5.157.85.78:2000/images/escape.png";
+		ERUsers[0].fotoLink = "http://5.157.85.78:2000/images/escape.jpg";
 		SendER_Email(ERUsers);
 	});
 
@@ -401,6 +400,6 @@ let SendER_Email = (obj)=>{
 		}));
 	}).then(() => {
 		console.log('send ER mail!');
-		//DeleteLocalImage("escape.png");
+		DeleteLocalImage("escape.jpg");
 	});
 }
