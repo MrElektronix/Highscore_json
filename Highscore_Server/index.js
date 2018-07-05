@@ -400,6 +400,6 @@ let SendER_Email = (obj)=>{
 		}));
 	}).then(() => {
 		console.log('send ER mail!');
-		DeleteLocalImage("escape.jpg");
+		//DeleteLocalImage("escape.jpg");
 	});
 }
