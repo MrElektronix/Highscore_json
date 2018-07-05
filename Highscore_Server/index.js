@@ -35,8 +35,6 @@ app.get("/", (req, res)=>{
     res.send("Hello World !");
 });
 
-
-
 // Page where the highscoreTable is displayed
 app.get("/Highscore_Table", (req, res)=>{ 
     HighscoreSchema.findOne({}, (err, results)=>{
@@ -52,11 +50,15 @@ app.get("/Highscore_Table", (req, res)=>{
 				//return b.score - a.score;
 				return ('' + b.score).localeCompare(a.score);
 			});
-			res.render('highscore.ejs', {scoreArray: scores, teamNameArray: scores, image: finalEmailPhoto});
+			res.render('highscore.ejs', {scoreArray: scores, teamNameArray: scores, image: "http://5.157.85.78:2000/images/ok_cat.jpg"});
 		} else{
 			res.render('highscore.ejs', {scoreArray: "", teamNameArray: ""});
 		}
 	});
+});
+
+app.get("/public", (req, res)=>{ 
+    
 });
 
 
@@ -361,7 +363,7 @@ let GoNext = ()=>{
 		}
 		
 
-		//ERUsers[0].fotoLink = data;
+		ERUsers[0].fotoLink = "http://5.157.85.78:2000/images/ok_cat.jpg";
 		SendER_Email(ERUsers);
 	});
 
