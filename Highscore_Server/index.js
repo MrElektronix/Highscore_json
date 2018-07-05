@@ -293,7 +293,7 @@ let ClearConsole = ()=>{
 
 
 let SaveLocalImage = (base64Data)=>{
-	fs.writeFile("./public/images/escape.png", base64Data, "base64", (err)=>{
+	fs.writeFile("/public/images/escape.png", base64Data, "base64", (err)=>{
 		if (err) throw err;
 		console.log("Photo saved !");
 	});
