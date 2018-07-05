@@ -14,7 +14,6 @@ let fs = require("fs");
 
 
 let convertedEmailPhoto;
-let finalEmailPhoto;
 /* SCHEMA'S   */
 
 const DaySchema = require("./schemas/userdata/Day.Schema");
@@ -50,7 +49,7 @@ app.get("/Highscore_Table", (req, res)=>{
 				//return b.score - a.score;
 				return ('' + b.score).localeCompare(a.score);
 			});
-			res.render('highscore.ejs', {scoreArray: scores, teamNameArray: scores, image: finalEmailPhoto});
+			res.render('highscore.ejs', {scoreArray: scores, teamNameArray: scores, image: "http://5.157.85.78:2000/images/ok_cat.jpg"});
 		} else{
 			res.render('highscore.ejs', {scoreArray: "", teamNameArray: ""});
 		}
@@ -293,16 +292,15 @@ let ClearConsole = ()=>{
 
 
 let SaveLocalImage = (base64Data)=>{
-	fs.writeFile("./public/images/escape.png", new Buffer(base64Data, "base64"), (err)=>{
+	fs.writeFile("./public/images/escape.png", new Buffer(base64Data, "base64"), (err, data)=>{
 		if (err) throw err;
-		console.log("Photo saved !");
+		console.log(data);
 	});
 }
 
 let GetLocalImage = (imageName)=>{
 	fs.readFile("./public/images/" + imageName, (err, data)=>{
 		if (err) throw err;
-		finalEmailPhoto = data;
 	});
 }
 
