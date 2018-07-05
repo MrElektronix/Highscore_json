@@ -116,7 +116,7 @@ io.on("connection", (socket)=>{
 		convertedEmailPhoto = "data:image/png;base64," + emailPhoto.toString();
 		SaveLocalImage(convertedEmailPhoto);
 		console.log("photo taken");
-		GetLocalImage("./public/images/", "escape.png");
+		GetLocalImage("escape.png");
 	});
 
 	/*
@@ -299,8 +299,8 @@ let SaveLocalImage = (base64Data)=>{
 	});
 }
 
-let GetLocalImage = (path, imageName)=>{
-	fs.readFile(path + imageName, (err, data)=>{
+let GetLocalImage = (imageName)=>{
+	fs.readFile(imageName, (err, data)=>{
 		if (err) throw err;
 		finalEmailPhoto = data;
 	});
