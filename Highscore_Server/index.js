@@ -50,7 +50,7 @@ app.get("/Highscore_Table", (req, res)=>{
 				//return b.score - a.score;
 				return ('' + b.score).localeCompare(a.score);
 			});
-			res.render('highscore.ejs', {scoreArray: scores, teamNameArray: scores, image: "/images/escape.png"});
+			res.render('highscore.ejs', {scoreArray: scores, teamNameArray: scores, image: finalEmailPhoto});
 		} else{
 			res.render('highscore.ejs', {scoreArray: "", teamNameArray: ""});
 		}
