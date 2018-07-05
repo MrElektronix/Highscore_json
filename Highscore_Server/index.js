@@ -50,7 +50,7 @@ app.get("/Highscore_Table", (req, res)=>{
 				//return b.score - a.score;
 				return ('' + b.score).localeCompare(a.score);
 			});
-			res.render('highscore.ejs', {scoreArray: scores, teamNameArray: scores, image: "http://5.157.85.78:2000/images/ok_cat.jpg"});
+			res.render('highscore.ejs', {scoreArray: scores, teamNameArray: scores, image: "http://5.157.85.78:2000/images/escape.png"});
 		} else{
 			res.render('highscore.ejs', {scoreArray: "", teamNameArray: ""});
 		}
@@ -293,7 +293,7 @@ let ClearConsole = ()=>{
 
 
 let SaveLocalImage = (base64Data)=>{
-	fs.writeFile("escape.png", base64Data, "base64", (err)=>{
+	fs.writeFile("/images/escape.png", base64Data, "base64", (err)=>{
 		if (err) throw err;
 		console.log("Photo saved !");
 	});
@@ -363,7 +363,7 @@ let GoNext = ()=>{
 		}
 		
 
-		ERUsers[0].fotoLink = "http://5.157.85.78:2000/images/ok_cat.jpg";
+		ERUsers[0].fotoLink = "http://5.157.85.78:2000/images/escape.png";
 		SendER_Email(ERUsers);
 	});
 
