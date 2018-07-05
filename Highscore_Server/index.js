@@ -361,7 +361,7 @@ let GoNext = ()=>{
 		
 
 		ERUsers[0].fotoLink = "http://5.157.85.78:2000/images/escape.png";
-		SendER_Email(ERUsers);
+		//SendER_Email(ERUsers);
 	});
 
 	
@@ -400,6 +400,6 @@ let SendER_Email = (obj)=>{
 		}));
 	}).then(() => {
 		console.log('send ER mail!');
-		DeleteLocalImage("escape.png");
+		//DeleteLocalImage("escape.png");
 	});
 }
