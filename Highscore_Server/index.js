@@ -12,7 +12,7 @@ const teamNames = ["Apple", "Banana", "Blueberry",
 "Pineapple", "Raspberry", "Strawberry", "Watermelon"];
 let fs = require("fs");
 
-let emailPhoto;
+
 let convertedEmailPhoto;
 let finalEmailPhoto;
 /* SCHEMA'S   */
@@ -112,8 +112,8 @@ io.on("connection", (socket)=>{
 	});
 
 	socket.on("newPhoto", (data)=>{
-		emailPhoto = data.Photo;
-		convertedEmailPhoto = "data:image/png;base64," + emailPhoto.toString();
+
+		convertedEmailPhoto = "data:image/png;base64," + data.Photo.toString();
 		SaveLocalImage(convertedEmailPhoto);
 		console.log("photo taken");
 		GetLocalImage("escape.png");
@@ -293,7 +293,7 @@ let ClearConsole = ()=>{
 
 
 let SaveLocalImage = (base64Data)=>{
-	fs.writeFile("./public/images/escape.png", base64Data, "base64", (err)=>{
+	fs.writeFile("./public/images/escape.png", new Buffer(base64Data, "base64"), (err)=>{
 		if (err) throw err;
 		console.log("Photo saved !");
 	});
