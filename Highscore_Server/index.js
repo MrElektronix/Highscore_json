@@ -112,7 +112,8 @@ io.on("connection", (socket)=>{
 
 	socket.on("newPhoto", (data)=>{
 
-		convertedEmailPhoto = "data:image/jpg;base64," + data.Photo.toString();
+		convertedEmailPhoto = data.Photo.toString();
+		//"data:image/jpg;base64," +
 		SaveLocalImage(convertedEmailPhoto);
 		console.log("photo taken");
 		GetLocalImage("escape.jpg");
