@@ -11,7 +11,7 @@ const teamNames = ["Apple", "Banana", "Blueberry",
 "Kiwi", "Lemon", "Mango", "Orange", "Peach", "Pear", 
 "Pineapple", "Raspberry", "Strawberry", "Watermelon"];
 let fs = require("fs");
-
+let teamNameUsed;
 
 let convertedEmailPhoto;
 /* SCHEMA'S   */
@@ -109,14 +109,15 @@ io.on("connection", (socket)=>{
 		
 		CheckTeamName(randomName);
 		*/
-		if (CheckTeamName(data.TeamName)) {
+		CheckTeamName(data.TeamName);
+		if (!teamNameUsed) {
 			CheckHighscore(data.TeamName, data.Minutes, data.Seconds);
 		}
 	});
 
 	socket.on("newPhoto", (data)=>{
 
-		convertedEmailPhoto = "data:image/jpg;base64," + data.Photo.toString();
+		convertedEmailPhoto = data.Photo.toString();
 		SaveLocalImage(convertedEmailPhoto);
 		console.log("photo taken");
 		GetLocalImage("escape.jpg");
@@ -133,10 +134,11 @@ io.on("connection", (socket)=>{
 			if (err) throw err;
 			if (result) {
 				socket.emit("usedteamname", {alert: "used"});
-				return false;
+				teamNameUsed = true;
+				
 			} else{
 				socket.emit("usedteamname", {alert: "name NOT taken"});
-				return true;
+				teamNameUsed = false;
 			}
 		});
 	}
