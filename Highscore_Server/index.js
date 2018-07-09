@@ -73,8 +73,8 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		RemoveSchemaData(HighscoreSchema);
-		RemoveSchemaData(DaySchema);
+		//RemoveSchemaData(HighscoreSchema);
+		//RemoveSchemaData(DaySchema);
 		CheckDay(CheckDate());
 	})
 	
