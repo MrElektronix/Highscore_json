@@ -110,6 +110,7 @@ io.on("connection", (socket)=>{
 		CheckTeamName(randomName);
 		*/
 		CheckTeamName(data.TeamName);
+		console.log(teamNameUsed);
 		if (!teamNameUsed) {
 			CheckHighscore(data.TeamName, data.Minutes, data.Seconds);
 		}
