@@ -6,6 +6,7 @@
 	<link href="https://upevents.nl/wp-content/themes/up-events/assets/images/favicon-32x32.png" rel="shortcut icon" type="image/x-icon"/>
 </head>
 <body>
+	<h1> <% names %></h1>
 	<table align="center">
 		<br/>
 		<br/>
@@ -30,9 +31,7 @@
             <tr>
 				<td><%= i + 1 %></td>
 				<% if(dingdong[i].eventGamemode == "Room 8") {%>
-					<% for (let j = 0; j < names.length; j++ ) {%>
-						<td><%= "Room 8" + names[i] %></td>
-					<% } %>
+					<td><%= "Room 8" + names[i] %></td>
 				<% } %>
             </tr>
             
@@ -64,9 +63,7 @@
             <tr>
 				<td><%= i + 1 %></td>
 				<% if(dingdong[i].eventGamemode == "Quarantaine") {%>
-					<% for (let j = 0; j < names.length; j++ ) {%>
-						<td><%= "Quarantaine" + names[i] %></td>
-					<% } %>
+					<td><%= "Quarantaine" + names[i] %></td>
 				<% } %>
             </tr>
             
@@ -99,9 +96,7 @@
             <tr>
 				<td><%= i + 1 %></td>
 				<% if(dingdong[i].eventGamemode == "The Bunker") {%>
-					<% for (let j = 0; j < names.length; j++ ) {%>
-						<td><%= "The Bunker" + names[i] %></td>
-					<% } %>
+					<td><%= "The Bunker" + names[i] %></td>
 				<% } %>
             </tr>
             
@@ -132,9 +127,7 @@
             <tr>
 				<td><%= i + 1 %></td>
 				<% if(dingdong[i].eventGamemode == "Vietnamese Victim") {%>
-					<% for (let j = 0; j < names.length; j++ ) {%>
 						<td><%= "Vietnamese Victim" +  names[i] %></td>
-					<% } %>
 				<% } %>
             </tr>
             
