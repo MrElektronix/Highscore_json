@@ -4,7 +4,7 @@ const app = express();
 const http = require("http").Server(app);
 const io = require("socket.io")(http);
 const mongoose = require("mongoose");
-const port = 2000;
+const port = 3000;
 const ipadress = "5.157.85.78";
 const teamNames = ["Apple", "Banana", "Blueberry", 
 "Cherry", "Coconut", "Cranberry", "Fig", "Grape", 
@@ -35,7 +35,8 @@ app.get("/", (req, res)=>{
 });
 
 // Page where the highscoreTable is displayed
-app.get("/Highscore_Table", (req, res)=>{ 
+app.get("/Highscore_Table", (req, res)=>{
+	/*
     HighscoreSchema.findOne({}, (err, results)=>{
 		if (err) throw err;
 		if (results) {
@@ -54,6 +55,16 @@ app.get("/Highscore_Table", (req, res)=>{
 			res.render('highscore.ejs', {scoreArray: "", teamNameArray: ""});
 		}
 	});
+	*/
+
+	
+	DaySchema.findOne({}, (err, results) =>{
+		if (err) throw err;
+
+		if (results){
+			res.render("highscore.ejs", {dingdong: results.Events})
+		}
+	});
 });
 
 app.get("/public", (req, res)=>{ 
@@ -61,7 +72,7 @@ app.get("/public", (req, res)=>{
 });
 
 
-http.listen(port, ipadress, (err)=>{
+http.listen(port, (err)=>{
     if (err){return console.log("Error Occured: ", err)}
 
     console.log(`server is listening on ${port}`);
