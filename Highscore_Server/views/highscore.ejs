@@ -31,7 +31,11 @@
 				<td><%= i + 1 %></td>
 
 				<% if(dingdong[i].eventGamemode == "The Bunker") {%>
-					<td><%= dingdong[i].eventTeams %></td>
+					<td><%= "The Bunker" + dingdong[i].eventTeams %></td>
+				<% } %>
+
+				<% if(dingdong[i].eventGamemode == "Room 8") {%>
+					<td><%= "Room 8" + dingdong[i].eventTeams %></td>
 				<% } %>
             </tr>
             
