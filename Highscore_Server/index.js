@@ -62,9 +62,9 @@ app.get("/Highscore_Table", (req, res)=>{
 		if (err) throw err;
 
 		if (results){
-			res.render("highscore.ejs", {dingdong: results.Events})
+			res.render("highscore.ejs", {dingdong: results.Events, names: results.Events.eventTeams})
 		} else{
-			res.render("highscore.ejs", {dingdong: results.Events})
+			res.render("highscore.ejs", {dingdong: results.Events, names: results.Events.eventTeams})
 		}
 	});
 });
