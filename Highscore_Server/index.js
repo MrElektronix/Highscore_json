@@ -4,7 +4,7 @@ const app = express();
 const http = require("http").Server(app);
 const io = require("socket.io")(http);
 const mongoose = require("mongoose");
-const port = 3000;
+const port = 2000;
 const ipadress = "5.157.85.78";
 const teamNames = ["Apple", "Banana", "Blueberry", 
 "Cherry", "Coconut", "Cranberry", "Fig", "Grape", 
@@ -72,7 +72,7 @@ app.get("/public", (req, res)=>{
 });
 
 
-http.listen(port, (err)=>{
+http.listen(port, ipadress, (err)=>{
     if (err){return console.log("Error Occured: ", err)}
 
     console.log(`server is listening on ${port}`);
