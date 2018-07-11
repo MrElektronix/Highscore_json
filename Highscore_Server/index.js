@@ -86,9 +86,9 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		//RemoveSchemaData(HighscoreSchema);
-		//RemoveSchemaData(DaySchema);
-		CheckDay(CheckDate());
+		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
+		//CheckDay(CheckDate());
 	})
 	
 	socket.on("newEvent", (data)=>{
@@ -103,10 +103,12 @@ io.on("connection", (socket)=>{
 		MakeTeam(data.TeamName, CheckDate());
 	});
 	
+	/*
 	socket.on("newLGTeam", (data)=>{
 		MakeTeam(data.TeamNameOne, CheckDate());
 		MakeTeam(data.TeamNameTwo, CheckDate());
 	})
+	*/
 	
 	socket.on("newERPlayers", (data)=>{
 		AddPlayers(data.PlayerInfo_names, data.PlayerInfo_email, CheckDate());
@@ -125,10 +127,9 @@ io.on("connection", (socket)=>{
 		CheckTeamName(data.TeamName);
 		console.log(teamNameUsed);
 		if (!teamNameUsed) {
-			CheckHighscore(data.TeamName, data.Minutes, data.Seconds);
+			//CheckHighscore(data.TeamName, data.Minutes, data.Seconds);
 		}
 	});
-
 	socket.on("newPhoto", (data)=>{
 
 		convertedEmailPhoto = data.Photo.toString();
