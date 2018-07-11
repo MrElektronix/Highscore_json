@@ -63,6 +63,8 @@ app.get("/Highscore_Table", (req, res)=>{
 
 		if (results){
 			res.render("highscore.ejs", {dingdong: results.Events})
+		} else{
+			res.render("highscore.ejs", {dingdong: results.Events})
 		}
 	});
 });
