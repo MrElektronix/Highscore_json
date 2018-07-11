@@ -28,8 +28,11 @@
         <% for(let i = 0; i < dingdong.length; i++) {%>
             
             <tr>
-                <td><%= i + 1 %></td>
-                <td><%= dingdong[i].eventGamemode %></td>
+				<td><%= i + 1 %></td>
+
+				<% if(dingdong[i].eventGamemode == "The Bunker") {%>
+					<td><%= dingdong[i].eventTeams %></td>
+				<% } %>
             </tr>
             
         <% } %>

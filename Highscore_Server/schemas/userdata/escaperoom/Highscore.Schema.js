@@ -6,7 +6,6 @@ let HighscoreSchema = new Schema({
     TeamNames: Array,
     scoreCount: Number,
     maxScores: Number
-
 });
 
 module.exports = mongoose.model("HighscoreSchema", HighscoreSchema);
