@@ -327,7 +327,7 @@ let GetLocalImage = (imageName)=>{
 }
 
 let DeleteLocalImage = (imageName)=>{
-	fs.unlinkSync("./public/images/" + imageName.toString(), (err, data)=>{
+	fs.unlinkSync("./public/images/" + imageName, (err, data)=>{
 		if (err) throw err;
 		console.log("Deleted: " + data);
 	});
@@ -423,6 +423,6 @@ let SendER_Email = (obj)=>{
 		}));
 	}).then(() => {
 		console.log('send ER mail!');
-		//DeleteLocalImage("escape.jpg");
+		DeleteLocalImage("escape.jpg");
 	});
 }
