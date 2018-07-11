@@ -12,7 +12,7 @@
 		<br/>
 		<tr>
 		<th colspan="3">
-			<h1 id="header">Escaperoom: Room 8 </h1>
+			<h1 id="header">Escaperoom: Room 8</h1>
 		</th>
 		</tr>
 		<tr>
@@ -29,11 +29,6 @@
             
             <tr>
 				<td><%= i + 1 %></td>
-
-				<% if(dingdong[i].eventGamemode == "The Bunker") {%>
-					<td><%= "The Bunker" + dingdong[i].eventTeams %></td>
-				<% } %>
-
 				<% if(dingdong[i].eventGamemode == "Room 8") {%>
 					<td><%= "Room 8" + dingdong[i].eventTeams %></td>
 				<% } %>
@@ -41,5 +36,100 @@
             
         <% } %>
 	
+	</table>
+
+	<table align="center">
+		<br/>
+		<br/>
+		<br/>
+		<tr>
+		<th colspan="3">
+			<h1 id="header">Escaperoom: Quarantaine</h1>
+		</th>
+		</tr>
+		<tr>
+			<td>Nr.</td>
+			<td>
+				<strong>Team Name</strong>
+			</td>
+			<td>
+				<strong>Tijd</strong>
+			</td>
+		</tr>
+
+        <% for(let i = 0; i < dingdong.length; i++) {%>
+            
+            <tr>
+				<td><%= i + 1 %></td>
+				<% if(dingdong[i].eventGamemode == "Quarantaine") {%>
+					<td><%= "Quarantaine" + dingdong[i].eventTeams %></td>
+				<% } %>
+            </tr>
+            
+        <% } %>
+	</table>
+
+
+
+	<table align="center">
+		<br/>
+		<br/>
+		<br/>
+		<tr>
+		<th colspan="3">
+			<h1 id="header">Escaperoom: The Bunker</h1>
+		</th>
+		</tr>
+		<tr>
+			<td>Nr.</td>
+			<td>
+				<strong>Team Name</strong>
+			</td>
+			<td>
+				<strong>Tijd</strong>
+			</td>
+		</tr>
+
+        <% for(let i = 0; i < dingdong.length; i++) {%>
+            
+            <tr>
+				<td><%= i + 1 %></td>
+				<% if(dingdong[i].eventGamemode == "The Bunker") {%>
+					<td><%= "The Bunker" + dingdong[i].eventTeams %></td>
+				<% } %>
+            </tr>
+            
+        <% } %>
+	</table>
+
+	<table align="center">
+		<br/>
+		<br/>
+		<br/>
+		<tr>
+		<th colspan="3">
+			<h1 id="header">Escaperoom: Vietnamese Victim</h1>
+		</th>
+		</tr>
+		<tr>
+			<td>Nr.</td>
+			<td>
+				<strong>Team Name</strong>
+			</td>
+			<td>
+				<strong>Tijd</strong>
+			</td>
+		</tr>
+
+        <% for(let i = 0; i < dingdong.length; i++) {%>
+            
+            <tr>
+				<td><%= i + 1 %></td>
+				<% if(dingdong[i].eventGamemode == "Vietnamese Victim") {%>
+					<td><%= "Vietnamese Victim" + dingdong[i].eventTeams %></td>
+				<% } %>
+            </tr>
+            
+        <% } %>
 	</table>
 </html>
