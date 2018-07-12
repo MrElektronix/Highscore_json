@@ -61,11 +61,9 @@ app.get("/Highscore_Table", (req, res)=>{
 		if (err) throw err;
 
 		if (results){
-			res.render("highscore.ejs", {name: "oof"});
-			//res.render("highscore.ejs", {dingdong: results.Events, names: results.Events[0].eventTeams[0]})
-		} else{
-			res.render("highscore.ejs", {name: "not oof"});
-			//res.render("highscore.ejs", {dingdong: results.Events, names: results.Events[0].eventTeams[0]})
+			res.render("highscore.ejs", {dingdong: results.Events})
+		} else{s
+			res.render("highscore.ejs", {dingdong: "not found"})
 		}
 	});
 	
