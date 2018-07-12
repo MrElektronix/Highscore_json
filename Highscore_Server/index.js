@@ -56,8 +56,7 @@ app.get("/Highscore_Table", (req, res)=>{
 		}
 	});
 	*/
-
-	
+	/*
 	DaySchema.findOne({}, (err, results) =>{
 		if (err) throw err;
 
@@ -67,6 +66,7 @@ app.get("/Highscore_Table", (req, res)=>{
 			//res.render("highscore.ejs", {dingdong: results.Events, names: results.Events[0].eventTeams[0]})
 		}
 	});
+	*/
 });
 
 app.get("/public", (req, res)=>{ 
