@@ -67,6 +67,7 @@ app.get("/Highscore_Table", (req, res)=>{
 		}
 	});
 	*/
+	res.render("highscore.ejs", {name: "oof"});
 });
 
 app.get("/public", (req, res)=>{ 
