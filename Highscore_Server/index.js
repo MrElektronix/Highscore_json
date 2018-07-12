@@ -64,7 +64,7 @@ app.get("/Highscore_Table", (req, res)=>{
 			res.render("highscore.ejs", {name: "oof"});
 			//res.render("highscore.ejs", {dingdong: results.Events, names: results.Events[0].eventTeams[0]})
 		} else{
-			res.render("highscore.ejs", {name: "oof"});
+			res.render("highscore.ejs", {name: "not oof"});
 			//res.render("highscore.ejs", {dingdong: results.Events, names: results.Events[0].eventTeams[0]})
 		}
 	});
