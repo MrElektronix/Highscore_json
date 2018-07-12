@@ -28,9 +28,9 @@
 		<% for(let i = 0; i < Event.length; i++) {%>
 			<tr>
 				<td><%= i + 1 %></td>
-				if (Event[i].eventGamemode == "Room 8"){
+				<% if (Event[i].eventGamemode == "Room 8"){ %>
 					<td><%= Event[i].eventTeams[Event[i].TeamIndex].TeamName %></td>
-				}
+				<% } %>
 			</tr>
 		<% } %>
 	</table>
@@ -57,9 +57,9 @@
 		<% for(let i = 0; i < Event.length; i++) {%>
 			<tr>
 				<td><%= i + 1 %></td>
-				if (Event[i].eventGamemode == "Quarantaine"){
+				<% if (Event[i].eventGamemode == "Quarantaine"){%>
 					<td><%= Event[i].eventTeams[Event[i].TeamIndex].TeamName %></td>
-				}
+				<% } %>
 			</tr>
 		<% } %>
 	</table>
@@ -86,9 +86,9 @@
 		<% for(let i = 0; i < Event.length; i++) {%>
 			<tr>
 				<td><%= i + 1 %></td>
-				if (Event[i].eventGamemode == "The Bunker"){
+				<% if (Event[i].eventGamemode == "The Bunker"){%>
 					<td><%= Event[i].eventTeams[Event[i].TeamIndex].TeamName %></td>
-				}
+				<% } %>
 			</tr>
 		<% } %>
 	</table>
@@ -115,9 +115,9 @@
 		<% for(let i = 0; i < Event.length; i++) {%>
 			<tr>
 				<td><%= i + 1 %></td>
-				if (Event[i].eventGamemode == "Vietnamese Victim"){
+				<% if (Event[i].eventGamemode == "Vietnamese Victim"){ %> 
 					<td><%= Event[i].eventTeams[Event[i].TeamIndex].TeamName %></td>
-				}
+				<% } %>
 			</tr>
 		<% } %>
 	</table>
