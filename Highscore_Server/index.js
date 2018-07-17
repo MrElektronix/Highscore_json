@@ -24,13 +24,14 @@ const PlayerSchema = require("./schemas/userdata/Player.Schema");
 
 const HighscoreSchema = require("./schemas/userdata/escaperoom/Highscore.Schema");
 
-
+/*
 const Rooms = {
 	rooms_8 = HighscoreSchema,
 	vietnam_victim = HighscoreSchema,
 	qurantaine = HighscoreSchema,
 	the_bunker = HighscoreSchema,
 }
+*/
 
 
 
