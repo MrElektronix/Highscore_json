@@ -24,14 +24,13 @@ const PlayerSchema = require("./schemas/userdata/Player.Schema");
 
 const HighscoreSchema = require("./schemas/userdata/escaperoom/Highscore.Schema");
 
-/*
+
 const Rooms = {
 	rooms_8 = HighscoreSchema,
 	vietnam_victim = HighscoreSchema,
 	qurantaine = HighscoreSchema,
 	the_bunker = HighscoreSchema,
 }
-*/
 
 
 
@@ -97,30 +96,6 @@ http.listen(port, ipadress, (err)=>{
 // Connection with SOCKET.IO//
 io.on("connection", (socket)=>{
     console.log("user connected");
-
-	socket.on("newGame", (data)=>{
-		console.log(data.EventName);
-		/*
-		CheckDay(CheckDate);
-
-		if (data.EventName == "Laser Gamen"){
-			MakeEvent(data.EventName, "Team Deathmatch", CheckDate());
-		} else{
-			MakeEvent(data.EventName, data.GameMode, CheckDate());
-		}
-
-		MakeTeam(data.TeamName, CheckDate());
-		AddPlayers(data.PlayerInfo_names, data.PlayerInfo_email, CheckDate());
-		CheckTeamName(data.TeamName);
-
-		convertedEmailPhoto = data.Photo.toString();
-		SaveLocalImage(convertedEmailPhoto);
-		console.log("photo taken");
-		GetLocalImage("escape.jpg");
-
-		ER_EmailData(CheckDate());
-		*/	
-	});
 
     socket.on("newDay", ()=>{
 		//RemoveSchemaData(HighscoreSchema);
