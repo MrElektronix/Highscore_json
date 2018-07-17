@@ -99,6 +99,8 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
 	socket.on("newGame", (data)=>{
+		console.log(data.EventName);
+		/*
 		CheckDay(CheckDate);
 
 		if (data.EventName == "Laser Gamen"){
@@ -117,6 +119,7 @@ io.on("connection", (socket)=>{
 		GetLocalImage("escape.jpg");
 
 		ER_EmailData(CheckDate());
+		*/	
 	});
 
     socket.on("newDay", ()=>{
