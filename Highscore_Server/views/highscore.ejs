@@ -86,7 +86,7 @@
 		<% for(let i = 0; i < Event.length; i++) {%>
 			<tr>
 				<td><%= i + 1 %></td>
-				<% if (Event[i].eventGamemode == "The Bunker"){%>
+				<% if (Event[i].eventGamemode == "The Bunker"){%>	
 					<td><%= Event[i].eventTeams[Event[i].TeamIndex].TeamName %></td>
 				<% } %>
 			</tr>

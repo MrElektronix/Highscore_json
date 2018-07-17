@@ -20,7 +20,19 @@ const DaySchema = require("./schemas/userdata/Day.Schema");
 const EventSchema = require("./schemas/userdata/Event.Schema");
 const TeamSchema = require("./schemas/userdata/Team.Schema");
 const PlayerSchema = require("./schemas/userdata/Player.Schema");
+
+
 const HighscoreSchema = require("./schemas/userdata/escaperoom/Highscore.Schema");
+
+
+const Rooms = {
+	rooms_8 = HighscoreSchema,
+	vietnam_victim = HighscoreSchema,
+	qurantaine = HighscoreSchema,
+	the_bunker = HighscoreSchema,
+}
+
+
 
 /*-------------------------------------------------------------------------------------*/
 /* CONNECTIONS  */
@@ -85,6 +97,27 @@ http.listen(port, ipadress, (err)=>{
 io.on("connection", (socket)=>{
     console.log("user connected");
 
+	socket.on("newGame", (data)=>{
+		CheckDay(CheckDate);
+
+		if (data.EventName == "Laser Gamen"){
+			MakeEvent(data.EventName, "Team Deathmatch", CheckDate());
+		} else{
+			MakeEvent(data.EventName, data.GameMode, CheckDate());
+		}
+
+		MakeTeam(data.TeamName, CheckDate());
+		AddPlayers(data.PlayerInfo_names, data.PlayerInfo_email, CheckDate());
+		CheckTeamName(data.TeamName);
+
+		convertedEmailPhoto = data.Photo.toString();
+		SaveLocalImage(convertedEmailPhoto);
+		console.log("photo taken");
+		GetLocalImage("escape.jpg");
+
+		ER_EmailData(CheckDate());
+	});
+
     socket.on("newDay", ()=>{
 		//RemoveSchemaData(HighscoreSchema);
 		//RemoveSchemaData(DaySchema);
@@ -130,8 +163,8 @@ io.on("connection", (socket)=>{
 			//CheckHighscore(data.TeamName, data.Minutes, data.Seconds);
 		}
 	});
+	
 	socket.on("newPhoto", (data)=>{
-
 		convertedEmailPhoto = data.Photo.toString();
 		SaveLocalImage(convertedEmailPhoto);
 		console.log("photo taken");
@@ -144,7 +177,8 @@ io.on("connection", (socket)=>{
 	});
 	*/
 
-	let CheckTeamName = (teamname)=> {
+	/*
+	let CheckTeamName = (teamname)=> { // check if teamname exist in the database
 		HighscoreSchema.findOne({TeamNames: teamname}, (err, result)=>{
 			if (err) throw err;
 			if (result) {
@@ -157,7 +191,14 @@ io.on("connection", (socket)=>{
 			}
 		});
 	}
+	*/
 })
+
+
+let CreateRooms = ()=>{
+	
+}
+
 /*-------------------------------------------------------------------------------------*/
 /* MAKE DAY */
 
