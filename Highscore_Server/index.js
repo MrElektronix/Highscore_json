@@ -62,8 +62,6 @@ app.get("/Highscore_Table", (req, res)=>{
 		if (results) {
 
 			for (let r = 0; r < results.Rooms.length; r++){
-				//console.log(results.Rooms[r]);
-				/*
 				switch(results.Rooms[r]){
 					case roomNames.room_8:
 						roomScores.room_8.push({name: results.TeamNames[r], score: results.Scores[r]});
@@ -79,7 +77,6 @@ app.get("/Highscore_Table", (req, res)=>{
 
 						break;
 				}
-				*/	
 			}
 			
 			/*
@@ -135,18 +132,15 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		//RemoveSchemaData(HighscoreSchema);
-		//RemoveSchemaData(DaySchema);
-		CheckDay(CheckDate());
+		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
+		//CheckDay(CheckDate());
 	})
 	
 	socket.on("newEvent", (data)=>{
 		if (data.EventName == "Laser Gamen"){
 			MakeEvent(data.EventName, "Team Deathmatch", CheckDate());
 		} else{
-			console.log("Event name: " + data.EventName);
-			console.log("Gamemode name: " + data.GameMode);
-			
 			MakeEvent(data.EventName, data.GameMode, CheckDate());
 		}
 	});
@@ -177,8 +171,7 @@ io.on("connection", (socket)=>{
 		CheckTeamName(randomName);
 		*/
 		//CheckTeamName(data.TeamName);
-		console.log(data.EventName);
-		CheckHighscore(data.EventName, data.TeamName, data.Minutes, data.Seconds);
+		CheckHighscore(data.GameMode, data.TeamName, data.Minutes, data.Seconds);
 		//console.log(teamNameUsed);
 		/*
 		if (!teamNameUsed) {
