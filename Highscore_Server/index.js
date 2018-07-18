@@ -153,9 +153,9 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		//RemoveSchemaData(HighscoreSchema);
-		//RemoveSchemaData(DaySchema);
-		CheckDay(CheckDate());
+		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
+		//CheckDay(CheckDate());
 	})
 	
 	socket.on("newEvent", (data)=>{
@@ -336,7 +336,7 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 
 				results.Scores.push(score);
 				results.TeamNames.push(team);
-				high.Rooms.push(room);
+				results.Rooms.push(room);
 				SaveData(results);
 				
 			} else{
