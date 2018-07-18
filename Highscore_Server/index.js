@@ -62,16 +62,11 @@ app.get("/Highscore_Table", (req, res)=>{
 		if (results) {
 			
 			for (let i = 0; i < results.Rooms.length; i++){
-		
-
-				if (results.Room[i] == roomNames.room_8){
-					//roomScores.room_8.push({name: results.TeamNames[i], score: results.Scores[i]});
-					console.log("yes");
-				} else{
-					console.log("no");
-				}
+				console.log("rooms: " + results.Rooms[0]);
 				/*
-				
+				if (results.Room[i] == roomNames.room_8){
+					roomScores.room_8.push({name: results.TeamNames[i], score: results.Scores[i]});
+				}
 
 				if (results.Room[i] == roomNames.qurantaine){
 					roomScores.qurantaine.push({name: results.TeamNames[i], score: result.Scores[i]});
