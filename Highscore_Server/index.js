@@ -65,16 +65,15 @@ app.get("/Highscore_Table", (req, res)=>{
 				switch(results.Rooms[r]){
 					case roomNames.room_8:
 						roomScores.room_8.push({name: results.TeamNames[r], score: results.Scores[r]});
-						
 						break;
 					case roomNames.qurantaine:
-
+						roomScores.qurantaine.push({name: results.TeamNames[r], score: result.Scores[r]});
 						break;
 					case roomNames.the_bunker:
-
+						roomScores.the_bunker.push({name: results.TeamNames[r], score: result.Scores[r]})
 						break;
 					case roomNames.vietnam_victim:
-
+						roomScores.vietnam_victim.push({name: results.TeamNames[r], score: result.Scores[r]});
 						break;
 				}
 			}
@@ -96,7 +95,12 @@ app.get("/Highscore_Table", (req, res)=>{
 				return ('' + b.score).localeCompare(a.score);
 			});
 
-			res.render('highscore.ejs', {room8_Score: roomScores.room_8, room8_Teamnames: roomScores.room_8});
+			res.render('highscore.ejs', {
+				room8_Info: roomScores.room_8, 
+				qurantaine_Info: roomScores.qurantaine,
+				thebunker_Info: roomScores.the_bunker,
+				vietnamvictim_Info: roomScores.vietnam_victim,
+			});
 		} else{
 			res.render('highscore.ejs', {room8_Score: "", room8_Teamnames: ""});
 		}

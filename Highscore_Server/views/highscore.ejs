@@ -25,11 +25,96 @@
 				<strong>Tijd</strong>
 			</td>
 		</tr>
-		<% for(let i = 0; i < room8_Score.length; i++) {%>
+		<% for(let i = 0; i < room8_Info.length; i++) {%>
             <tr>
                 <td><%= i + 1 %></td>
-                <td><%= room8_Teamnames[i].name %></td>
-                <td><%= room8_Score[i].score %></td>
+                <td><%= room8_Info[i].name %></td>
+                <td><%= room8_Info[i].score %></td>
+            </tr>
+        <% } %>
+	</table>
+
+
+	<!-- QUARANTAINE Table -->
+	<table align="center">
+		<br/>
+		<br/>
+		<br/>
+		<tr>
+		<th colspan="3">
+			<h1 id="header">Escaperoom: Quarantaine </h1>
+		</th>
+		</tr>
+		<tr>
+			<td>Nr.</td>
+			<td>
+				<strong>Team Name</strong>
+			</td>
+			<td>
+				<strong>Tijd</strong>
+			</td>
+		</tr>
+		<% for(let i = 0; i < qurantaine_Info.length; i++) {%>
+            <tr>
+                <td><%= i + 1 %></td>
+                <td><%= qurantaine_Info[i].name %></td>
+                <td><%= qurantaine_Info[i].score %></td>
+            </tr>
+        <% } %>
+	</table>
+
+	<!-- THE BUNKER Table -->
+	<table align="center">
+		<br/>
+		<br/>
+		<br/>
+		<tr>
+		<th colspan="3">
+			<h1 id="header">Escaperoom: The Bunker </h1>
+		</th>
+		</tr>
+		<tr>
+			<td>Nr.</td>
+			<td>
+				<strong>Team Name</strong>
+			</td>
+			<td>
+				<strong>Tijd</strong>
+			</td>
+		</tr>
+		<% for(let i = 0; i < thebunker_Info.length; i++) {%>
+            <tr>
+                <td><%= i + 1 %></td>
+                <td><%= thebunker_Info[i].name %></td>
+                <td><%= thebunker_Info[i].score %></td>
+            </tr>
+        <% } %>
+	</table>
+
+	<!-- VIETNAMESE VICTIM Table -->
+	<table align="center">
+		<br/>
+		<br/>
+		<br/>
+		<tr>
+		<th colspan="3">
+			<h1 id="header">Escaperoom: Vietnamese Victim </h1>
+		</th>
+		</tr>
+		<tr>
+			<td>Nr.</td>
+			<td>
+				<strong>Team Name</strong>
+			</td>
+			<td>
+				<strong>Tijd</strong>
+			</td>
+		</tr>
+		<% for(let i = 0; i < vietnamvictim_Info.length; i++) {%>
+            <tr>
+                <td><%= i + 1 %></td>
+                <td><%= vietnamvictim_Info[i].name %></td>
+                <td><%= vietnamvictim_Info[i].score %></td>
             </tr>
         <% } %>
 	</table>
