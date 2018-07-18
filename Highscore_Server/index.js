@@ -144,6 +144,9 @@ io.on("connection", (socket)=>{
 		if (data.EventName == "Laser Gamen"){
 			MakeEvent(data.EventName, "Team Deathmatch", CheckDate());
 		} else{
+			console.log("Event name: " + data.EventName);
+			console.log("Gamemode name: " + data.GameMode);
+			
 			MakeEvent(data.EventName, data.GameMode, CheckDate());
 		}
 	});
@@ -174,7 +177,7 @@ io.on("connection", (socket)=>{
 		CheckTeamName(randomName);
 		*/
 		//CheckTeamName(data.TeamName);
-		console.log(data.TeamName);
+		console.log(data.EventName);
 		CheckHighscore(data.EventName, data.TeamName, data.Minutes, data.Seconds);
 		//console.log(teamNameUsed);
 		/*
