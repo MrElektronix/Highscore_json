@@ -95,7 +95,7 @@ app.get("/Highscore_Table", (req, res)=>{
 				return ('' + b.score).localeCompare(a.score);
 			});
 			*/
-			
+
 			roomScores.room_8.sort((a, b)=>{
 				return ('' + b.score).localeCompare(a.score);
 			});
@@ -153,9 +153,9 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		//RemoveSchemaData(HighscoreSchema);
-		//RemoveSchemaData(DaySchema);
-		CheckDay(CheckDate());
+		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
+		//CheckDay(CheckDate());
 	})
 	
 	socket.on("newEvent", (data)=>{
@@ -336,6 +336,7 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 
 				results.Scores.push(score);
 				results.TeamNames.push(team);
+				high.Rooms.push(room);
 				SaveData(results);
 				
 			} else{
