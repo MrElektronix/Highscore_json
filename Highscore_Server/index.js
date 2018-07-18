@@ -61,19 +61,6 @@ app.get("/Highscore_Table", (req, res)=>{
 		
 		if (results) {
 			
-			if (results.Rooms[results.scoreCount] === roomNames.room_8){
-				roomScores.room_8.push({name: results.TeamNames[i], score: results.Scores[i]});
-			} else if (results.Rooms[results.scoreCount] === roomNames.qurantaine){
-				roomScores.qurantaine.push({name: results.TeamNames[i], score: results.Scores[i]});
-			} else if (results.Rooms[results.scoreCount] === roomNames.the_bunker){
-				roomScores.the_bunker.push({name: results.TeamNames[i], score: results.Scores[i]});
-			} else if (results.Rooms[results.scoreCount] === roomNames.vietnam_victim){
-				roomScores.vietnam_victim.push({name: results.TeamNames[i], score: results.Scores[i]});
-			} else{
-				console.log("no score a man");
-			}
-			
-			
 			/*
 			let scores = [];
 			
@@ -144,9 +131,9 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		//RemoveSchemaData(HighscoreSchema);
-		//RemoveSchemaData(DaySchema);
-		CheckDay(CheckDate());
+		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
+		//CheckDay(CheckDate());
 	})
 	
 	socket.on("newEvent", (data)=>{
@@ -321,6 +308,20 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 			high.maxScores = 10;
 			high.scoreCount += 1;
 			SaveData(high);
+
+			for (let i = 0; i < results.Rooms.length; i++){
+				if (results.Rooms[i] === roomNames.room_8){
+					roomScores.room_8.push({name: results.TeamNames[i], score: results.Scores[i]});
+				} else if (results.Rooms[i] === roomNames.qurantaine){
+					roomScores.qurantaine.push({name: results.TeamNames[i], score: results.Scores[i]});
+				} else if (results.Rooms[i] === roomNames.the_bunker){
+					roomScores.the_bunker.push({name: results.TeamNames[i], score: results.Scores[i]});
+				} else if (results.Rooms[i] === roomNames.vietnam_victim){
+					roomScores.vietnam_victim.push({name: results.TeamNames[i], score: results.Scores[i]})
+				} else{
+					console.log("no score a man");
+				}
+			}
 		} else{
 			results.scoreCount += 1;
 			if (results.scoreCount < results.maxScores){
@@ -329,6 +330,20 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 				results.TeamNames.push(team);
 				results.Rooms.push(room);
 				SaveData(results);
+
+				for (let i = 0; i < results.Rooms.length; i++){
+					if (results.Rooms[i] === roomNames.room_8){
+						roomScores.room_8.push({name: results.TeamNames[i], score: results.Scores[i]});
+					} else if (results.Rooms[i] === roomNames.qurantaine){
+						roomScores.qurantaine.push({name: results.TeamNames[i], score: results.Scores[i]});
+					} else if (results.Rooms[i] === roomNames.the_bunker){
+						roomScores.the_bunker.push({name: results.TeamNames[i], score: results.Scores[i]});
+					} else if (results.Rooms[i] === roomNames.vietnam_victim){
+						roomScores.vietnam_victim.push({name: results.TeamNames[i], score: results.Scores[i]})
+					} else{
+						console.log("no score a man");
+					}
+				}
 				
 			} else{
 				results.maxScores = 10;
