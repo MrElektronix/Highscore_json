@@ -63,7 +63,8 @@ app.get("/Highscore_Table", (req, res)=>{
 			for (let r = 0; r < results.Rooms.length; r++){
 				switch(results.Rooms[r]){
 					case roomNames.room_8:
-						roomScores.room_8.push({name: results.TeamNames[r], score: results.Scores[r]})
+						console.log(results.TeamNames[r]);
+						//roomScores.room_8.push({name: results.TeamNames[r], score: results.Scores[r]})
 						break;
 					case roomNames.qurantaine:
 
@@ -96,11 +97,11 @@ app.get("/Highscore_Table", (req, res)=>{
 
 			res.render('highscore.ejs', {room8_Score: roomScores.room_8, room8_Teamnames: roomScores.room_8});
 		} else{
-			res.render('highscore.ejs', {scoreArray: "", teamNameArray: ""});
+			res.render('highscore.ejs', {room8_Score: "", room8_Teamnames: ""});
 		}
 	});
 	
-	
+	/*
 	DaySchema.findOne({}, (err, results) =>{
 		if (err) throw err;
 
@@ -110,7 +111,7 @@ app.get("/Highscore_Table", (req, res)=>{
 			res.render("highscore.ejs", {Event: "not found"})
 		}
 	});
-	
+	*/
 });
 
 app.get("/public", (req, res)=>{ 
