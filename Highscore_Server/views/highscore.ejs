@@ -25,14 +25,13 @@
 				<strong>Tijd</strong>
 			</td>
 		</tr>
-		<% for(let i = 0; i < Event.length; i++) {%>
-			<tr>
-				<td><%= i + 1 %></td>
-				<% if (Event[i].eventGamemode == "Room 8"){ %>
-					<td><%= Event[i].eventTeams[Event[i].TeamIndex].TeamName %></td>
-				<% } %>
-			</tr>
-		<% } %>
+		<% for(let i = 0; i < room8_Score.length; i++) {%>
+            <tr>
+                <td><%= i + 1 %></td>
+                <td><%= room8_Teamnames[i].name %></td>
+                <td><%= room8_Score[i].score %></td>
+            </tr>
+        <% } %>
 	</table>
 </body>
 </html>
