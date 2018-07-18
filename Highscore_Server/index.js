@@ -64,6 +64,12 @@ app.get("/Highscore_Table", (req, res)=>{
 			for (let i = 0; i < results.Rooms.length; i++){
 				if (results.Rooms[i] === roomNames.room_8){
 					roomScores.room_8.push({name: results.TeamNames[i], score: results.Scores[i]});
+				} else if (results.Rooms[i] === roomNames.qurantaine){
+					roomScores.qurantaine.push({name: results.TeamNames[i], score: results.Scores[i]});
+				} else if (results.Rooms[i] === roomNames.the_bunker){
+					roomScores.the_bunker.push({name: results.TeamNames[i], score: results.Scores[i]});
+				} else if (results.Rooms[i] === roomNames.vietnam_victim){
+					roomScores.vietnam_victim.push({name: results.TeamNames[i], score: results.Scores[i]});
 				}
 			}
 			
