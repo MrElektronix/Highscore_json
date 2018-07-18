@@ -131,9 +131,9 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		//RemoveSchemaData(HighscoreSchema);
-		//RemoveSchemaData(DaySchema);
-		CheckDay(CheckDate());
+		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
+		//CheckDay(CheckDate());
 	})
 	
 	socket.on("newEvent", (data)=>{
@@ -322,7 +322,7 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 					console.log("no score a man");
 				}
 			}
-			
+
 		} else{
 			results.scoreCount += 1;
 			if (results.scoreCount < results.maxScores){
