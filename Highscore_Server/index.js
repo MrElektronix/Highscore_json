@@ -62,7 +62,7 @@ app.get("/Highscore_Table", (req, res)=>{
 		if (results) {
 			
 			for (let i = 0; i < results.Rooms.length; i++){
-				if (results.Rooms[i] === roomNames.room_8){
+				if (results.Rooms[i] == roomNames.room_8){
 					console.log(results.TeamNames[i]);
 				}
 				/*
