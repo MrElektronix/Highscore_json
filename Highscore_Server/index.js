@@ -63,8 +63,7 @@ app.get("/Highscore_Table", (req, res)=>{
 			for (let r = 0; r < results.Rooms.length; r++){
 				switch(results.Rooms[r]){
 					case roomNames.room_8:
-						console.log(results.TeamNames[r]);
-						//roomScores.room_8.push({name: results.TeamNames[r], score: results.Scores[r]})
+						roomScores.room_8.push({name: results.TeamNames[r], score: results.Scores[r]})
 						break;
 					case roomNames.qurantaine:
 
