@@ -58,7 +58,7 @@ app.get("/Highscore_Table", (req, res)=>{
 	
     HighscoreSchema.findOne({}, (err, results)=>{
 		if (err) throw err;
-		console.log("hallo");
+		
 		if (results) {
 
 			for (let r = 0; r < results.Rooms.length; r++){
@@ -77,7 +77,7 @@ app.get("/Highscore_Table", (req, res)=>{
 						break;
 				}
 			}
-
+			console.log("hallo");
 			/*
 			let scores = [];
 			
