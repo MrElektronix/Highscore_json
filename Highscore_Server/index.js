@@ -62,7 +62,7 @@ app.get("/Highscore_Table", (req, res)=>{
 		if (results) {
 
 			for (let r = 0; r < results.Rooms.length; r++){
-				console.log(results.Rooms[r]);
+				//console.log(results.Rooms[r]);
 				/*
 				switch(results.Rooms[r]){
 					case roomNames.room_8:
@@ -312,6 +312,8 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 			high.maxScores = 10;
 			high.scoreCount += 1;
 			SaveData(high);
+
+			console.log(high.Rooms);
 			
 		} else{
 			results.scoreCount += 1;
