@@ -58,11 +58,12 @@ app.get("/Highscore_Table", (req, res)=>{
 	
     HighscoreSchema.findOne({}, (err, results)=>{
 		if (err) throw err;
-		console.log(roomScores.room_8);
+		
 		if (results) {
 
 			for (let r = 0; r < results.Rooms.length; r++){
-			
+				console.log(results.Rooms[r]);
+				/*
 				switch(results.Rooms[r]){
 					case roomNames.room_8:
 						roomScores.room_8.push({name: results.TeamNames[r], score: results.Scores[r]});
@@ -78,6 +79,7 @@ app.get("/Highscore_Table", (req, res)=>{
 
 						break;
 				}
+				*/	
 			}
 			
 			/*
