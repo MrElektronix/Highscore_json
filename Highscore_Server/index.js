@@ -62,21 +62,21 @@ app.get("/Highscore_Table", (req, res)=>{
 		if (results) {
 
 			for (let r = 0; r < results.Rooms.length; r++){
-				switch(results.Rooms[r]){
-					case roomNames.room_8:
-						console.log("hallo room 8");
-						roomScores.room_8.push({name: results.TeamNames[r], score: results.Scores[r]});
-						break;
-					case roomNames.qurantaine:
-						roomScores.qurantaine.push({name: results.TeamNames[r], score: result.Scores[r]});
-						break;
-					case roomNames.the_bunker:
-						console.log("hallo bunker");
-						roomScores.the_bunker.push({name: results.TeamNames[r], score: result.Scores[r]})
-						break;
-					case roomNames.vietnam_victim:
-						roomScores.vietnam_victim.push({name: results.TeamNames[r], score: result.Scores[r]});
-						break;
+
+				if (results.Room[r] == roomNames.room_8){
+					roomScores.room_8.push({name: results.TeamNames[r], score: results.Scores[r]});
+				}
+
+				if (results.Room[r] == roomNames.qurantaine){
+					roomScores.qurantaine.push({name: results.TeamNames[r], score: result.Scores[r]});
+				}
+
+				if (results.Room[r] == roomNames.the_bunker){
+					roomScores.the_bunker.push({name: results.TeamNames[r], score: result.Scores[r]})
+				}
+
+				if(results.Room[r] == roomNames.vietnam_victim){
+					roomScores.vietnam_victim.push({name: results.TeamNames[r], score: result.Scores[r]});
 				}
 			}
 			
@@ -94,6 +94,18 @@ app.get("/Highscore_Table", (req, res)=>{
 			*/
 
 			roomScores.room_8.sort((a, b)=>{
+				return ('' + b.score).localeCompare(a.score);
+			});
+
+			roomScores.qurantaine.sort((a, b)=>{
+				return ('' + b.score).localeCompare(a.score);
+			});
+
+			roomScores.the_bunker.sort((a, b)=>{
+				return ('' + b.score).localeCompare(a.score);
+			});
+
+			roomScores.vietnam_victim.sort((a, b)=>{
 				return ('' + b.score).localeCompare(a.score);
 			});
 
@@ -138,9 +150,9 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		//RemoveSchemaData(HighscoreSchema);
-		//RemoveSchemaData(DaySchema);
-		CheckDay(CheckDate());
+		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
+		//CheckDay(CheckDate());
 	})
 	
 	socket.on("newEvent", (data)=>{
