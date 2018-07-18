@@ -174,6 +174,7 @@ io.on("connection", (socket)=>{
 		CheckTeamName(randomName);
 		*/
 		//CheckTeamName(data.TeamName);
+		console.log(data.EventName);
 		CheckHighscore(data.EventName, data.TeamName, data.Minutes, data.Seconds);
 		//console.log(teamNameUsed);
 		/*
@@ -312,9 +313,6 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 			high.maxScores = 10;
 			high.scoreCount += 1;
 			SaveData(high);
-
-			console.log(high.Rooms);
-			
 		} else{
 			results.scoreCount += 1;
 			if (results.scoreCount < results.maxScores){
