@@ -174,7 +174,7 @@ io.on("connection", (socket)=>{
 		CheckTeamName(randomName);
 		*/
 		//CheckTeamName(data.TeamName);
-		console.log(data.EventName);
+		console.log(data.TeamName);
 		CheckHighscore(data.EventName, data.TeamName, data.Minutes, data.Seconds);
 		//console.log(teamNameUsed);
 		/*
