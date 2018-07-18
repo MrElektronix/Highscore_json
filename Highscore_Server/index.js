@@ -24,14 +24,21 @@ const PlayerSchema = require("./schemas/userdata/Player.Schema");
 
 const HighscoreSchema = require("./schemas/userdata/escaperoom/Highscore.Schema");
 
-/*
-const Rooms = {
-	rooms_8 = HighscoreSchema,
-	vietnam_victim = HighscoreSchema,
-	qurantaine = HighscoreSchema,
-	the_bunker = HighscoreSchema,
+
+let roomScores = {
+	room_8: [],
+	qurantaine: [],
+	the_bunker: [],
+	vietnam_victim: [],
 }
-*/
+
+const roomNames = {
+	room_8: "Room 8",
+	qurantaine: "Quarantaine",
+	the_bunker: "The Bunker",
+	vietnam_victim: "Vietnam v"
+}
+
 
 
 /*-------------------------------------------------------------------------------------*/
@@ -48,10 +55,29 @@ app.get("/", (req, res)=>{
 
 // Page where the highscoreTable is displayed
 app.get("/Highscore_Table", (req, res)=>{
-	/*
+	
     HighscoreSchema.findOne({}, (err, results)=>{
 		if (err) throw err;
 		if (results) {
+
+			for (let r = 0; r < results.Rooms.length; r++){
+				switch(results.Rooms[r]){
+					case roomNames.room_8:
+						roomScores.room_8.push({name: results.TeamNames[r], score: results.Scores[r]})
+						break;
+					case roomNames.qurantaine:
+
+						break;
+					case roomNames.the_bunker:
+
+						break;
+					case roomNames.vietnam_victim:
+
+						break;
+				}
+			}
+
+			/*
 			let scores = [];
 			
 			for (let i = 0; i < results.Scores.length; i++){
@@ -62,12 +88,18 @@ app.get("/Highscore_Table", (req, res)=>{
 				//return b.score - a.score;
 				return ('' + b.score).localeCompare(a.score);
 			});
-			res.render('highscore.ejs', {scoreArray: scores, teamNameArray: scores});
+			*/
+
+			roomScores.room_8.sort((a, b)=>{
+				return ('' + b.score).localeCompare(a.score);
+			});
+
+			res.render('highscore.ejs', {room8_Score: roomScores.room_8, room8_Teamnames: roomScores.room_8});
 		} else{
 			res.render('highscore.ejs', {scoreArray: "", teamNameArray: ""});
 		}
 	});
-	*/
+	
 	
 	DaySchema.findOne({}, (err, results) =>{
 		if (err) throw err;
@@ -98,9 +130,9 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		//RemoveSchemaData(HighscoreSchema);
-		//RemoveSchemaData(DaySchema);
-		CheckDay(CheckDate());
+		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
+		//CheckDay(CheckDate());
 	})
 	
 	socket.on("newEvent", (data)=>{
@@ -136,11 +168,14 @@ io.on("connection", (socket)=>{
 		
 		CheckTeamName(randomName);
 		*/
-		CheckTeamName(data.TeamName);
-		console.log(teamNameUsed);
+		//CheckTeamName(data.TeamName);
+		CheckHighscore(data.EventName, data.TeamName, data.Minutes, data.Seconds);
+		//console.log(teamNameUsed);
+		/*
 		if (!teamNameUsed) {
 			//CheckHighscore(data.TeamName, data.Minutes, data.Seconds);
 		}
+		*/
 	});
 	
 	socket.on("newPhoto", (data)=>{
@@ -257,7 +292,7 @@ let AddPlayers = (name, email, date)=>{
 
 /*-------------------------------------------------------------------------------------*/
 /* SAVE HIGHSCORES */
-let CheckHighscore = (team, minutes, seconds)=>{
+let CheckHighscore = (room, team, minutes, seconds)=>{
 	HighscoreSchema.findOne({}, (err, results)=>{
 		if (err) throw err;
 		let score = minutes + " min " + "& " + seconds + " sec";
@@ -267,6 +302,7 @@ let CheckHighscore = (team, minutes, seconds)=>{
 
 			high.Scores.push(score);
 			high.TeamNames.push(team);
+			high.Rooms.push(room);
 			high.scoreCount = 0;
 			high.maxScores = 10;
 			high.scoreCount += 1;
