@@ -149,6 +149,7 @@ io.on("connection", (socket)=>{
 	});
 
 	socket.on("newERTeam", (data)=>{
+		console.log("hallo");
 		MakeTeam(data.TeamName, CheckDate());
 	});
 	
@@ -192,8 +193,8 @@ io.on("connection", (socket)=>{
 
 	
 	socket.on("deleteAll", ()=>{
-		//RemoveSchemaData(HighscoreSchema);
-		//RemoveSchemaData(DaySchema);
+		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
 	});
 	
 
