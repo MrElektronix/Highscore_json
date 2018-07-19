@@ -149,7 +149,6 @@ io.on("connection", (socket)=>{
 	});
 
 	socket.on("newERTeam", (data)=>{
-		console.log("hallo");
 		MakeTeam(data.TeamName, CheckDate());
 	});
 	
@@ -245,6 +244,7 @@ let MakeDay = (date)=>{
 /* MAKE EVENT */
 
 let MakeEvent = (eventname, gamemode, date)=>{
+	console.log("hallo eventjes");
 	DaySchema.findOne({currentDate: date}, (err, day)=>{
 		if (err) throw err;
 		
