@@ -162,7 +162,9 @@ io.on("connection", (socket)=>{
 	*/
 	
 	socket.on("newERPlayers", (data)=>{
-		AddPlayers(data.PlayerInfo_names, data.PlayerInfo_email, CheckDate());
+		console.log("date: " + CheckDate());
+		console.log("playername: " + data.PlayerInfo_names);
+		//AddPlayers(data.PlayerInfo_names, data.PlayerInfo_email, CheckDate());
 	});
 	
 	socket.on("sendMail", ()=>{ 
