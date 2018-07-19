@@ -307,7 +307,7 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 			high.TeamNames.push(team);
 			high.Rooms.push(room);
 			high.scoreCount = 0;
-			high.maxScores = 1;
+			high.maxScores = 2;
 			high.scoreCount += 1;
 			SaveData(high);
 
