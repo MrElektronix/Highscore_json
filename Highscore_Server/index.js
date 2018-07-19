@@ -192,8 +192,8 @@ io.on("connection", (socket)=>{
 
 	
 	socket.on("deleteAll", ()=>{
-		RemoveSchemaData(HighscoreSchema);
-		RemoveSchemaData(DaySchema);
+		//RemoveSchemaData(HighscoreSchema);
+		//RemoveSchemaData(DaySchema);
 	});
 	
 
@@ -282,7 +282,6 @@ let MakeTeam = (teamname, date)=>{
 /* ADD PLAYERS */
 let AddPlayers = (name, email, date)=>{
 	ClearConsole();
-	console.log(name);
 	/*
 	DaySchema.findOne({currentDate: date}, (err, day)=>{
 		if (err) throw err;
