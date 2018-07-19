@@ -143,9 +143,9 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		//RemoveSchemaData(HighscoreSchema);
-		//RemoveSchemaData(DaySchema);
-		CheckDay(CheckDate());
+		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
+		//CheckDay(CheckDate());
 	})
 	
 	socket.on("newEvent", (data)=>{
@@ -308,13 +308,21 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 			high.Rooms.push(room);
 			high.scoreCount = 0;
 			high.maxScores = 2;
-			high.scoreCount += 1;
+
+			if (room == roomNames.room_8){high.Room8_Count += 1}
+			if (room == roomNames.qurantaine){high.Qurantiane_Count += 1}
+			if (room == roomNames.the_bunker){high.TheBunker_Count += 1}
+			if (room == roomNames.vietnam_victim){high.VietnamVictim_Count += 1}
 			SaveData(high);
 
 		} else{
-			results.scoreCount += 1;
-			if (results.scoreCount < results.maxScores){
+			if (room == roomNames.room_8){results.Room8_Count += 1}
+			if (room == roomNames.qurantaine){results.Qurantiane_Count += 1}
+			if (room == roomNames.the_bunker){results.TheBunker_Count += 1}
+			if (room == roomNames.vietnam_victim){results.VietnamVictim_Count += 1}
 
+			if (results.Room8_Count < results.maxScores || results.Qurantiane_Count < results.maxScores 
+				|| results.TheBunker_Count < results.maxScores || results.VietnamVictim_Count < results.maxScores){
 				results.Scores.push(score);
 				results.TeamNames.push(team);
 				results.Rooms.push(room);
