@@ -79,18 +79,6 @@ app.get("/Highscore_Table", (req, res)=>{
 					console.log("no score a man");
 				}
 			}
-			/*
-			let scores = [];
-			
-			for (let i = 0; i < results.Scores.length; i++){
-				scores.push({name: results.TeamNames[i], score: results.Scores[i]});
-			}
-
-			scores.sort((a, b)=>{
-				//return b.score - a.score;
-				return ('' + b.score).localeCompare(a.score);
-			});
-			*/
 
 			roomScores.room_8.sort((a, b)=>{
 				return ('' + b.score).localeCompare(a.score);
