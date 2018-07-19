@@ -60,7 +60,8 @@ app.get("/Highscore_Table", (req, res)=>{
 		if (err) throw err;
 		
 		if (results) {
-
+			console.log(results);
+			/*
 			roomScores.room_8 = [];
 			roomScores.qurantaine = [];
 			roomScores.the_bunker = [];
@@ -103,8 +104,15 @@ app.get("/Highscore_Table", (req, res)=>{
 				vietnamvictim_Info: roomScores.vietnam_victim,
 			});
 		} else{
-			res.render('highscore.ejs', {room8_Score: "", room8_Teamnames: ""});
+			res.render('highscore.ejs', {
+				room8_Info: roomScores.room_8,
+				qurantaine_Info: roomScores.qurantaine,
+				thebunker_Info: roomScores.the_bunker,
+				vietnamvictim_Info: roomScores.vietnam_victim,
+			});
+			*/
 		}
+		
 	});
 	
 	/*
