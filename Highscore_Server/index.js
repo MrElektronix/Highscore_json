@@ -244,7 +244,6 @@ let MakeDay = (date)=>{
 /* MAKE EVENT */
 
 let MakeEvent = (eventname, gamemode, date)=>{
-	console.log("hallo eventjes");
 	DaySchema.findOne({currentDate: date}, (err, day)=>{
 		if (err) throw err;
 		
@@ -265,6 +264,7 @@ let MakeEvent = (eventname, gamemode, date)=>{
 /* MAKE TEAM */
 
 let MakeTeam = (teamname, date)=>{
+	console.log("hallo teampjes");
 	DaySchema.findOne({currentDate: date}, (err, day)=>{
 		if (err) throw err;
 		
