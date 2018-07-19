@@ -465,9 +465,7 @@ let GoNext = ()=>{
 	HighscoreSchema.findOne({}, (err, results)=>{
 		if (err) throw err;
 		if (results){
-			//console.log(results.TotalNumberCount)
-			console.log(results.Scores[results.Scores.length - 1]);
-			ERUsers[0].time = results.Scores[results.scoreCount - 1];
+			ERUsers[0].time = results.Scores[results.Scores.length - 1];
 		}
 		
 
