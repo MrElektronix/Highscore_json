@@ -143,9 +143,9 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		//RemoveSchemaData(HighscoreSchema);
-		//RemoveSchemaData(DaySchema);
-		CheckDay(CheckDate());
+		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
+		//CheckDay(CheckDate());
 	})
 	
 	socket.on("newEvent", (data)=>{
@@ -509,6 +509,6 @@ let SendER_Email = (obj)=>{
 		}));
 	}).then(() => {
 		console.log('send ER mail!');
-		DeleteLocalImage("escape.jpg");
+		//DeleteLocalImage("escape.jpg");
 	});
 }
