@@ -60,8 +60,7 @@ app.get("/Highscore_Table", (req, res)=>{
 		if (err) throw err;
 		
 		if (results) {
-			console.log(results);
-			/*
+			
 			roomScores.room_8 = [];
 			roomScores.qurantaine = [];
 			roomScores.the_bunker = [];
@@ -110,7 +109,6 @@ app.get("/Highscore_Table", (req, res)=>{
 				thebunker_Info: roomScores.the_bunker,
 				vietnamvictim_Info: roomScores.vietnam_victim,
 			});
-			*/
 		}
 		
 	});
@@ -145,8 +143,6 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		//RemoveSchemaData(HighscoreSchema);
-		//RemoveSchemaData(DaySchema);
 		CheckDay(CheckDate());
 	})
 	
@@ -193,6 +189,11 @@ io.on("connection", (socket)=>{
 		SaveLocalImage(convertedEmailPhoto);
 		console.log("photo taken");
 		GetLocalImage("escape.jpg");
+	});
+
+	socket.on("deleteAll", ()=>{
+		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
 	});
 
 	/*
