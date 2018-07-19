@@ -143,6 +143,7 @@ io.on("connection", (socket)=>{
 	})
 	
 	socket.on("newEvent", (data)=>{
+		console.log("event hier");
 		if (data.EventName == "Laser Gamen"){
 			MakeEvent(data.EventName, "Team Deathmatch", CheckDate());
 		} else{
@@ -151,6 +152,7 @@ io.on("connection", (socket)=>{
 	});
 
 	socket.on("newERTeam", (data)=>{
+		console.log("team hier");
 		MakeTeam(data.TeamName, CheckDate());
 	});
 	
@@ -259,7 +261,7 @@ let MakeEvent = (eventname, gamemode, date)=>{
 /* MAKE TEAM */
 
 let MakeTeam = (teamname, date)=>{
-	console.log("hallo teampjes");
+
 	DaySchema.findOne({currentDate: date}, (err, day)=>{
 		if (err) throw err;
 		
