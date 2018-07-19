@@ -459,7 +459,7 @@ let ER_EmailData = (date)=>{
 let GoNext = ()=>{
 	HighscoreSchema.findOne({}, (err, results)=>{
 		if (err) throw err;
-
+		console.log(results.Scores[results.scoreCount - 1]);
 		if (results){
 			ERUsers[0].time = results.Scores[results.scoreCount - 1];
 		}
