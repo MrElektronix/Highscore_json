@@ -10,7 +10,8 @@ let HighscoreSchema = new Schema({
     Room8_Count: Number,
     Qurantiane_Count: Number,
     TheBunker_Count: Number,
-    VietnamVictim_Count: Number
+    VietnamVictim_Count: Number,
+    TotalNumberCount: Number
 });
 
 module.exports = mongoose.model("HighscoreSchema", HighscoreSchema);

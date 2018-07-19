@@ -305,12 +305,13 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 			high.Qurantiane_Count = 0;
 			high.TheBunker_Count = 0;
 			high.VietnamVictim_Count = 0;
+			high.TotalNumberCount = 0;
 			high.maxScores = 10;
 
-			if (room == roomNames.room_8){high.Room8_Count += 1}
-			if (room == roomNames.qurantaine){high.Qurantiane_Count += 1}
-			if (room == roomNames.the_bunker){high.TheBunker_Count += 1}
-			if (room == roomNames.vietnam_victim){high.VietnamVictim_Count += 1}
+			if (room == roomNames.room_8){high.Room8_Count += 1;  high.TotalNumberCount += 1}
+			if (room == roomNames.qurantaine){high.Qurantiane_Count += 1; high.TotalNumberCount += 1}
+			if (room == roomNames.the_bunker){high.TheBunker_Count += 1; high.TotalNumberCount += 1}
+			if (room == roomNames.vietnam_victim){high.VietnamVictim_Count += 1; high.TotalNumberCount += 1}
 			SaveData(high);
 
 		} else{
@@ -320,6 +321,7 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 				results.Scores.push(score);
 				results.TeamNames.push(team);
 				results.Rooms.push(room);
+				results.TotalNumberCount += 1;
 				SaveData(results);	
 			} else if (room == roomNames.qurantaine && results.Qurantiane_Count < results.maxScores){
 				results.Qurantiane_Count += 1
@@ -327,6 +329,7 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 				results.Scores.push(score);
 				results.TeamNames.push(team);
 				results.Rooms.push(room);
+				results.TotalNumberCount += 1;
 				SaveData(results);	
 			} else if (room == roomNames.the_bunker && results.TheBunker_Count < results.maxScores){
 				results.TheBunker_Count += 1
@@ -334,6 +337,7 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 				results.Scores.push(score);
 				results.TeamNames.push(team);
 				results.Rooms.push(room);
+				results.TotalNumberCount += 1;
 				SaveData(results);	
 			} else if (room == roomNames.vietnam_victim && results.VietnamVictim_Count < results.maxScores){
 				results.VietnamVictim_Count += 1
@@ -341,7 +345,8 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 				results.Scores.push(score);
 				results.TeamNames.push(team);
 				results.Rooms.push(room);
-				SaveData(results);	
+				results.TotalNumberCount += 1;
+				SaveData(results);
 			} else{
 				results.maxScores = 10;
 			}
@@ -459,9 +464,10 @@ let ER_EmailData = (date)=>{
 let GoNext = ()=>{
 	HighscoreSchema.findOne({}, (err, results)=>{
 		if (err) throw err;
-		console.log(results.Scores[results.Scores.length]);
 		if (results){
-			ERUsers[0].time = results.Scores[results.scoreCount - 1];
+			console.log(results.TotalNumberCount)
+			console.log(results.Scores[results.TotalNumberCount]);
+			//ERUsers[0].time = results.Scores[results.scoreCount - 1];
 		}
 		
 
