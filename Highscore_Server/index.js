@@ -137,7 +137,9 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		CheckDay(CheckDate());
+		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
+		//CheckDay(CheckDate());
 	})
 	
 	socket.on("newEvent", (data)=>{
@@ -189,13 +191,6 @@ io.on("connection", (socket)=>{
 		console.log("photo taken");
 		GetLocalImage("escape.jpg");
 	});
-
-	
-	socket.on("deleteAll", ()=>{
-		RemoveSchemaData(HighscoreSchema);
-		RemoveSchemaData(DaySchema);
-	});
-	
 
 	/*
 	let CheckTeamName = (teamname)=> { // check if teamname exist in the database
