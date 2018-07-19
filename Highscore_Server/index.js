@@ -137,13 +137,12 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		//RemoveSchemaData(HighscoreSchema);
-		//RemoveSchemaData(DaySchema);
-		CheckDay(CheckDate());
+		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
+		//CheckDay(CheckDate());
 	})
 	
 	socket.on("newEvent", (data)=>{
-		console.log("event hier");
 		if (data.EventName == "Laser Gamen"){
 			MakeEvent(data.EventName, "Team Deathmatch", CheckDate());
 		} else{
@@ -152,7 +151,6 @@ io.on("connection", (socket)=>{
 	});
 
 	socket.on("newERTeam", (data)=>{
-		console.log("team hier");
 		MakeTeam(data.TeamName, CheckDate());
 	});
 	
@@ -172,11 +170,6 @@ io.on("connection", (socket)=>{
 	});
 
 	socket.on("newTime", (data)=>{
-		/*
-		let randomName = teamNames[Math.floor(Math.random() * teamNames.length)];
-		
-		CheckTeamName(randomName);
-		*/
 		//CheckTeamName(data.TeamName);
 		CheckHighscore(data.GameMode, data.TeamName, data.Minutes, data.Seconds);
 		//console.log(teamNameUsed);
@@ -261,7 +254,6 @@ let MakeEvent = (eventname, gamemode, date)=>{
 /* MAKE TEAM */
 
 let MakeTeam = (teamname, date)=>{
-
 	DaySchema.findOne({currentDate: date}, (err, day)=>{
 		if (err) throw err;
 		
@@ -279,8 +271,7 @@ let MakeTeam = (teamname, date)=>{
 /*-------------------------------------------------------------------------------------*/
 /* ADD PLAYERS */
 let AddPlayers = (name, email, date)=>{
-	//ClearConsole();
-	/*
+	ClearConsole();
 	DaySchema.findOne({currentDate: date}, (err, day)=>{
 		if (err) throw err;
 		if (day){
@@ -293,7 +284,7 @@ let AddPlayers = (name, email, date)=>{
 			SaveData(day);
 		}
 	});
-	*/
+	
 };
 
 /*-------------------------------------------------------------------------------------*/
