@@ -137,8 +137,6 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		//RemoveSchemaData(HighscoreSchema);
-		//RemoveSchemaData(DaySchema);
 		CheckDay(CheckDate());
 	})
 	
@@ -162,9 +160,7 @@ io.on("connection", (socket)=>{
 	*/
 	
 	socket.on("newERPlayers", (data)=>{
-		console.log("date: " + CheckDate());
-		console.log("playername: " + data.PlayerInfo_names);
-		//AddPlayers(data.PlayerInfo_names, data.PlayerInfo_email, CheckDate());
+		AddPlayers(data.PlayerInfo_names, data.PlayerInfo_email, CheckDate());
 	});
 	
 	socket.on("sendMail", ()=>{ 
@@ -194,11 +190,12 @@ io.on("connection", (socket)=>{
 		GetLocalImage("escape.jpg");
 	});
 
-	/*
-	socket.on("deleteTime", ()=>{
+	
+	socket.on("deleteAll", ()=>{
 		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
 	});
-	*/
+	
 
 	/*
 	let CheckTeamName = (teamname)=> { // check if teamname exist in the database
@@ -285,6 +282,8 @@ let MakeTeam = (teamname, date)=>{
 /* ADD PLAYERS */
 let AddPlayers = (name, email, date)=>{
 	ClearConsole();
+	console.log(name);
+	/*
 	DaySchema.findOne({currentDate: date}, (err, day)=>{
 		if (err) throw err;
 		if (day){
@@ -297,6 +296,7 @@ let AddPlayers = (name, email, date)=>{
 			SaveData(day);
 		}
 	});
+	*/
 };
 
 /*-------------------------------------------------------------------------------------*/
