@@ -143,9 +143,9 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		RemoveSchemaData(HighscoreSchema);
-		RemoveSchemaData(DaySchema);
-		//CheckDay(CheckDate());
+		//RemoveSchemaData(HighscoreSchema);
+		//RemoveSchemaData(DaySchema);
+		CheckDay(CheckDate());
 	})
 	
 	socket.on("newEvent", (data)=>{
@@ -467,7 +467,7 @@ let GoNext = ()=>{
 		if (results){
 			console.log(results.TotalNumberCount)
 			console.log(results.Scores[results.TotalNumberCount]);
-			//ERUsers[0].time = results.Scores[results.scoreCount - 1];
+			ERUsers[0].time = results.Scores[results.scoreCount - 1];
 		}
 		
 
