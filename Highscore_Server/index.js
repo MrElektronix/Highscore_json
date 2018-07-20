@@ -142,12 +142,12 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		RemoveSchemaData(HighscoreSchema);
-		RemoveSchemaData(DaySchema);
-		RemoveSchemaData(ImageSchema);
-		DeleteLocalImage("escape0.jpg");
-		//CheckDay(CheckDate());
-		//CheckImageSchema();
+		//RemoveSchemaData(HighscoreSchema);
+		//RemoveSchemaData(DaySchema);
+		//RemoveSchemaData(ImageSchema);
+		//DeleteLocalImage("escape0.jpg");
+		CheckDay(CheckDate());
+		CheckImageSchema();
 	})
 	
 	socket.on("newEvent", (data)=>{
@@ -190,6 +190,7 @@ io.on("connection", (socket)=>{
 	});
 	
 	socket.on("newPhoto", (data)=>{
+		CheckImageSchema();
 		SaveImage(data.Photo.toString());
 	});
 
@@ -247,7 +248,8 @@ let CheckImageSchema = ()=>{
 
 			SaveData(newImage)
 		} else{
-			console.log(results.Count);
+			results.Count += 1;
+			SaveData(results);
 		}
 
 	});
@@ -257,11 +259,13 @@ let SaveImage = (image)=>{
 	ImageSchema.findOne({}, (err, results)=>{
 		if (err) throw err;
 		if (results){
-			results.Count += 1;
 			results.FullString = results.Name + results.Count + "." + results.Format;
 			SaveData(results);
 		}
-		
+		console.log(results.FullString);
+
+
+
 		SaveLocalImage(results.FullString, image);
 		console.log("photo taken");
 		GetLocalImage(results.FullString);
@@ -349,7 +353,6 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 			if (room == roomNames.the_bunker){high.TheBunker_Count += 1; high.TotalNumberCount += 1}
 			if (room == roomNames.vietnam_victim){high.VietnamVictim_Count += 1; high.TotalNumberCount += 1}
 			SaveData(high);
-
 		} else{
 			if (room == roomNames.room_8 && results.Room8_Count < results.maxScores){
 				results.Room8_Count += 1
