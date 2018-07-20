@@ -142,12 +142,12 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		//RemoveSchemaData(HighscoreSchema);
-		//RemoveSchemaData(DaySchema);
-		//RemoveSchemaData(ImageSchema);
-		//DeleteLocalImage("escape1.jpg");
-		CheckDay(CheckDate());
-		CheckImageSchema();
+		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
+		RemoveSchemaData(ImageSchema);
+		DeleteLocalImage("escape0.jpg");
+		//CheckDay(CheckDate());
+		//CheckImageSchema();
 	})
 	
 	socket.on("newEvent", (data)=>{
@@ -244,8 +244,11 @@ let CheckImageSchema = ()=>{
 			newImage.Format = "jpg";
 			newImage.FullString = "";
 
-			SaveData(newImage);
+			SaveData(newImage)
+		} else{
+			console.log(results.Count);
 		}
+
 	});
 }
 
@@ -256,10 +259,11 @@ let SaveImage = (image)=>{
 			results.Count += 1;
 			results.FullString = results.Name + results.Count + "." + results.Format;
 			SaveData(results);
-			SaveLocalImage(results.FullString, image);
-			console.log("photo taken");
-			GetLocalImage(results.FullString);
 		}
+
+		SaveLocalImage(results.FullString, image);
+		console.log("photo taken");
+		GetLocalImage(results.FullString);
 	});
 }
 
