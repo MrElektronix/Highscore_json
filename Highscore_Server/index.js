@@ -270,7 +270,7 @@ let SaveImage = (image)=>{
 	ImageSchema.findOne({}, (err, results)=>{
 		if (err) throw err;
 		if (results){
-			csonole.log("hiero: "+ results.FullString);
+			console.log("hiero: "+ results.FullString);
 			SaveLocalImage(results.FullString, image);
 			console.log("photo taken");
 			GetLocalImage(results.FullString);
