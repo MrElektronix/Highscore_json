@@ -142,12 +142,12 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		//RemoveSchemaData(HighscoreSchema);
-		//RemoveSchemaData(DaySchema);
-		//RemoveSchemaData(ImageSchema);
-		//DeleteLocalImage("escape3.jpg");
-		CheckDay(CheckDate());
-		CheckImageSchema();
+		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
+		RemoveSchemaData(ImageSchema);
+		DeleteLocalImage("escape0.jpg");
+		//CheckDay(CheckDate());
+		//CheckImageSchema();
 	})
 	
 	socket.on("newEvent", (data)=>{
@@ -247,12 +247,7 @@ let CheckImageSchema = ()=>{
 			newImage.FullString = "";
 
 			SaveData(newImage)
-		} else{
-			results.Count += 1;
-			console.log("opgeteld");
-			SaveData(results);
 		}
-
 	});
 }
 
@@ -260,6 +255,8 @@ let SaveImage = (image)=>{
 	ImageSchema.findOne({}, (err, results)=>{
 		if (err) throw err;
 		if (results){
+			results.Count += 1;
+			console.log("opgeteld");
 			results.FullString = results.Name + results.Count + "." + results.Format;
 			SaveData(results);
 		}
