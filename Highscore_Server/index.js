@@ -170,6 +170,7 @@ io.on("connection", (socket)=>{
 	*/
 	
 	socket.on("newERPlayers", (data)=>{
+		//CheckImageSchema();
 		AddPlayers(data.PlayerInfo_names, data.PlayerInfo_email, CheckDate());
 	});
 	
