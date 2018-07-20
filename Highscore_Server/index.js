@@ -144,8 +144,7 @@ io.on("connection", (socket)=>{
     socket.on("newDay", ()=>{
 		//RemoveSchemaData(HighscoreSchema);
 		//RemoveSchemaData(DaySchema);
-		RemoveSchemaData(ImageSchema);
-		DeleteLocalImage("escape0.jpg");
+		//RemoveSchemaData(ImageSchema);
 		CheckDay(CheckDate());
 		CheckImageSchema();
 	})
