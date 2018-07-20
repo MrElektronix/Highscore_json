@@ -144,8 +144,6 @@ io.on("connection", (socket)=>{
     socket.on("newDay", ()=>{
 		//RemoveSchemaData(HighscoreSchema);
 		//RemoveSchemaData(DaySchema);
-		RemoveSchemaData(ImageSchema);
-		DeleteLocalImage("escape0jpg");
 		CheckDay(CheckDate());
 		CheckImageSchema();
 	})
@@ -478,14 +476,18 @@ let ERUsers = [
 let ER_EmailData = ()=>{
 	//ClearConsole();
 
+	ImageSchema.findOne({}, (err, results)=>{
+		if (err) throw err;
+		if (results){
+			ERUsers[0].fotoLink = "http://5.157.85.78:2000/images/" + results.FullString;
+		}
+	});
+
 	HighscoreSchema.findOne({}, (err, results)=>{
 		if (err) throw err;
 		if (results){
 			ERUsers[0].time = results.Scores[results.Scores.length - 1];
 		}
-		
-		
-		ERUsers[0].fotoLink = "http://5.157.85.78:2000/images/escape.jpg";
 	});
 
 	GoNext(CheckDate());
