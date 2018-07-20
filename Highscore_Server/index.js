@@ -285,7 +285,7 @@ let AddPlayers = (name, email, date)=>{
 			SaveData(day);
 		}
 	});
-	CheckPlayers();
+	CheckPlayers(CheckDate());
 };
 
 let CheckPlayers = (date)=>{
