@@ -142,15 +142,16 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		//RemoveSchemaData(HighscoreSchema);
-		//RemoveSchemaData(DaySchema);
-		//RemoveSchemaData(ImageSchema);
-		//DeleteLocalImage("escape3.jpg");
-		CheckDay(CheckDate());
-		CheckImageSchema();
+		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
+		RemoveSchemaData(ImageSchema);
+		DeleteLocalImage("escape0.jpg");
+		//CheckDay(CheckDate());
+		//CheckImageSchema();
 	})
 	
 	socket.on("newEvent", (data)=>{
+		CheckImageSchema();
 		if (data.EventName == "Laser Gamen"){
 			MakeEvent(data.EventName, "Team Deathmatch", CheckDate());
 		} else{
@@ -159,6 +160,7 @@ io.on("connection", (socket)=>{
 	});
 
 	socket.on("newERTeam", (data)=>{
+		CountUp();
 		MakeTeam(data.TeamName, CheckDate());
 	});
 	
@@ -170,7 +172,7 @@ io.on("connection", (socket)=>{
 	*/
 	
 	socket.on("newERPlayers", (data)=>{
-		CheckImageSchema();
+		
 		AddPlayers(data.PlayerInfo_names, data.PlayerInfo_email, CheckDate());
 	});
 	
@@ -251,7 +253,7 @@ let CheckImageSchema = ()=>{
 	});
 }
 
-let SaveImage = (image)=>{
+let CountUp = ()=>{
 	ImageSchema.findOne({}, (err, results)=>{
 		if (err) throw err;
 		if (results){
@@ -260,9 +262,19 @@ let SaveImage = (image)=>{
 			results.FullString = results.Name + results.Count + "." + results.Format;
 			SaveData(results);
 		}
-		SaveLocalImage(results.FullString, image);
-		console.log("photo taken");
-		GetLocalImage(results.FullString);
+	});
+}
+
+let SaveImage = (image)=>{
+
+	ImageSchema.findOne({}, (err, results)=>{
+		if (err) throw err;
+		if (results){
+			csonole.log("hiero: "+ results.FullString);
+			SaveLocalImage(results.FullString, image);
+			console.log("photo taken");
+			GetLocalImage(results.FullString);
+		}
 	});
 }
 
