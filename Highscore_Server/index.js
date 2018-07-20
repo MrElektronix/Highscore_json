@@ -480,8 +480,9 @@ let ER_EmailData = ()=>{
 	ImageSchema.findOne({}, (err, results)=>{
 		if (err) throw err;
 		if (results){
-			console.log(results.FullString);
+			console.log("photo name: " + results.FullString);
 			ERUsers[0].fotoLink = "http://5.157.85.78:2000/images/" + results.FullString;
+			console.log("FotoLink: " + ERUsers[0].fotoLink)
 		}
 	});
 
