@@ -273,6 +273,7 @@ let MakeTeam = (teamname, date)=>{
 /* ADD PLAYERS */
 let AddPlayers = (name, email, date)=>{
 	ClearConsole();
+	console.log("doe dit vaker");
 	DaySchema.findOne({currentDate: date}, (err, day)=>{
 		if (err) throw err;
 		if (day){
@@ -285,21 +286,7 @@ let AddPlayers = (name, email, date)=>{
 			SaveData(day);
 		}
 	});
-	CheckPlayers(CheckDate());
 };
-
-let CheckPlayers = (date)=>{
-	DaySchema.findOne({}, (err, day)=>{
-		if (err) throw err;
-		if (day){
-			console.log(day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players);
-		} else{
-			console.log("no result");
-			console.log(day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players);
-		}
-	});
-
-}
 
 /*-------------------------------------------------------------------------------------*/
 /* SAVE HIGHSCORES */
