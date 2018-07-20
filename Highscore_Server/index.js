@@ -291,7 +291,7 @@ let AddPlayers = (name, email, date)=>{
 let CheckPlayers = (date)=>{
 	PlayerSchema.findOne({}, (err, results)=>{
 		if (err) throw err;
-		if (results){
+		if (!results){
 			console.log(results.playerName);
 		}
 	});
