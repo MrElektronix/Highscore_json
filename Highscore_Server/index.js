@@ -289,10 +289,10 @@ let AddPlayers = (name, email, date)=>{
 };
 
 let CheckPlayers = (date)=>{
-	DaySchema.findOne({currentDate: date}, (err, day)=>{
+	PlayerSchema.findOne({}, (err, results)=>{
 		if (err) throw err;
 		if (day){
-			console.log(day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players.playerEmail);
+			console.log(results.playerName);
 		}
 	});
 
