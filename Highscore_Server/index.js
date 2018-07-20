@@ -273,7 +273,7 @@ let MakeTeam = (teamname, date)=>{
 /* ADD PLAYERS */
 let AddPlayers = (name, email, date)=>{
 	ClearConsole();
-	console.log("doe dit vaker");
+	console.log(name);
 	DaySchema.findOne({currentDate: date}, (err, day)=>{
 		if (err) throw err;
 		if (day){
