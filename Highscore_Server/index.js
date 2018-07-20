@@ -289,10 +289,13 @@ let AddPlayers = (name, email, date)=>{
 };
 
 let CheckPlayers = (date)=>{
-	PlayerSchema.findOne({}, (err, results)=>{
+	DaySchema.findOne({}, (err, results)=>{
 		if (err) throw err;
-		if (!results){
-			console.log(results.playerName);
+		if (results){
+			console.log(day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players);
+		} else{
+			console.log("no result");
+			console.log(day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players);
 		}
 	});
 
