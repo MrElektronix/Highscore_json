@@ -142,11 +142,13 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
+		/*
 		RemoveSchemaData(HighscoreSchema);
 		RemoveSchemaData(DaySchema);
 		RemoveSchemaData(ImageSchema);
 		DeleteLocalImage("escape0.jpg");
-		//CheckDay(CheckDate());
+		*/
+		CheckDay(CheckDate());
 		//CheckImageSchema();
 	})
 	
@@ -170,7 +172,7 @@ io.on("connection", (socket)=>{
 	*/
 	
 	socket.on("newERPlayers", (data)=>{
-		//CheckImageSchema();
+		CheckImageSchema();
 		AddPlayers(data.PlayerInfo_names, data.PlayerInfo_email, CheckDate());
 	});
 	
