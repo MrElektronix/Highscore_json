@@ -13,14 +13,13 @@ const teamNames = ["Apple", "Banana", "Blueberry",
 let fs = require("fs");
 let teamNameUsed;
 
-let convertedEmailPhoto;
 /* SCHEMA'S   */
 
 const DaySchema = require("./schemas/userdata/Day.Schema");
 const EventSchema = require("./schemas/userdata/Event.Schema");
 const TeamSchema = require("./schemas/userdata/Team.Schema");
 const PlayerSchema = require("./schemas/userdata/Player.Schema");
-
+const ImageSchema = require("./schemas/userdata/Image.Schema");
 
 const HighscoreSchema = require("./schemas/userdata/escaperoom/Highscore.Schema");
 
@@ -146,6 +145,7 @@ io.on("connection", (socket)=>{
 		//RemoveSchemaData(HighscoreSchema);
 		//RemoveSchemaData(DaySchema);
 		CheckDay(CheckDate());
+		CheckImageSchema();
 	})
 	
 	socket.on("newEvent", (data)=>{
@@ -187,10 +187,7 @@ io.on("connection", (socket)=>{
 	});
 	
 	socket.on("newPhoto", (data)=>{
-		convertedEmailPhoto = data.Photo.toString();
-		SaveLocalImage(convertedEmailPhoto);
-		console.log("photo taken");
-		GetLocalImage("escape.jpg");
+		SaveImage(data.Photo.toString());
 	});
 
 	/*
@@ -231,6 +228,40 @@ let MakeDay = (date)=>{
 	newDay.EventIndex = -1;
 	SaveData(newDay);
 }
+/*-------------------------------------------------------------------------------------*/
+/* MAKE PHOTO Schema */
+
+let CheckImageSchema = ()=>{
+	ImageSchema.findOne({}, (err, results)=>{
+		if (err) throw err;
+
+		if (!results){
+			let newImage = new ImageSchema();
+			newImage.Name = "escape"
+			newImage.Count = -1;
+			newImage.Format = "jpg";
+			newImage.FullString = "";
+
+			SaveData(newImage);
+		}
+	});
+}
+
+let SaveImage = (image)=>{
+	ImageSchema.findOne({}, (err, results)=>{
+		if (err) throw err;
+		if (results){
+			results.Count += 1;
+			results.FullString = results.Name + results.Count + results.Format;
+			SaveData(results);
+
+			SaveLocalImage(results.FullString, image);
+			console.log("photo taken");
+			GetLocalImage(results.FullString);
+		}
+	});
+}
+
 /*-------------------------------------------------------------------------------------*/
 /* MAKE EVENT */
 
@@ -400,14 +431,14 @@ let ClearConsole = ()=>{
 }
 
 
-let SaveLocalImage = (base64Data)=>{
-	fs.writeFile("./public/images/escape.jpg", new Buffer(base64Data, "base64"), (err, data)=>{
+let SaveLocalImage = (imageName, base64Data)=>{
+	fs.writeFile("./public/images/" + imageName, new Buffer(base64Data, "base64"), (err)=>{
 		if (err) throw err;
 	});
 }
 
 let GetLocalImage = (imageName)=>{
-	fs.readFile("./public/images/" + imageName, (err, data)=>{
+	fs.readFile("./public/images/" + imageName, (err)=>{
 		if (err) throw err;
 	});
 }
@@ -451,7 +482,7 @@ let ER_EmailData = ()=>{
 			ERUsers[0].time = results.Scores[results.Scores.length - 1];
 		}
 		
-
+		
 		ERUsers[0].fotoLink = "http://5.157.85.78:2000/images/escape.jpg";
 	});
 
