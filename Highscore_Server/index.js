@@ -480,15 +480,14 @@ let ER_EmailData = ()=>{
 	ImageSchema.findOne({}, (err, results)=>{
 		if (err) throw err;
 		if (results){
-			console.log("hey gooi die foto erop man");
-			ERUsers[0].fotoLink = "http://5.157.85.78:2000/images/" + results.FullString;
+			console.log(results.FullString);
+			ERUsers[0].fotoLink = "http://5.157.85.78:2000/images/" + "escape1.jpg";
 		}
 	});
 
 	HighscoreSchema.findOne({}, (err, results)=>{
 		if (err) throw err;
 		if (results){
-			console.log("tijdje niet gezien");
 			ERUsers[0].time = results.Scores[results.Scores.length - 1];
 		}
 	});
