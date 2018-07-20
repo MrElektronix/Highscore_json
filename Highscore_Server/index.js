@@ -142,12 +142,12 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		RemoveSchemaData(HighscoreSchema);
-		RemoveSchemaData(DaySchema);
-		RemoveSchemaData(ImageSchema);
-		DeleteLocalImage("escape3.jpg");
-		//CheckDay(CheckDate());
-		//CheckImageSchema();
+		//RemoveSchemaData(HighscoreSchema);
+		//RemoveSchemaData(DaySchema);
+		//RemoveSchemaData(ImageSchema);
+		//DeleteLocalImage("escape3.jpg");
+		CheckDay(CheckDate());
+		CheckImageSchema();
 	})
 	
 	socket.on("newEvent", (data)=>{
@@ -482,23 +482,23 @@ let ERUsers = [
 
 let ER_EmailData = ()=>{
 	//ClearConsole();
-
-	HighscoreSchema.findOne({}, (err, results)=>{
-		if (err) throw err;
-		if (results){
-			ERUsers[0].time = results.Scores[results.Scores.length - 1];
-		}
-	});
-	GoFoto();
-}
-
-let GoFoto = ()=>{
 	ImageSchema.findOne({}, (err, results)=>{
 		if (err) throw err;
 		if (results){
 			ERUsers[0].fotoLink = "http://5.157.85.78:2000/images/" + results.FullString;
 		} else{
 			console.log("No Image");
+		}
+	});
+
+	GoHighscore();
+}
+
+let GoHighscore = ()=>{
+	HighscoreSchema.findOne({}, (err, results)=>{
+		if (err) throw err;
+		if (results){
+			ERUsers[0].time = results.Scores[results.Scores.length - 1];
 		}
 	});
 
