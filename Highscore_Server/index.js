@@ -257,7 +257,6 @@ let SaveImage = (image)=>{
 			results.Count += 1;
 			results.FullString = results.Name + results.Count + "." + results.Format;
 			SaveData(results);
-			console.log(results.FullString);
 			SaveLocalImage(results.FullString, image);
 			console.log("photo taken");
 			GetLocalImage(results.FullString);
@@ -435,6 +434,7 @@ let ClearConsole = ()=>{
 
 
 let SaveLocalImage = (imageName, base64Data)=>{
+	console.log(imageName);
 	fs.writeFile("./public/images/" + imageName, new Buffer(base64Data, "base64"), (err)=>{
 		if (err) throw err;
 	});
