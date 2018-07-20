@@ -442,7 +442,7 @@ let ERUsers = [
 	}
 ];
 
-let ER_EmailData = (date)=>{
+let ER_EmailData = ()=>{
 	//ClearConsole();
 
 	HighscoreSchema.findOne({}, (err, results)=>{
@@ -455,10 +455,10 @@ let ER_EmailData = (date)=>{
 		ERUsers[0].fotoLink = "http://5.157.85.78:2000/images/escape.jpg";
 	});
 
-	GoNext();
+	GoNext(CheckDate());
 }
 
-let GoNext = ()=>{
+let GoNext = (date)=>{
 	DaySchema.findOne({currentDate: date}, (err, day)=>{
 		if (err) throw err;
 		
