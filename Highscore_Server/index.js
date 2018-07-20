@@ -273,7 +273,6 @@ let MakeTeam = (teamname, date)=>{
 /* ADD PLAYERS */
 let AddPlayers = (name, email, date)=>{
 	ClearConsole();
-	console.log(name);
 	DaySchema.findOne({currentDate: date}, (err, day)=>{
 		if (err) throw err;
 		if (day){
@@ -445,23 +444,7 @@ let ERUsers = [
 
 let ER_EmailData = (date)=>{
 	//ClearConsole();
-	DaySchema.findOne({currentDate: date}, (err, day)=>{
-		if (err) throw err;
-		
-		if (day){
 
-			for (let p = 0; p < day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players.length; p++){
-				ERUsers[0].name = day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players[p].playerName;
-				ERUsers[0].email = day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players[p].playerEmail;
-			}
-		}
-		
-	});
-
-	GoNext();
-}
-
-let GoNext = ()=>{
 	HighscoreSchema.findOne({}, (err, results)=>{
 		if (err) throw err;
 		if (results){
@@ -470,10 +453,25 @@ let GoNext = ()=>{
 		
 
 		ERUsers[0].fotoLink = "http://5.157.85.78:2000/images/escape.jpg";
-		SendER_Email(ERUsers);
 	});
 
-	
+	GoNext();
+}
+
+let GoNext = ()=>{
+	DaySchema.findOne({currentDate: date}, (err, day)=>{
+		if (err) throw err;
+		
+		if (day){
+
+			for (let p = 0; p < day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players.length; p++){
+				ERUsers[0].name = day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players[p].playerName;
+				ERUsers[0].email = day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players[p].playerEmail;
+				SendER_Email(ERUsers);
+			}
+		}
+		
+	});
 }
 	
 function sendEmail (obj) {
