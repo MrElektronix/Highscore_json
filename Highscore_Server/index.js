@@ -142,13 +142,11 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		/*
 		RemoveSchemaData(HighscoreSchema);
 		RemoveSchemaData(DaySchema);
 		RemoveSchemaData(ImageSchema);
 		DeleteLocalImage("escape0.jpg");
-		*/
-		CheckDay(CheckDate());
+		//CheckDay(CheckDate());
 		//CheckImageSchema();
 	})
 	
@@ -263,7 +261,7 @@ let SaveImage = (image)=>{
 			results.FullString = results.Name + results.Count + "." + results.Format;
 			SaveData(results);
 		}
-
+		
 		SaveLocalImage(results.FullString, image);
 		console.log("photo taken");
 		GetLocalImage(results.FullString);
