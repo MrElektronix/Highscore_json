@@ -142,12 +142,12 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		RemoveSchemaData(HighscoreSchema);
-		RemoveSchemaData(DaySchema);
-		RemoveSchemaData(ImageSchema);
-		DeleteLocalImage("escape0.jpg");
-		//CheckDay(CheckDate());
-		//CheckImageSchema();
+		//RemoveSchemaData(HighscoreSchema);
+		//RemoveSchemaData(DaySchema);
+		//RemoveSchemaData(ImageSchema);
+		//DeleteLocalImage("escape0.jpg");
+		CheckDay(CheckDate());
+		CheckImageSchema();
 	})
 	
 	socket.on("newEvent", (data)=>{
@@ -482,7 +482,6 @@ let ERUsers = [
 let ER_EmailData = ()=>{
 	//ClearConsole();
 
-	//ERUsers[0].fotoLink = "http://5.157.85.78:2000/images/" + results.FullString;
 	HighscoreSchema.findOne({}, (err, results)=>{
 		if (err) throw err;
 		if (results){
@@ -496,7 +495,7 @@ let GoFoto = ()=>{
 	ImageSchema.findOne({}, (err, results)=>{
 		if (err) throw err;
 		if (results){
-			console.log(results.Count);
+			console.log(results.FullString);
 		} else{
 			console.log("No Image");
 		}
