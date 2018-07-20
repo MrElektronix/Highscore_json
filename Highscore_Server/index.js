@@ -144,6 +144,8 @@ io.on("connection", (socket)=>{
     socket.on("newDay", ()=>{
 		//RemoveSchemaData(HighscoreSchema);
 		//RemoveSchemaData(DaySchema);
+		RemoveSchemaData(ImageSchema);
+		DeleteLocalImage("escape0jpg");
 		CheckDay(CheckDate());
 		CheckImageSchema();
 	})
@@ -252,7 +254,7 @@ let SaveImage = (image)=>{
 		if (err) throw err;
 		if (results){
 			results.Count += 1;
-			results.FullString = results.Name + results.Count + results.Format;
+			results.FullString = results.Name + results.Count + "." + results.Format;
 			SaveData(results);
 
 			SaveLocalImage(results.FullString, image);
