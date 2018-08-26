@@ -142,13 +142,13 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		//RemoveSchemaData(HighscoreSchema);
-		//RemoveSchemaData(DaySchema);
-		//RemoveSchemaData(ImageSchema);
-		//DeleteLocalImage("escape0.jpg");
+		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
+		RemoveSchemaData(ImageSchema);
+		DeleteLocalImage("escape0.jpg");
 		//LibrarySetup();
-		CheckDay(CheckDate());
-		CheckImageSchema();
+		//CheckDay(CheckDate());
+		//CheckImageSchema();
 	})
 	
 	socket.on("newEvent", (data)=>{
@@ -369,7 +369,7 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 			high.TheBunker_Count = 0;
 			high.VietnamVictim_Count = 0;
 			high.TotalNumberCount = 0;
-			high.maxScores = 10;
+			high.maxScores = 2;
 
 			if (room == roomNames.room_8){high.Room8_Count += 1;  high.TotalNumberCount += 1}
 			if (room == roomNames.qurantaine){high.Qurantiane_Count += 1; high.TotalNumberCount += 1}
@@ -410,8 +410,69 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 				results.TotalNumberCount += 1;
 				SaveData(results);
 			} else{
-				console.log(score);
 				results.maxScores = 10;
+				if (room == roomNames.room_8 && results.Room8_Count == results.maxScores){
+					for (let i = 0; i < results.Scores.length; i++){
+						if (score < results.Scores[i]){
+							results.Scores.splice(results.Scores[i], 1, score);
+							results.TeamNames.splice(results.TeamNames[i], 1, team);
+
+							results.Scores.splice(results.Scores[i], 0, score);
+							results.TeamNames.splice(results.Scores[i], 0, team);
+
+							results.Scores.push(score);
+							results.TeamNames.push(team);
+							//results.Rooms.push(room);
+							SaveData(results);
+						}
+					}
+				} else if (room == roomNames.qurantaine && results.Qurantiane_Count < results.maxScores){
+	
+					for (let i = 0; i < results.Scores.length; i++){
+						if (score < results.Scores[i]){
+							results.Scores.splice(results.Scores[i], 1, score);
+							results.TeamNames.splice(results.TeamNames[i], 1, team);
+
+							results.Scores.splice(results.Scores[i], 0, score);
+							results.TeamNames.splice(results.Scores[i], 0, team);
+
+							results.Scores.push(score);
+							results.TeamNames.push(team);
+							//results.Rooms.push(room);
+							SaveData(results);
+						}
+					}
+				} else if (room == roomNames.the_bunker && results.TheBunker_Count < results.maxScores){
+	
+					for (let i = 0; i < results.Scores.length; i++){
+						if (score < results.Scores[i]){
+							results.Scores.splice(results.Scores[i], 1, score);
+							results.TeamNames.splice(results.TeamNames[i], 1, team);
+
+							results.Scores.splice(results.Scores[i], 0, score);
+							results.TeamNames.splice(results.Scores[i], 0, team);
+
+							results.Scores.push(score);
+							results.TeamNames.push(team);
+							//results.Rooms.push(room);
+							SaveData(results);
+						}
+					}	
+				} else if (room == roomNames.vietnam_victim && results.VietnamVictim_Count < results.maxScores){
+					for (let i = 0; i < results.Scores.length; i++){
+						if (score < results.Scores[i]){
+							results.Scores.splice(results.Scores[i], 1, score);
+							results.TeamNames.splice(results.TeamNames[i], 1, team);
+
+							results.Scores.splice(results.Scores[i], 0, score);
+							results.TeamNames.splice(results.Scores[i], 0, team);
+
+							results.Scores.push(score);
+							results.TeamNames.push(team);
+							//results.Rooms.push(room);
+							SaveData(results);
+						}
+					}
 			}
 		}
 	});
