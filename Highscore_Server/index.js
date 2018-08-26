@@ -142,13 +142,13 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		//RemoveSchemaData(HighscoreSchema);
-		//RemoveSchemaData(DaySchema);
-		//RemoveSchemaData(ImageSchema);
-		//DeleteLocalImage("escape0.jpg");
+		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
+		RemoveSchemaData(ImageSchema);
+		DeleteLocalImage("escape0.jpg");
 		//LibrarySetup();
-		CheckDay(CheckDate());
-		CheckImageSchema();
+		//CheckDay(CheckDate());
+		//CheckImageSchema();
 	})
 	
 	socket.on("newEvent", (data)=>{
@@ -424,8 +424,10 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 							results.TeamNames.push(team);
 							//results.Rooms.push(room);
 							SaveData(results);
+							console.log("if: " + i);
 						} else{
 							i++;
+							console.log("else: " + i);
 						}
 					}	
 				} else if (room == roomNames.qurantaine && results.Qurantiane_Count == results.maxScores){
