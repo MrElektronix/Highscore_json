@@ -142,13 +142,13 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		//RemoveSchemaData(HighscoreSchema);
-		//RemoveSchemaData(DaySchema);
-		//RemoveSchemaData(ImageSchema);
-		//DeleteLocalImage("escape0.jpg");
+		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
+		RemoveSchemaData(ImageSchema);
+		DeleteLocalImage("escape0.jpg");
 		//LibrarySetup();
-		CheckDay(CheckDate());
-		CheckImageSchema();
+		//CheckDay(CheckDate());
+		//CheckImageSchema();
 	})
 	
 	socket.on("newEvent", (data)=>{
@@ -414,15 +414,14 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 					console.log("room 8");
 					for (let i = 0; i < results.Scores.length; i++){
 						if (score > results.Scores[i]){
-							results.Scores.splice(results.Scores[i], 1, score);
-							results.TeamNames.splice(results.TeamNames[i], 1, team);
+							results.Scores.splice(i, 1, score);
+							results.TeamNames.splice(i, 1, team);
 
-							results.Scores.splice(results.Scores[i], 0, score);
-							results.TeamNames.splice(results.Scores[i], 0, team);
+							results.Scores.splice(i, 0, score);
+							results.TeamNames.splice(i, 0, team);
 
 							results.Scores.push(score);
 							results.TeamNames.push(team);
-							//results.Rooms.push(room);
 							SaveData(results);
 							console.log("if: " + i);
 						} else{
@@ -433,15 +432,14 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 				} else if (room == roomNames.qurantaine && results.Qurantiane_Count == results.maxScores){
 					for (let i = 0; i < results.Scores.length; i++){
 						if (score > results.Scores[i]){
-							results.Scores.splice(results.Scores[i], 1, score);
-							results.TeamNames.splice(results.TeamNames[i], 1, team);
+							results.Scores.splice(i, 1, score);
+							results.TeamNames.splice(i, 1, team);
 
-							results.Scores.splice(results.Scores[i], 0, score);
-							results.TeamNames.splice(results.Scores[i], 0, team);
+							results.Scores.splice(i, 0, score);
+							results.TeamNames.splice(i, 0, team);
 
 							results.Scores.push(score);
 							results.TeamNames.push(team);
-							//results.Rooms.push(room);
 							SaveData(results);
 						} else{
 							i++;
@@ -450,15 +448,14 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 				} else if (room == roomNames.the_bunker && results.TheBunker_Count == results.maxScores){
 					for (let i = 0; i > results.Scores.length;){
 						if (score > results.Scores[i]){
-							results.Scores.splice(results.Scores[i], 1, score);
-							results.TeamNames.splice(results.TeamNames[i], 1, team);
+							results.Scores.splice(i, 1, score);
+							results.TeamNames.splice(i, 1, team);
 
-							results.Scores.splice(results.Scores[i], 0, score);
-							results.TeamNames.splice(results.Scores[i], 0, team);
+							results.Scores.splice(i, 0, score);
+							results.TeamNames.splice(i, 0, team);
 
 							results.Scores.push(score);
 							results.TeamNames.push(team);
-							//results.Rooms.push(room);
 							SaveData(results);
 						} else{
 							i++;
@@ -467,15 +464,14 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 				} else if (room == roomNames.vietnam_victim && results.VietnamVictim_Count == results.maxScores){
 					for (let i = 0; i < results.Scores.length; i++){
 						if (score > results.Scores[i]){
-							results.Scores.splice(results.Scores[i], 1, score);
-							results.TeamNames.splice(results.TeamNames[i], 1, team);
+							results.Scores.splice(i, 1, score);
+							results.TeamNames.splice(i, 1, team);
 
-							results.Scores.splice(results.Scores[i], 0, score);
-							results.TeamNames.splice(results.Scores[i], 0, team);
+							results.Scores.splice(i, 0, score);
+							results.TeamNames.splice(i, 0, team);
 
 							results.Scores.push(score);
 							results.TeamNames.push(team);
-							//results.Rooms.push(room);
 							SaveData(results);
 						} else{
 							i++;
