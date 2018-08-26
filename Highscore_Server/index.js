@@ -20,7 +20,7 @@ const EventSchema = require("./schemas/userdata/Event.Schema");
 const TeamSchema = require("./schemas/userdata/Team.Schema");
 const PlayerSchema = require("./schemas/userdata/Player.Schema");
 const ImageSchema = require("./schemas/userdata/Image.Schema");
-
+const ImageLibrarySchema = require("./schemas/userdata/ImageLibrarySchema.Schema");
 const HighscoreSchema = require("./schemas/userdata/escaperoom/Highscore.Schema");
 
 
@@ -142,12 +142,13 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		RemoveSchemaData(HighscoreSchema);
-		RemoveSchemaData(DaySchema);
-		RemoveSchemaData(ImageSchema);
-		DeleteLocalImage("escape0.jpg");
-		//CheckDay(CheckDate());
-		//CheckImageSchema();
+		//RemoveSchemaData(HighscoreSchema);
+		//RemoveSchemaData(DaySchema);
+		//RemoveSchemaData(ImageSchema);
+		//DeleteLocalImage("escape0.jpg");
+		LibrarySetup();
+		CheckDay(CheckDate());
+		CheckImageSchema();
 	})
 	
 	socket.on("newEvent", (data)=>{
@@ -335,6 +336,22 @@ let AddPlayers = (name, email, date)=>{
 };
 
 /*-------------------------------------------------------------------------------------*/
+/* ADD IMAGE TO LIBRARY */
+let LibrarySetup = ()=>{
+	ClearConsole();
+	ImageLibrarySchema.findOne({}, (err, results)=>{
+		if (err) throw err;
+		if (!results){
+			let newLibrary = new ImageLibrarySchema();
+			newLibrary.PhotoNames = [];
+			newLibrary.TotalDays = [];
+			newLibrary.MaximumDays = 25;
+			SaveData(newLibrary);
+		}
+	});
+};
+
+/*-------------------------------------------------------------------------------------*/
 /* SAVE HIGHSCORES */
 let CheckHighscore = (room, team, minutes, seconds)=>{
 	HighscoreSchema.findOne({}, (err, results)=>{
@@ -362,7 +379,7 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 		} else{
 			if (room == roomNames.room_8 && results.Room8_Count < results.maxScores){
 				results.Room8_Count += 1
-
+				
 				results.Scores.push(score);
 				results.TeamNames.push(team);
 				results.Rooms.push(room);
@@ -393,6 +410,7 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 				results.TotalNumberCount += 1;
 				SaveData(results);
 			} else{
+				console.log(score);
 				results.maxScores = 10;
 			}
 		}
@@ -521,9 +539,13 @@ let GoNext = (date)=>{
 		if (day){
 
 			for (let p = 0; p < day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players.length; p++){
-				ERUsers[0].name = day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players[p].playerName;
-				ERUsers[0].email = day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players[p].playerEmail;
-				SendER_Email(ERUsers);
+				if (day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players[p].playerEmail == ""){
+					console.log("no email");
+				} else{
+					ERUsers[0].name = day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players[p].playerName;
+					ERUsers[0].email = day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players[p].playerEmail;
+					SendER_Email(ERUsers);
+				}
 			}
 		}
 		
