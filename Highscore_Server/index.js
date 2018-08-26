@@ -20,7 +20,7 @@ const EventSchema = require("./schemas/userdata/Event.Schema");
 const TeamSchema = require("./schemas/userdata/Team.Schema");
 const PlayerSchema = require("./schemas/userdata/Player.Schema");
 const ImageSchema = require("./schemas/userdata/Image.Schema");
-const ImageLibrarySchema = require("./schemas/userdata/ImageLibrarySchema.Schema");
+//const ImageLibrarySchema = require("./schemas/userdata/ImageLibrarySchema.Schema");
 const HighscoreSchema = require("./schemas/userdata/escaperoom/Highscore.Schema");
 
 
@@ -146,7 +146,7 @@ io.on("connection", (socket)=>{
 		//RemoveSchemaData(DaySchema);
 		//RemoveSchemaData(ImageSchema);
 		//DeleteLocalImage("escape0.jpg");
-		LibrarySetup();
+		//LibrarySetup();
 		CheckDay(CheckDate());
 		CheckImageSchema();
 	})
