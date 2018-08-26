@@ -142,13 +142,14 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		//RemoveSchemaData(HighscoreSchema);
-		//RemoveSchemaData(DaySchema);
-		//RemoveSchemaData(ImageSchema);
-		//DeleteLocalImage("escape0.jpg");
+		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
+		RemoveSchemaData(ImageSchema);
+		DeleteLocalImage("escape0.jpg");
+		DeleteLocalImage("escape1.jpg");
 		//LibrarySetup();
-		CheckDay(CheckDate());
-		CheckImageSchema();
+		//CheckDay(CheckDate());
+		//CheckImageSchema();
 	})
 	
 	socket.on("newEvent", (data)=>{
@@ -413,7 +414,7 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 				if (room == roomNames.room_8 && results.Room8_Count == results.maxScores){
 					console.log("room 8");
 					for (let i = 0; i < results.Scores.length; i++){
-						if (score < results.Scores[i]){
+						if (score > results.Scores[i]){
 							results.Scores.splice(results.Scores[i], 1, score);
 							results.TeamNames.splice(results.TeamNames[i], 1, team);
 
@@ -424,11 +425,13 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 							results.TeamNames.push(team);
 							//results.Rooms.push(room);
 							SaveData(results);
+						} else{
+							i++;
 						}
 					}	
 				} else if (room == roomNames.qurantaine && results.Qurantiane_Count == results.maxScores){
 					for (let i = 0; i < results.Scores.length; i++){
-						if (score < results.Scores[i]){
+						if (score > results.Scores[i]){
 							results.Scores.splice(results.Scores[i], 1, score);
 							results.TeamNames.splice(results.TeamNames[i], 1, team);
 
@@ -439,11 +442,13 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 							results.TeamNames.push(team);
 							//results.Rooms.push(room);
 							SaveData(results);
+						} else{
+							i++;
 						}
 					}	
 				} else if (room == roomNames.the_bunker && results.TheBunker_Count == results.maxScores){
-					for (let i = 0; i < results.Scores.length; i++){
-						if (score < results.Scores[i]){
+					for (let i = 0; i > results.Scores.length;){
+						if (score > results.Scores[i]){
 							results.Scores.splice(results.Scores[i], 1, score);
 							results.TeamNames.splice(results.TeamNames[i], 1, team);
 
@@ -454,11 +459,13 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 							results.TeamNames.push(team);
 							//results.Rooms.push(room);
 							SaveData(results);
+						} else{
+							i++;
 						}
 					}
 				} else if (room == roomNames.vietnam_victim && results.VietnamVictim_Count == results.maxScores){
 					for (let i = 0; i < results.Scores.length; i++){
-						if (score < results.Scores[i]){
+						if (score > results.Scores[i]){
 							results.Scores.splice(results.Scores[i], 1, score);
 							results.TeamNames.splice(results.TeamNames[i], 1, team);
 
@@ -469,7 +476,10 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 							results.TeamNames.push(team);
 							//results.Rooms.push(room);
 							SaveData(results);
+						} else{
+							i++;
 						}
+
 					}
 				}
 			}
