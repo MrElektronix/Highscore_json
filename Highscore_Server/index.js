@@ -63,6 +63,8 @@ app.get("/Highscore_Table", (req, res)=>{
 			roomScores.vietnam_victim = [];
 			
 			for (let i = 0; i < results.Data.length; i++){
+				console.log(results.Data[i].time);
+				/*
 				if (results.Data[i].roomname === roomNames.room_8){
 					roomScores.room_8.push({name: results.Data[i].teamname, score: results.Data[i].time});
 				} else if (results.Data[i].roomname === roomNames.qurantaine){
@@ -74,6 +76,7 @@ app.get("/Highscore_Table", (req, res)=>{
 				} else{
 					console.log("no score a man");
 				}
+				*/
 			}
 
 			res.render('highscore.ejs', {
@@ -92,18 +95,6 @@ app.get("/Highscore_Table", (req, res)=>{
 		}
 		
 	});
-	
-	/*
-	DaySchema.findOne({}, (err, results) =>{
-		if (err) throw err;
-
-		if (results){
-			res.render("highscore.ejs", {Event: results.Events})
-		} else{s
-			res.render("highscore.ejs", {Event: "not found"})
-		}
-	});
-	*/
 });
 
 app.get("/public", (req, res)=>{ 
@@ -123,15 +114,15 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		//RemoveSchemaData(HighscoreSchema);
-		//RemoveSchemaData(DaySchema);
-		//RemoveSchemaData(ImageSchema);
-		//DeleteLocalImage("escape0.jpg");
-		//DeleteLocalImage("escape1.jpg");
+		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
+		RemoveSchemaData(ImageSchema);
+		DeleteLocalImage("escape0.jpg");
+		DeleteLocalImage("escape1.jpg");
 		//DeleteLocalImage("escape2.jpg");
 		//LibrarySetup();
-		CheckDay(CheckDate());
-		CheckImageSchema();
+		//CheckDay(CheckDate());
+		//CheckImageSchema();
 	})
 	
 	socket.on("newEvent", (data)=>{
