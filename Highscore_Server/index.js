@@ -6,10 +6,7 @@ const io = require("socket.io")(http);
 const mongoose = require("mongoose");
 const port = 2000;
 const ipadress = "5.157.85.78";
-const teamNames = ["Apple", "Banana", "Blueberry", 
-"Cherry", "Coconut", "Cranberry", "Fig", "Grape", 
-"Kiwi", "Lemon", "Mango", "Orange", "Peach", "Pear", 
-"Pineapple", "Raspberry", "Strawberry", "Watermelon"];
+
 let fs = require("fs");
 let teamNameUsed;
 
@@ -67,13 +64,13 @@ app.get("/Highscore_Table", (req, res)=>{
 			
 			for (let i = 0; i < results.Data.length; i++){
 				if (results.Data[i].roomname === roomNames.room_8){
-					roomScores.room_8.push({name: results.Data[i].teamNames, score: results.Data[i].time});
+					roomScores.room_8.push({name: results.Data[i].teamname, score: results.Data[i].time});
 				} else if (results.Data[i].roomname === roomNames.qurantaine){
-					roomScores.qurantaine.push({name: results.Data[i].teamNames, score: results.Data[i].time});
+					roomScores.qurantaine.push({name: results.Data[i].teamname, score: results.Data[i].time});
 				} else if (results.Data[i].roomname === roomNames.the_bunker){
-					roomScores.the_bunker.push({name: results.Data[i].teamNames, score: results.Data[i].time});
+					roomScores.the_bunker.push({name: results.Data[i].teamname, score: results.Data[i].time});
 				} else if (results.Data[i].roomname === roomNames.vietnam_victim){
-					roomScores.vietnam_victim.push({name: results.Data[i].teamNames, score: results.Data[i].time})
+					roomScores.vietnam_victim.push({name: results.Data[i].teamname, score: results.Data[i].time})
 				} else{
 					console.log("no score a man");
 				}
@@ -126,15 +123,15 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		//RemoveSchemaData(HighscoreSchema);
-		//RemoveSchemaData(DaySchema);
-		//RemoveSchemaData(ImageSchema);
-		//DeleteLocalImage("escape0.jpg");
-		//DeleteLocalImage("escape1.jpg");
+		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
+		RemoveSchemaData(ImageSchema);
+		DeleteLocalImage("escape0.jpg");
+		DeleteLocalImage("escape1.jpg");
 		//DeleteLocalImage("escape2.jpg");
 		//LibrarySetup();
-		CheckDay(CheckDate());
-		CheckImageSchema();
+		//CheckDay(CheckDate());
+		//CheckImageSchema();
 	})
 	
 	socket.on("newEvent", (data)=>{
@@ -339,6 +336,7 @@ let LibrarySetup = ()=>{
 /*-------------------------------------------------------------------------------------*/
 /* SAVE HIGHSCORES */
 let CheckHighscore = (room, team, minutes, seconds)=>{
+	console.log(team);
 	HighscoreSchema.findOne({}, (err, results)=>{
 		if (err) throw err;
 		let score = minutes + " min " + "& " + seconds + " sec";
@@ -360,6 +358,7 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 
 			SaveData(high);
 		} else{
+			console.log(team);
 			if (room == roomNames.room_8 && results.Room8_Count < results.maxScores){
 				results.Room8_Count += 1;
 				results.Data.push({roomname: room, teamname: team, time: score});
@@ -393,7 +392,18 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 				if (room == roomNames.room_8 && results.Room8_Count == results.maxScores){
 					console.log("room 8");
 					for (let i = 0; i < results.Data.length; i++){
-						console.log(results.Data[i].time);
+						if (score > results.Scores[i]){
+							console.log("stay here: " + i);
+							results.Data[i].time = score;
+							results.Data[i].teamname = team;
+							SaveData(results);
+
+							console.log(results.Data[i].time);
+							console.log(results.Data[i].teamname);
+						} else{
+							console.log("count up: " + i);
+							i++;
+						}
 					}	
 				} else if (room == roomNames.qurantaine && results.Qurantiane_Count == results.maxScores){
 					for (let i = 0; i < results.Scores.length;){
