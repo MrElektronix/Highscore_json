@@ -65,7 +65,7 @@ app.get("/Highscore_Table", (req, res)=>{
 			roomScores.the_bunker = [];
 			roomScores.vietnam_victim = [];
 			
-			for (let i = 0; i < results.Rooms.length; i++){
+			for (let i = 0; i < results.Data.length; i++){
 				if (results.Data[i].roomname === roomNames.room_8){
 					roomScores.room_8.push({name: results.Data[i].teamNames, score: results.Data[i].time});
 				} else if (results.Data[i].roomname === roomNames.qurantaine){
@@ -126,15 +126,15 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		RemoveSchemaData(HighscoreSchema);
-		RemoveSchemaData(DaySchema);
-		RemoveSchemaData(ImageSchema);
-		DeleteLocalImage("escape0.jpg");
-		DeleteLocalImage("escape1.jpg");
-		DeleteLocalImage("escape2.jpg");
+		//RemoveSchemaData(HighscoreSchema);
+		//RemoveSchemaData(DaySchema);
+		//RemoveSchemaData(ImageSchema);
+		//DeleteLocalImage("escape0.jpg");
+		//DeleteLocalImage("escape1.jpg");
+		//DeleteLocalImage("escape2.jpg");
 		//LibrarySetup();
-		//CheckDay(CheckDate());
-		//CheckImageSchema();
+		CheckDay(CheckDate());
+		CheckImageSchema();
 	})
 	
 	socket.on("newEvent", (data)=>{
