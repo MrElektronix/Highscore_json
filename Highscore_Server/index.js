@@ -117,8 +117,8 @@ io.on("connection", (socket)=>{
 		RemoveSchemaData(HighscoreSchema);
 		RemoveSchemaData(DaySchema);
 		RemoveSchemaData(ImageSchema);
-		DeleteLocalImage("escape0.jpg");
-		DeleteLocalImage("escape1.jpg");
+		//DeleteLocalImage("escape0.jpg");
+		//DeleteLocalImage("escape1.jpg");
 		//DeleteLocalImage("escape2.jpg");
 		//LibrarySetup();
 		//CheckDay(CheckDate());
