@@ -142,14 +142,14 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		//RemoveSchemaData(HighscoreSchema);
-		//RemoveSchemaData(DaySchema);
-		//RemoveSchemaData(ImageSchema);
-		//DeleteLocalImage("escape0.jpg");
-		//DeleteLocalImage("escape1.jpg");
-		//DeleteLocalImage("escape2.jpg");
+		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
+		RemoveSchemaData(ImageSchema);
+		DeleteLocalImage("escape0.jpg");
+		DeleteLocalImage("escape1.jpg");
+		DeleteLocalImage("escape2.jpg");
 		//LibrarySetup();
-		CheckDay(CheckDate());
+		//CheckDay(CheckDate());
 		//CheckImageSchema();
 	})
 	
@@ -416,6 +416,7 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 					console.log("room 8");
 					for (let i = 0; i < results.Scores.length;){
 						if (score > results.Scores[i]){
+							console.log("stay here: " + i);
 							results.Scores.splice(i, 1, score);
 							results.TeamNames.splice(i, 1, team);
 
@@ -427,6 +428,7 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 							SaveData(results);
 							break;
 						} else{
+							console.log("count up: " + i);
 							i++;
 						}
 					}	
@@ -610,7 +612,12 @@ let GoNext = (date)=>{
 		if (day){
 
 			for (let p = 0; p < day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players.length; p++){
-				if (day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players[p].playerEmail == ""){
+				if (day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players[p].playerName == "" 
+				&& day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players[p].playerEmail != ""){
+					ERUsers[0].name = "UpEventer";
+					ERUsers[0].email = day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players[p].playerEmail;
+					SendER_Email(ERUsers);
+				} else if (day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players[p].playerEmail == ""){
 					console.log("no email");
 				} else{
 					ERUsers[0].name = day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players[p].playerName;
@@ -656,6 +663,5 @@ let SendER_Email = (obj)=>{
 		}));
 	}).then(() => {
 		console.log('send ER mail!');
-		//DeleteLocalImage("escape.jpg");
 	});
 }
