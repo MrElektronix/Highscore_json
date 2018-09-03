@@ -59,41 +59,25 @@ app.get("/Highscore_Table", (req, res)=>{
 		if (err) throw err;
 		
 		if (results) {
-			
+
 			roomScores.room_8 = [];
 			roomScores.qurantaine = [];
 			roomScores.the_bunker = [];
 			roomScores.vietnam_victim = [];
-
+			
 			for (let i = 0; i < results.Rooms.length; i++){
-				if (results.Rooms[i] === roomNames.room_8){
-					roomScores.room_8.push({name: results.TeamNames[i], score: results.Scores[i]});
-				} else if (results.Rooms[i] === roomNames.qurantaine){
-					roomScores.qurantaine.push({name: results.TeamNames[i], score: results.Scores[i]});
-				} else if (results.Rooms[i] === roomNames.the_bunker){
-					roomScores.the_bunker.push({name: results.TeamNames[i], score: results.Scores[i]});
-				} else if (results.Rooms[i] === roomNames.vietnam_victim){
-					roomScores.vietnam_victim.push({name: results.TeamNames[i], score: results.Scores[i]})
+				if (results.Data[i].roomname === roomNames.room_8){
+					roomScores.room_8.push({name: results.Data[i].teamNames, score: results.Data[i].time});
+				} else if (results.Data[i].roomname === roomNames.qurantaine){
+					roomScores.qurantaine.push({name: results.Data[i].teamNames, score: results.Data[i].time});
+				} else if (results.Data[i].roomname === roomNames.the_bunker){
+					roomScores.the_bunker.push({name: results.Data[i].teamNames, score: results.Data[i].time});
+				} else if (results.Data[i].roomname === roomNames.vietnam_victim){
+					roomScores.vietnam_victim.push({name: results.Data[i].teamNames, score: results.Data[i].time})
 				} else{
 					console.log("no score a man");
 				}
 			}
-
-			roomScores.room_8.sort((a, b)=>{
-				return ('' + b.score).localeCompare(a.score);
-			});
-
-			roomScores.qurantaine.sort((a, b)=>{
-				return ('' + b.score).localeCompare(a.score);
-			});
-
-			roomScores.the_bunker.sort((a, b)=>{
-				return ('' + b.score).localeCompare(a.score);
-			});
-
-			roomScores.vietnam_victim.sort((a, b)=>{
-				return ('' + b.score).localeCompare(a.score);
-			});
 
 			res.render('highscore.ejs', {
 				room8_Info: roomScores.room_8, 
@@ -142,15 +126,15 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		//RemoveSchemaData(HighscoreSchema);
-		//RemoveSchemaData(DaySchema);
-		//RemoveSchemaData(ImageSchema);
-		//DeleteLocalImage("escape0.jpg");
-		//DeleteLocalImage("escape1.jpg");
-		//DeleteLocalImage("escape2.jpg");
+		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
+		RemoveSchemaData(ImageSchema);
+		DeleteLocalImage("escape0.jpg");
+		DeleteLocalImage("escape1.jpg");
+		DeleteLocalImage("escape2.jpg");
 		//LibrarySetup();
-		CheckDay(CheckDate());
-		CheckImageSchema();
+		//CheckDay(CheckDate());
+		//CheckImageSchema();
 	})
 	
 	socket.on("newEvent", (data)=>{
@@ -359,77 +343,57 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 		if (err) throw err;
 		let score = minutes + " min " + "& " + seconds + " sec";
 		if (!results) {
-			
 			let high = new HighscoreSchema();
 
-			high.Scores.push(score);
-			high.TeamNames.push(team);
-			high.Rooms.push(room);
+
+			high.Data.push({roomname: room, teamname: team, time: score});
 			high.Room8_Count = 0;
 			high.Qurantiane_Count = 0;
 			high.TheBunker_Count = 0;
 			high.VietnamVictim_Count = 0;
-			high.TotalNumberCount = 0;
 			high.maxScores = 2;
 
-			if (room == roomNames.room_8){high.Room8_Count += 1;  high.TotalNumberCount += 1}
-			if (room == roomNames.qurantaine){high.Qurantiane_Count += 1; high.TotalNumberCount += 1}
-			if (room == roomNames.the_bunker){high.TheBunker_Count += 1; high.TotalNumberCount += 1}
-			if (room == roomNames.vietnam_victim){high.VietnamVictim_Count += 1; high.TotalNumberCount += 1}
+			if (room == roomNames.room_8){high.Room8_Count += 1;}
+			if (room == roomNames.qurantaine){high.Qurantiane_Count += 1;}
+			if (room == roomNames.the_bunker){high.TheBunker_Count += 1;}
+			if (room == roomNames.vietnam_victim){high.VietnamVictim_Count += 1;}
+
 			SaveData(high);
 		} else{
 			if (room == roomNames.room_8 && results.Room8_Count < results.maxScores){
-				results.Room8_Count += 1
-				
-				results.Scores.push(score);
-				results.TeamNames.push(team);
-				results.Rooms.push(room);
-				results.TotalNumberCount += 1;
+				results.Room8_Count += 1;
+				results.Data.push({roomname: room, teamname: team, time: score});
+				results.Data.sort((a, b)=>{
+					return ('' + b.time).localeCompare(a.time);
+				});
 				SaveData(results);	
 			} else if (room == roomNames.qurantaine && results.Qurantiane_Count < results.maxScores){
-				results.Qurantiane_Count += 1
-
-				results.Scores.push(score);
-				results.TeamNames.push(team);
-				results.Rooms.push(room);
-				results.TotalNumberCount += 1;
+				results.Qurantiane_Count += 1;
+				results.Data.push({roomname: room, teamname: team, time: score});
+				results.Data.sort((a, b)=>{
+					return ('' + b.time).localeCompare(a.time);
+				});
 				SaveData(results);	
 			} else if (room == roomNames.the_bunker && results.TheBunker_Count < results.maxScores){
-				results.TheBunker_Count += 1
-
-				results.Scores.push(score);
-				results.TeamNames.push(team);
-				results.Rooms.push(room);
-				results.TotalNumberCount += 1;
+				results.TheBunker_Count += 1;
+				results.Data.push({roomname: room, teamname: team, time: score});
+				results.Data.sort((a, b)=>{
+					return ('' + b.time).localeCompare(a.time);
+				});
 				SaveData(results);	
 			} else if (room == roomNames.vietnam_victim && results.VietnamVictim_Count < results.maxScores){
 				results.VietnamVictim_Count += 1
-
-				results.Scores.push(score);
-				results.TeamNames.push(team);
-				results.Rooms.push(room);
-				results.TotalNumberCount += 1;
+				results.Data.push({roomname: room, teamname: team, time: score});
+				results.Data.sort((a, b)=>{
+					return ('' + b.time).localeCompare(a.time);
+				});
 				SaveData(results);
 			} else{ // if scoreboard is full and a new time comes along
 				
 				if (room == roomNames.room_8 && results.Room8_Count == results.maxScores){
 					console.log("room 8");
-					for (let i = 0; i < results.Scores.length;){
-						if (score > results.Scores[i]){
-							console.log("stay here: " + i);
-							console.log(results.Scores[i]);
-							console.log(results.teamNames[i]);
-
-							results.Scores[i] = score;
-							results.TeamNames[i] = team;
-							SaveData(results);
-
-							console.log(results.Scores[i]);
-							console.log(results.teamNames[i]);
-						} else{
-							console.log("count up: " + i);
-							i++;
-						}
+					for (let i = 0; i < results.Data.length; i++){
+						console.log(results.Data[i].time);
 					}	
 				} else if (room == roomNames.qurantaine && results.Qurantiane_Count == results.maxScores){
 					for (let i = 0; i < results.Scores.length;){
