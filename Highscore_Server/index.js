@@ -142,15 +142,15 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		//RemoveSchemaData(HighscoreSchema);
-		//RemoveSchemaData(DaySchema);
-		//RemoveSchemaData(ImageSchema);
-		//DeleteLocalImage("escape0.jpg");
-		//DeleteLocalImage("escape1.jpg");
-		//DeleteLocalImage("escape2.jpg");
+		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
+		RemoveSchemaData(ImageSchema);
+		DeleteLocalImage("escape0.jpg");
+		DeleteLocalImage("escape1.jpg");
+		DeleteLocalImage("escape2.jpg");
 		//LibrarySetup();
-		CheckDay(CheckDate());
-		CheckImageSchema();
+		//CheckDay(CheckDate());
+		//CheckImageSchema();
 	})
 	
 	socket.on("newEvent", (data)=>{
@@ -417,14 +417,8 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 					for (let i = 0; i < results.Scores.length;){
 						if (score > results.Scores[i]){
 							console.log("stay here: " + i);
-							results.Scores.splice(i, 1, score);
-							results.TeamNames.splice(i, 1, team);
-
-							results.Scores.splice(i, 0, score);
-							results.TeamNames.splice(i, 0, team);
-
-							//results.Scores.push(score);
-							//results.TeamNames.push(team);
+							results.Scores[i] = score;
+							results.TeamNames[i] = team;
 							SaveData(results);
 							break;
 						} else{
@@ -614,7 +608,7 @@ let GoNext = (date)=>{
 			for (let p = 0; p < day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players.length; p++){
 				if (day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players[p].playerName == "" 
 				&& day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players[p].playerEmail != ""){
-					ERUsers[0].name = "UpEventer";
+					ERUsers[0].name = "";
 					ERUsers[0].email = day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players[p].playerEmail;
 					SendER_Email(ERUsers);
 				} else if (day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players[p].playerEmail == ""){
