@@ -142,15 +142,15 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		//RemoveSchemaData(HighscoreSchema);
-		//RemoveSchemaData(DaySchema);
-		//RemoveSchemaData(ImageSchema);
-		//DeleteLocalImage("escape0.jpg");
-		//DeleteLocalImage("escape1.jpg");
-		//DeleteLocalImage("escape2.jpg");
+		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
+		RemoveSchemaData(ImageSchema);
+		DeleteLocalImage("escape0.jpg");
+		DeleteLocalImage("escape1.jpg");
+		DeleteLocalImage("escape2.jpg");
 		//LibrarySetup();
-		CheckDay(CheckDate());
-		CheckImageSchema();
+		//CheckDay(CheckDate());
+		//CheckImageSchema();
 	})
 	
 	socket.on("newEvent", (data)=>{
@@ -417,10 +417,15 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 					for (let i = 0; i < results.Scores.length;){
 						if (score > results.Scores[i]){
 							console.log("stay here: " + i);
+							console.log(results.Scores[i]);
+							console.log(results.teamNames[i]);
+
 							results.Scores[i] = score;
 							results.TeamNames[i] = team;
 							SaveData(results);
-							break;
+
+							console.log(results.Scores[i]);
+							console.log(results.teamNames[i]);
 						} else{
 							console.log("count up: " + i);
 							i++;
