@@ -121,8 +121,8 @@ io.on("connection", (socket)=>{
 		//DeleteLocalImage("escape1.jpg");
 		//DeleteLocalImage("escape2.jpg");
 		//LibrarySetup();
-		CheckDay(CheckDate());
-		CheckImageSchema();
+		//CheckDay(CheckDate());
+		//CheckImageSchema();
 	})
 	
 	socket.on("newEvent", (data)=>{
@@ -382,7 +382,7 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 					console.log("room 8");
 
 					for (let i in results.Data){
-						if (newScore > results.Data[i].time){
+						if (score > results.Data[i].time){
 							results.Data[i].time = score;
 							results.Data[i].teamname = team;
 							SaveData(results);
