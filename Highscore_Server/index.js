@@ -114,15 +114,15 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		//RemoveSchemaData(HighscoreSchema);
-		//RemoveSchemaData(DaySchema);
-		//RemoveSchemaData(ImageSchema);
-		//DeleteLocalImage("escape0.jpg");
-		//DeleteLocalImage("escape1.jpg");
+		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
+		RemoveSchemaData(ImageSchema);
+		DeleteLocalImage("escape0.jpg");
+		DeleteLocalImage("escape1.jpg");
 		//DeleteLocalImage("escape2.jpg");
 		//LibrarySetup();
-		CheckDay(CheckDate());
-		CheckImageSchema();
+		//CheckDay(CheckDate());
+		//CheckImageSchema();
 	})
 	
 	socket.on("newEvent", (data)=>{
@@ -350,11 +350,7 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 				console.log("room 8");
 				for (let i in result.Data){
 					if (score > result.Data[i].time){
-						result.Data.collection.update(  { _id:result.Data[i].time} , { $set: score });
-						result.Data.collection.update(  { _id:result.Data[i].teamname} , { $set: team });
-						//result.Data[i].time = score;
-						//result.Data[i].teamname = team;
-						SaveData(result);
+						result.update({"Data.name": result.Data[i].time}, {$set: {"Data.name": score}});
 						break;
 					}
 				}
