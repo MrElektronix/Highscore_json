@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 let HighscoreSchema = new Schema({
     Data: Array,
-    maxScores: Number,
+    maxScore: Number,
     Room8_Count: Number,
     Qurantiane_Count: Number,
     TheBunker_Count: Number,
