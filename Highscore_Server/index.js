@@ -350,13 +350,10 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 				console.log("room 8");
 				for (let i in result.Data){
 					if (score > result.Data[i].time){
-						result.update({'Data.time': result.Data[i].time}, {'$set': {
-							'Data.0.time': score,
-							'Data.0.teamname': team
-						}}, function(err, output) {
+						result.update({'Data.time': result.Data[i].time}, function(err, output) {
 							if (err) throw err;
 							if (output){
-								console.log(result);
+								console.log(output);
 								
 							} else{
 								console.log("no output");
