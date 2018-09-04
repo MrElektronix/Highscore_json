@@ -52,27 +52,27 @@ app.get("/", (req, res)=>{
 // Page where the highscoreTable is displayed
 app.get("/Highscore_Table", (req, res)=>{
 	
-    HighscoreSchema.findOne({}, (err, results)=>{
+    HighscoreSchema.findOne({}, (err, result)=>{
 		if (err) throw err;
 		
-		if (results) {
+		if (result) {
 
 			roomScores.room_8 = [];
 			roomScores.qurantaine = [];
 			roomScores.the_bunker = [];
 			roomScores.vietnam_victim = [];
 			
-			for (let i = 0; i < results.Data.length; i++){
-				console.log(results.Data[i].time);
+			for (let i = 0; i < result.Data.length; i++){
+				console.log(result.Data[i].time);
 				/*
-				if (results.Data[i].roomname === roomNames.room_8){
-					roomScores.room_8.push({name: results.Data[i].teamname, score: results.Data[i].time});
-				} else if (results.Data[i].roomname === roomNames.qurantaine){
-					roomScores.qurantaine.push({name: results.Data[i].teamname, score: results.Data[i].time});
-				} else if (results.Data[i].roomname === roomNames.the_bunker){
-					roomScores.the_bunker.push({name: results.Data[i].teamname, score: results.Data[i].time});
-				} else if (results.Data[i].roomname === roomNames.vietnam_victim){
-					roomScores.vietnam_victim.push({name: results.Data[i].teamname, score: results.Data[i].time})
+				if (result.Data[i].roomname === roomNames.room_8){
+					roomScores.room_8.push({name: result.Data[i].teamname, score: result.Data[i].time});
+				} else if (result.Data[i].roomname === roomNames.qurantaine){
+					roomScores.qurantaine.push({name: result.Data[i].teamname, score: result.Data[i].time});
+				} else if (result.Data[i].roomname === roomNames.the_bunker){
+					roomScores.the_bunker.push({name: result.Data[i].teamname, score: result.Data[i].time});
+				} else if (result.Data[i].roomname === roomNames.vietnam_victim){
+					roomScores.vietnam_victim.push({name: result.Data[i].teamname, score: result.Data[i].time})
 				} else{
 					console.log("no score a man");
 				}
@@ -114,15 +114,15 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		//RemoveSchemaData(HighscoreSchema);
-		//RemoveSchemaData(DaySchema);
-		//RemoveSchemaData(ImageSchema);
-		//DeleteLocalImage("escape0.jpg");
-		//DeleteLocalImage("escape1.jpg");
+		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
+		RemoveSchemaData(ImageSchema);
+		DeleteLocalImage("escape0.jpg");
+		DeleteLocalImage("escape1.jpg");
 		//DeleteLocalImage("escape2.jpg");
 		//LibrarySetup();
-		CheckDay(CheckDate());
-		CheckImageSchema();
+		//CheckDay(CheckDate());
+		//CheckImageSchema();
 	})
 	
 	socket.on("newEvent", (data)=>{
@@ -212,10 +212,10 @@ let MakeDay = (date)=>{
 /* MAKE PHOTO Schema */
 
 let CheckImageSchema = ()=>{
-	ImageSchema.findOne({}, (err, results)=>{
+	ImageSchema.findOne({}, (err, result)=>{
 		if (err) throw err;
 
-		if (!results){
+		if (!result){
 			let newImage = new ImageSchema();
 			newImage.Name = "escape"
 			newImage.Count = -1;
@@ -228,26 +228,26 @@ let CheckImageSchema = ()=>{
 }
 
 let CountUp = ()=>{
-	ImageSchema.findOne({}, (err, results)=>{
+	ImageSchema.findOne({}, (err, result)=>{
 		if (err) throw err;
-		if (results){
-			results.Count += 1;
+		if (result){
+			result.Count += 1;
 			console.log("opgeteld");
-			results.FullString = results.Name + results.Count + "." + results.Format;
-			SaveData(results);
+			result.FullString = result.Name + result.Count + "." + result.Format;
+			SaveData(result);
 		}
 	});
 }
 
 let SaveImage = (image)=>{
 
-	ImageSchema.findOne({}, (err, results)=>{
+	ImageSchema.findOne({}, (err, result)=>{
 		if (err) throw err;
-		if (results){
-			console.log("hiero: "+ results.FullString);
-			SaveLocalImage(results.FullString, image);
+		if (result){
+			console.log("hiero: "+ result.FullString);
+			SaveLocalImage(result.FullString, image);
 			console.log("photo taken");
-			GetLocalImage(results.FullString);
+			GetLocalImage(result.FullString);
 		}
 	});
 }
@@ -312,9 +312,9 @@ let AddPlayers = (name, email, date)=>{
 /* ADD IMAGE TO LIBRARY */
 let LibrarySetup = ()=>{
 	ClearConsole();
-	ImageLibrarySchema.findOne({}, (err, results)=>{
+	ImageLibrarySchema.findOne({}, (err, result)=>{
 		if (err) throw err;
-		if (!results){
+		if (!result){
 			let newLibrary = new ImageLibrarySchema();
 			newLibrary.PhotoNames = [];
 			newLibrary.TotalDays = [];
@@ -327,10 +327,10 @@ let LibrarySetup = ()=>{
 /*-------------------------------------------------------------------------------------*/
 /* SAVE HIGHSCORES */
 let CheckHighscore = (room, team, minutes, seconds)=>{
-	HighscoreSchema.findOne({}, (err, results)=>{
+	HighscoreSchema.findOne({}, (err, result)=>{
 		if (err) throw err;
 		let score = minutes + " min " + "& " + seconds + " sec";
-		if (!results) {
+		if (!result) {
 			let high = new HighscoreSchema();
 			high.Data.push({roomname: room, teamname: team, time: score});
 			high.Room8_Count = 0;
@@ -346,57 +346,56 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 
 			SaveData(high);
 		} else{
-			if (room == roomNames.room_8 && results.Room8_Count == results.maxScores){
+			if (room == roomNames.room_8 && result.Room8_Count == result.maxScores){
 				console.log("room 8");
-				for (let i in results.Data){
-					if (score > results.Data[i].time){
-						results.Data[i].time = score;
-						results.Data[i].teamname = team;
-						results.collection.save((err)=>{
-							if (err) throw err;
-							console.log("Saved !");
-						});
+				for (let i in result.Data){
+					if (score > result.Data[i].time){
+						result.Data.collection.update(  { _id:result.Data[i].time} , { $set: score });
+						result.Data.collection.update(  { _id:result.Data[i].teamname} , { $set: team });
+						//result.Data[i].time = score;
+						//result.Data[i].teamname = team;
+						SaveData(result);
 						break;
 					}
 				}
 			}
 			/*
-			if (room == roomNames.room_8 && results.Room8_Count < results.maxScores){
-				results.Room8_Count += 1;
-				results.Data.push({roomname: room, teamname: team, time: score});
-				results.Data.sort((a, b)=>{
+			if (room == roomNames.room_8 && result.Room8_Count < result.maxScores){
+				result.Room8_Count += 1;
+				result.Data.push({roomname: room, teamname: team, time: score});
+				result.Data.sort((a, b)=>{
 					return ('' + b.time).localeCompare(a.time);
 				});
-				SaveData(results);	
-			} else if (room == roomNames.qurantaine && results.Qurantiane_Count < results.maxScores){
-				results.Qurantiane_Count += 1;
-				results.Data.push({roomname: room, teamname: team, time: score});
-				results.Data.sort((a, b)=>{
+				SaveData(result);	
+			} else if (room == roomNames.qurantaine && result.Qurantiane_Count < result.maxScores){
+				result.Qurantiane_Count += 1;
+				result.Data.push({roomname: room, teamname: team, time: score});
+				result.Data.sort((a, b)=>{
 					return ('' + b.time).localeCompare(a.time);
 				});
-				SaveData(results);	
-			} else if (room == roomNames.the_bunker && results.TheBunker_Count < results.maxScores){
-				results.TheBunker_Count += 1;
-				results.Data.push({roomname: room, teamname: team, time: score});
-				results.Data.sort((a, b)=>{
+				SaveData(result);	
+			} else if (room == roomNames.the_bunker && result.TheBunker_Count < result.maxScores){
+				result.TheBunker_Count += 1;
+				result.Data.push({roomname: room, teamname: team, time: score});
+				result.Data.sort((a, b)=>{
 					return ('' + b.time).localeCompare(a.time);
 				});
-				SaveData(results);	
-			} else if (room == roomNames.vietnam_victim && results.VietnamVictim_Count < results.maxScores){
-				results.VietnamVictim_Count += 1
-				results.Data.push({roomname: room, teamname: team, time: score});
-				results.Data.sort((a, b)=>{
+				SaveData(result);	
+			} else if (room == roomNames.vietnam_victim && result.VietnamVictim_Count < result.maxScores){
+				result.VietnamVictim_Count += 1
+				result.Data.push({roomname: room, teamname: team, time: score});
+				result.Data.sort((a, b)=>{
 					return ('' + b.time).localeCompare(a.time);
 				});
-				SaveData(results);
+				SaveData(result);
 			} else { // if scoreboard is full and a new time comes along
-				if (room == roomNames.room_8 && results.Room8_Count == results.maxScores){
+				if (room == roomNames.room_8 && result.Room8_Count == result.maxScores){
 					console.log("room 8");
-					for (let i in results.Data){
-						if (score > results.Data[i].time){
-							results.Data[i].time = score;
-							results.Data[i].teamname = team;
-							SaveData(results);
+					for (let i in result.Data){
+						if (score > result.Data[i].time){
+							result.Data[i].time = score;
+							result.Data[i].teamname = team;
+							SaveData(result);
 							break;
 						}
 					}
@@ -499,10 +498,10 @@ let ERUsers = [
 
 let ER_EmailData = ()=>{
 	//ClearConsole();
-	ImageSchema.findOne({}, (err, results)=>{
+	ImageSchema.findOne({}, (err, result)=>{
 		if (err) throw err;
-		if (results){
-			ERUsers[0].fotoLink = "http://5.157.85.78:2000/images/" + results.FullString;
+		if (result){
+			ERUsers[0].fotoLink = "http://5.157.85.78:2000/images/" + result.FullString;
 		} else{
 			console.log("No Image");
 		}
@@ -512,10 +511,10 @@ let ER_EmailData = ()=>{
 }
 
 let GoHighscore = ()=>{
-	HighscoreSchema.findOne({}, (err, results)=>{
+	HighscoreSchema.findOne({}, (err, result)=>{
 		if (err) throw err;
-		if (results){
-			ERUsers[0].time = results.Scores[results.Scores.length - 1];
+		if (result){
+			ERUsers[0].time = result.Scores[result.Scores.length - 1];
 		}
 	});
 
@@ -568,8 +567,8 @@ function loadTemplate (templateName, contexts) {
 
 
 let SendER_Email = (obj)=>{
-	loadTemplate('mail-escape-room', obj).then((results) => {
-		return Promise.all(results.map((result) => {
+	loadTemplate('mail-escape-room', obj).then((result) => {
+		return Promise.all(result.map((result) => {
 			sendEmail({
 				to: result.context.email,
 				from: "UpEvents",
