@@ -114,15 +114,15 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		//RemoveSchemaData(HighscoreSchema);
-		//RemoveSchemaData(DaySchema);
-		//RemoveSchemaData(ImageSchema);
-		//DeleteLocalImage("escape0.jpg");
-		//DeleteLocalImage("escape1.jpg");
-		//DeleteLocalImage("escape2.jpg");
+		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
+		RemoveSchemaData(ImageSchema);
+		DeleteLocalImage("escape0.jpg");
+		DeleteLocalImage("escape1.jpg");
+		DeleteLocalImage("escape2.jpg");
 		//LibrarySetup();
-		CheckDay(CheckDate());
-		CheckImageSchema();
+		//CheckDay(CheckDate());
+		//CheckImageSchema();
 	})
 	
 	socket.on("newEvent", (data)=>{
@@ -380,18 +380,15 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 				
 				if (room == roomNames.room_8 && results.Room8_Count == results.maxScores){
 					console.log("room 8");
-					for (let i = 0; i < results.Data.length;){
-						if (score > results.Data[i].time){
+
+					for (let i in results.Data){
+						if (newScore > results.Data[i].time){
 							results.Data[i].time = score;
 							results.Data[i].teamname = team;
-							console.log("stay here: " + i);
+							SaveData(results);
 							break;
-						} else{
-							i++;
-							console.log("count up: " + i);
 						}
 					}
-					SaveData(results);
 				} else if (room == roomNames.qurantaine && results.Qurantiane_Count == results.maxScores){
 					for (let i = 0; i < results.Scores.length;){
 						if (score > results.Scores[i]){
