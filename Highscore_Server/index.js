@@ -356,7 +356,10 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 						}}, function(err, output) {
 							if (err) throw err;
 							if (output){
-								console.log(result);
+								console.log("result: " + result);
+
+								console.log("score: " + score);
+								console.log("teamname: " + team);
 								
 							} else{
 								console.log("no output");
