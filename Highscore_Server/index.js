@@ -114,15 +114,15 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		//RemoveSchemaData(HighscoreSchema);
-		//RemoveSchemaData(DaySchema);
-		//RemoveSchemaData(ImageSchema);
+		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
+		RemoveSchemaData(ImageSchema);
 		//DeleteLocalImage("escape0.jpg");
 		//DeleteLocalImage("escape1.jpg");
 		//DeleteLocalImage("escape2.jpg");
 		//LibrarySetup();
-		CheckDay(CheckDate());
-		CheckImageSchema();
+		//CheckDay(CheckDate());
+		//CheckImageSchema();
 	})
 	
 	socket.on("newEvent", (data)=>{
@@ -248,6 +248,15 @@ let SaveImage = (image)=>{
 			SaveLocalImage(results.FullString, image);
 			console.log("photo taken");
 			GetLocalImage(results.FullString);
+		}
+	});
+
+	HighscoreSchema.findOne({}, (err, results)=>{
+		if (err) throw err;
+		if (results){
+			for (let i in results.Data){
+				console.log(results.Data[i]);
+			}
 		}
 	});
 }
@@ -377,22 +386,20 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 				});
 				SaveData(results);
 			} else{ // if scoreboard is full and a new time comes along
-				HighscoreSchema.findOne({}, (err, results)=>{
-					if (err) throw err;
-					if (results) {
-						if (room == roomNames.room_8 && results.Room8_Count == results.maxScores){
-							console.log("room 8");
-							for (let i in results.Data){
-								if (score > results.Data[i].time){
-									results.Data[i].time = score;
-									results.Data[i].teamname = team;
-									SaveData(results);
-									break;
-								}
-							}
+				if (room == roomNames.room_8 && results.Room8_Count == results.maxScores){
+					console.log("room 8");
+					for (let i in results.Data){
+						if (score > results.Data[i].time){
+							results.Data[i].time = score;
+							results.Data[i].teamname = team;
+							results.save((err)=>{
+								if (err) throw err;
+								console.log("Saved room 8!");
+							});
+							break;
 						}
-					}			
-				});
+					}
+				}
 			}
 		}
 	});
