@@ -350,7 +350,7 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 				console.log("room 8");
 				for (let i in result.Data){
 					if (score > result.Data[i].time){
-						HighscoreSchema.update({'Data.time': result.Data[i].time}, {'$set': {
+						result.update({'Data.time': result.Data[i].time}, {'$set': {
 							'items.$.time': score,
 							'items.$.teamname': team
 						}}, function(err, output) {
