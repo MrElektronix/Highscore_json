@@ -351,8 +351,8 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 				for (let i in result.Data){
 					if (score > result.Data[i].time){
 						result.update({'Data': result.Data[i].time}, {'$set': {
-							'Data.$.time': score,
-							'Data.$.teamname': team
+							'Data.0.time': score,
+							'Data.0.teamname': team
 						}}, function(err, output) {
 							if (err) throw err;
 							if (output){
@@ -362,6 +362,7 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 								console.log("no output");
 							}
 						});
+						SaveData(result);
 					}
 				}
 			}
