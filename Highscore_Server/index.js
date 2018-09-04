@@ -114,15 +114,15 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		//RemoveSchemaData(HighscoreSchema);
-		//RemoveSchemaData(DaySchema);
-		//RemoveSchemaData(ImageSchema);
-		//DeleteLocalImage("escape0.jpg");
-		//DeleteLocalImage("escape1.jpg");
-		//DeleteLocalImage("escape2.jpg");
+		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
+		RemoveSchemaData(ImageSchema);
+		DeleteLocalImage("escape0.jpg");
+		DeleteLocalImage("escape1.jpg");
+		DeleteLocalImage("escape2.jpg");
 		//LibrarySetup();
-		CheckDay(CheckDate());
-		CheckImageSchema();
+		//CheckDay(CheckDate());
+		//CheckImageSchema();
 	})
 	
 	socket.on("newEvent", (data)=>{
@@ -250,15 +250,6 @@ let SaveImage = (image)=>{
 			GetLocalImage(results.FullString);
 		}
 	});
-
-	HighscoreSchema.findOne({}, (err, results)=>{
-		if (err) throw err;
-		if (results){
-			for (let i in results.Data){
-				console.log(results.Data[i]);
-			}
-		}
-	});
 }
 
 /*-------------------------------------------------------------------------------------*/
@@ -348,7 +339,7 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 			high.Qurantiane_Count = 0;
 			high.TheBunker_Count = 0;
 			high.VietnamVictim_Count = 0;
-			high.maxScores = 2;
+			high.maxScores = 1;
 
 			if (room == roomNames.room_8){high.Room8_Count += 1;}
 			if (room == roomNames.qurantaine){high.Qurantiane_Count += 1;}
@@ -357,6 +348,18 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 
 			SaveData(high);
 		} else{
+			if (room == roomNames.room_8 && results.Room8_Count == results.maxScores){
+				console.log("room 8");
+				for (let i in results.Data){
+					if (score > results.Data[i].time){
+						results.Data[i].time = score;
+						results.Data[i].teamname = team;
+						SaveData(results);
+						break;
+					}
+				}
+			}
+			/*
 			if (room == roomNames.room_8 && results.Room8_Count < results.maxScores){
 				results.Room8_Count += 1;
 				results.Data.push({roomname: room, teamname: team, time: score});
@@ -385,22 +388,20 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 					return ('' + b.time).localeCompare(a.time);
 				});
 				SaveData(results);
-			} else{ // if scoreboard is full and a new time comes along
+			} else { // if scoreboard is full and a new time comes along
 				if (room == roomNames.room_8 && results.Room8_Count == results.maxScores){
 					console.log("room 8");
 					for (let i in results.Data){
 						if (score > results.Data[i].time){
 							results.Data[i].time = score;
 							results.Data[i].teamname = team;
-							results.save((err)=>{
-								if (err) throw err;
-								console.log("Saved room 8!");
-							});
+							SaveData(results);
 							break;
 						}
 					}
 				}
 			}
+			*/
 		}
 	});
 }
