@@ -350,7 +350,7 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 				console.log("room 8");
 				for (let i in result.Data){
 					if (score > result.Data[i].time){
-						result.Data.set(result.Data[i].time, score);
+						result.Data[i].time.set(i, score);
 						SaveData(result);
 
 						/*
