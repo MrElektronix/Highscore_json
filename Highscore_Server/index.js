@@ -63,7 +63,9 @@ app.get("/Highscore_Table", (req, res)=>{
 			roomScores.vietnam_victim = [];
 			
 			for (let i = 0; i < result.Data.length; i++){
-				console.log(result.Data[i].time);
+				if (result.Data[i].roomname == roomNames.room_8){
+					console.log(result.Data[i].time);
+				}
 				/*
 				if (result.Data[i].roomname === roomNames.room_8){
 					roomScores.room_8.push({name: result.Data[i].teamname, score: result.Data[i].time});
@@ -114,15 +116,15 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		//RemoveSchemaData(HighscoreSchema);
-		//RemoveSchemaData(DaySchema);
-		//RemoveSchemaData(ImageSchema);
-		//DeleteLocalImage("escape0.jpg");
+		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
+		RemoveSchemaData(ImageSchema);
+		DeleteLocalImage("escape0.jpg");
 		//DeleteLocalImage("escape1.jpg");
 		//DeleteLocalImage("escape2.jpg");
 		//LibrarySetup();
-		CheckDay(CheckDate());
-		CheckImageSchema();
+		//CheckDay(CheckDate());
+		//CheckImageSchema();
 	})
 	
 	socket.on("newEvent", (data)=>{
@@ -330,7 +332,10 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 	HighscoreSchema.findOne({}, (err, result)=>{
 		if (err) throw err;
 		let score = minutes + " min " + "& " + seconds + " sec";
-		if (!result) {
+
+		if (result){
+			ReplaceStuff(score, team);
+		} else{
 			let high = new HighscoreSchema();
 			high.Data.push({roomname: room, teamname: team, time: score});
 			high.Room8_Count = 0;
@@ -345,35 +350,7 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 			if (room == roomNames.vietnam_victim){high.VietnamVictim_Count += 1;}
 
 			SaveData(high);
-		} else{
-			if (room == roomNames.room_8 && result.Room8_Count == result.maxScore){
-				console.log("room 8");
-				for (let i in result.Data){
-					if (score > result.Data[i].time){
-						result.Data[i].time.set(i, score);
-						SaveData(result);
-
-						/*
-						result.update({'Data': result.Data[i].time}, {'$set': {
-							'Data.$.time': score,
-							'Data.$.teamname': team
-						}}, function(err, output) {
-							if (err) throw err;
-							if (output){
-								console.log("result: " + result);
-
-								console.log("score: " + score);
-								console.log("teamname: " + team);
-								
-							} else{
-								console.log("no output");
-							}
-						});
-						*/
-					}
-				}
-			}
-
+		}
 			/*
 			if (room == roomNames.room_8 && result.Room8_Count == result.maxScore){
 				console.log("room 8");
@@ -439,9 +416,36 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 				}
 			}
 			*/
+	});
+}
+
+let ReplaceStuff = (score, team)=>{
+	HighscoreSchema.findOne({}, (err, result)=>{
+		if (room == roomNames.room_8 && result.Room8_Count == result.maxScore){
+			console.log("room 8");
+			for (let i in result.Data){
+				if (score > result.Data[i].time){
+					console.log("score: " + score);
+					console.log("team name: " + team);
+
+					console.log("Data time: " + result.Data[i].time);
+					console.log("Data team: " + result.Data[i].teamname);
+
+					//result.Data[i].time = score;
+					//result.Data[i].teamname = team;
+					/*
+					result.save((err)=>{
+						if (err) throw err;
+						console.log("Saved !" + result);
+					});
+					*/
+				}
+			}
 		}
 	});
 }
+
+
 
 /*-------------------------------------------------------------------------------------*/
 /* SCHEMA FUNCTIONS */
