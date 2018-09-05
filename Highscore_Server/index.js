@@ -116,15 +116,15 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		RemoveSchemaData(HighscoreSchema);
-		RemoveSchemaData(DaySchema);
-		RemoveSchemaData(ImageSchema);
-		DeleteLocalImage("escape0.jpg");
-		DeleteLocalImage("escape1.jpg");
+		//RemoveSchemaData(HighscoreSchema);
+		//RemoveSchemaData(DaySchema);
+		//RemoveSchemaData(ImageSchema);
+		//DeleteLocalImage("escape0.jpg");
+		//DeleteLocalImage("escape1.jpg");
 		//DeleteLocalImage("escape2.jpg");
 		//LibrarySetup();
-		//CheckDay(CheckDate());
-		//CheckImageSchema();
+		CheckDay(CheckDate());
+		CheckImageSchema();
 	})
 	
 	socket.on("newEvent", (data)=>{
@@ -427,7 +427,7 @@ let ReplaceStuff = (score, team, room)=>{
 				if (score > result.Data[i].time){
 					result.Data[i].time = score;
 					result.Data[i].teamname = team;
-					result.markModified("result.Data");
+					result.markModified("Data");
 					SaveData(result);
 					//result.Data[i].time = score;
 					//result.Data[i].teamname = team;
