@@ -116,15 +116,15 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		//RemoveSchemaData(HighscoreSchema);
-		//RemoveSchemaData(DaySchema);
-		//RemoveSchemaData(ImageSchema);
-		//DeleteLocalImage("escape0.jpg");
+		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
+		RemoveSchemaData(ImageSchema);
+		DeleteLocalImage("escape0.jpg");
 		//DeleteLocalImage("escape1.jpg");
 		//DeleteLocalImage("escape2.jpg");
 		//LibrarySetup();
-		CheckDay(CheckDate());
-		CheckImageSchema();
+		//CheckDay(CheckDate());
+		//CheckImageSchema();
 	})
 	
 	socket.on("newEvent", (data)=>{
@@ -334,7 +334,7 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 		let score = minutes + " min " + "& " + seconds + " sec";
 
 		if (result){
-			ReplaceStuff(score, team);
+			ReplaceStuff(score, team, room);
 		} else{
 			let high = new HighscoreSchema();
 			high.Data.push({roomname: room, teamname: team, time: score});
@@ -419,7 +419,7 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 	});
 }
 
-let ReplaceStuff = (score, team)=>{
+let ReplaceStuff = (score, team, room)=>{
 	HighscoreSchema.findOne({}, (err, result)=>{
 		if (room == roomNames.room_8 && result.Room8_Count == result.maxScore){
 			console.log("room 8");
