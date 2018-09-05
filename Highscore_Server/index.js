@@ -425,12 +425,10 @@ let ReplaceStuff = (score, team, room)=>{
 			console.log("room 8");
 			for (let i in result.Data){
 				if (score > result.Data[i].time){
-					console.log("score: " + score);
-					console.log("team name: " + team);
+					result.Data[i].time = score;
+					result.Data[i].teamname = team;
 
-					console.log("Data time: " + result.Data[i].time);
-					console.log("Data team: " + result.Data[i].teamname);
-
+					SaveData(result);
 					//result.Data[i].time = score;
 					//result.Data[i].teamname = team;
 					/*
