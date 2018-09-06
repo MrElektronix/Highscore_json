@@ -342,10 +342,11 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 			if (room == roomNames.qurantaine){high.Qurantiane_Count += 1;}
 			if (room == roomNames.the_bunker){high.TheBunker_Count += 1;}
 			if (room == roomNames.vietnam_victim){high.VietnamVictim_Count += 1;}
-
+			ERUsers[0].time = score;
 			SaveData(high);
 		} else{ // If the HighscoreSchema is not empty
 			if (room == roomNames.room_8 && result.Room8_Count < result.maxScore){
+				ERUsers[0].time = score;
 				result.Room8_Count += 1;
 				result.Data.push({roomname: room, teamname: team, time: score});
 				result.Data.sort((a, b)=>{
@@ -353,6 +354,7 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 				});
 				SaveData(result);
 			} else if (room == roomNames.qurantaine && result.Qurantiane_Count < result.maxScore){
+				ERUsers[0].time = score;
 				result.Qurantiane_Count += 1;
 				result.Data.push({roomname: room, teamname: team, time: score});
 				result.Data.sort((a, b)=>{
@@ -360,6 +362,7 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 				});
 				SaveData(result);	
 			} else if (room == roomNames.the_bunker && result.TheBunker_Count < result.maxScore){
+				ERUsers[0].time = score;
 				result.TheBunker_Count += 1;
 				result.Data.push({roomname: room, teamname: team, time: score});
 				result.Data.sort((a, b)=>{
@@ -367,6 +370,7 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 				});
 				SaveData(result);	
 			} else if (room == roomNames.vietnam_victim && result.VietnamVictim_Count < result.maxScore){
+				ERUsers[0].time = score;
 				result.VietnamVictim_Count += 1
 				result.Data.push({roomname: room, teamname: team, time: score});
 				result.Data.sort((a, b)=>{
@@ -375,6 +379,7 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 				SaveData(result);
 			} else { // if scoreboard is full and a new time comes along
 				if (room == roomNames.room_8 && result.Room8_Count == result.maxScore){
+					ERUsers[0].time = score;
 					console.log("room 8");
 					for (let i in result.Data){
 						if (score > result.Data[i].time){
@@ -518,7 +523,7 @@ let ER_EmailData = ()=>{
 			console.log("No Image");
 		}
 	});
-
+	GoNext(CheckDate());
 	//GoHighscore();
 }
 
@@ -530,7 +535,7 @@ let GoHighscore = ()=>{
 		}
 	});
 
-	GoNext(CheckDate());
+	
 }
 
 let GoNext = (date)=>{
@@ -538,9 +543,13 @@ let GoNext = (date)=>{
 		if (err) throw err;
 		
 		if (day){
-
 			for (let p = 0; p < day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players.length; p++){
-				if (day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players[p].playerEmail == ""){
+				if (day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players[p].playerName == "" 
+				&& day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players[p].playerEmail != ""){
+					ERUsers[0].name = "";
+					ERUsers[0].email = day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players[p].playerEmail;
+					SendER_Email(ERUsers);
+				} else if (day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players[p].playerEmail == ""){
 					console.log("no email");
 				} else{
 					ERUsers[0].name = day.Events[day.EventIndex].eventTeams[day.Events[day.EventIndex].TeamIndex].Players[p].playerName;
