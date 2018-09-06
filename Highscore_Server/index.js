@@ -16,7 +16,7 @@ const DaySchema = require("./schemas/userdata/Day.Schema");
 const EventSchema = require("./schemas/userdata/Event.Schema");
 const TeamSchema = require("./schemas/userdata/Team.Schema");
 const PlayerSchema = require("./schemas/userdata/Player.Schema");
-const ImageSchema = require("./schemas/userdata/Image.Schema");
+//const ImageSchema = require("./schemas/userdata/Image.Schema");
 const ImageLibrarySchema = require("./schemas/userdata/ImageLibrary.Schema");
 const HighscoreSchema = require("./schemas/userdata/escaperoom/Highscore.Schema");
 
@@ -111,19 +111,19 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		RemoveSchemaData(HighscoreSchema);
-		RemoveSchemaData(DaySchema);
-		RemoveSchemaData(ImageSchema);
-		DeleteLocalImage("escape0.jpg");
+		//RemoveSchemaData(HighscoreSchema);
+		//RemoveSchemaData(DaySchema);
+		//RemoveSchemaData(ImageSchema);
+		//DeleteLocalImage("escape0.jpg");
 		//DeleteLocalImage("escape1.jpg");
 		//DeleteLocalImage("escape2.jpg");
-		//LibrarySetup();
-		//CheckDay(CheckDate());
-		//CheckImageSchema();
+		CheckLibrary();
+		CheckDay(CheckDate());
+		CheckImageSchema();
 	})
 	
 	socket.on("newEvent", (data)=>{
-		CheckImageSchema();
+		//CheckImageSchema();
 		if (data.EventName == "Laser Gamen"){
 			MakeEvent(data.EventName, "Team Deathmatch", CheckDate());
 		} else{
@@ -132,7 +132,7 @@ io.on("connection", (socket)=>{
 	});
 
 	socket.on("newERTeam", (data)=>{
-		CountUp();
+		//CountUp();
 		MakeTeam(data.TeamName, CheckDate());
 	});
 	
@@ -163,8 +163,8 @@ io.on("connection", (socket)=>{
 	});
 	
 	socket.on("newPhoto", (data)=>{
-		CheckImageSchema();
-		SaveImage(data.Photo.toString());
+		SaveInLibrary(data.Photo.toString());
+		CheckImageRemove();
 	});
 
 	/*
@@ -204,24 +204,6 @@ let MakeDay = (date)=>{
 	newDay.EventIndex = -1;
 	SaveData(newDay);
 }
-/*-------------------------------------------------------------------------------------*/
-/* MAKE PHOTO Schema */
-
-let CheckImageSchema = ()=>{
-	ImageSchema.findOne({}, (err, result)=>{
-		if (err) throw err;
-
-		if (!result){
-			let newImage = new ImageSchema();
-			newImage.Name = "escape"
-			newImage.Count = -1;
-			newImage.Format = "jpg";
-			newImage.FullString = "";
-
-			SaveData(newImage)
-		}
-	});
-}
 
 let CountUp = ()=>{
 	ImageSchema.findOne({}, (err, result)=>{
@@ -235,8 +217,27 @@ let CountUp = ()=>{
 	});
 }
 
-let SaveImage = (image)=>{
 
+let SaveInLibrary = (image)=>{
+	ImageLibrarySchema.findOne({}, (err, result)=>{
+		if (err) throw err;
+		if (result){
+			result.Count += 1;
+			result.FullString = result.Name + result.Count + "." + result.Format;
+			result.PhotoNames.push(result.FullString);
+			result.TotalDays.push(25);
+			result.markModified("PhotoNames");
+			result.markModified("TotalDays");
+
+			console.log("hiero: "+ result.FullString);
+			SaveLocalImage(result.FullString, image);
+			console.log("photo taken");
+			GetLocalImage(result.FullString);
+			SaveData(result);
+		}
+	});
+
+	/*
 	ImageSchema.findOne({}, (err, result)=>{
 		if (err) throw err;
 		if (result){
@@ -246,6 +247,7 @@ let SaveImage = (image)=>{
 			GetLocalImage(result.FullString);
 		}
 	});
+	*/	
 }
 
 /*-------------------------------------------------------------------------------------*/
@@ -306,19 +308,43 @@ let AddPlayers = (name, email, date)=>{
 
 /*-------------------------------------------------------------------------------------*/
 /* ADD IMAGE TO LIBRARY */
-let LibrarySetup = ()=>{
+
+let CheckLibrary = ()=>{
 	ClearConsole();
 	ImageLibrarySchema.findOne({}, (err, result)=>{
 		if (err) throw err;
+
 		if (!result){
-			let newLibrary = new ImageLibrarySchema();
-			newLibrary.PhotoNames = [];
-			newLibrary.TotalDays = [];
-			newLibrary.MaximumDays = 25;
-			SaveData(newLibrary);
+			let newImage = new ImageLibrarySchema();
+			newImage.Name = "escape"
+			newImage.Count = -1;
+			newImage.Format = "jpg";
+			newImage.FullString = "";
+			newImage.PhotoNames = [];
+			newImage.TotalDays = [];
+			newImage.MaximumDays = 25;
+			SaveData(newImage)
 		}
 	});
-};
+}
+
+let CheckImageRemove = ()=>{
+	ClearConsole();
+	ImageLibrarySchema.findOne({}, (err, result)=>{
+		if (err) throw err;
+
+		if (result){
+			for (let i in result.TotalDays){
+				if (result.TotalDays[i] <= result.MaximumDays){
+					result.TotalDays[i] -= 1;
+					result.markModified("TotalDays");
+					console.log(result.TotalDays[i]);
+					SaveData(result);
+				}
+			}
+		}
+	});
+}
 
 /*-------------------------------------------------------------------------------------*/
 /* SAVE HIGHSCORES */
@@ -514,28 +540,18 @@ let ERUsers = [
 
 let ER_EmailData = ()=>{
 	//ClearConsole();
-	ImageSchema.findOne({}, (err, result)=>{
+	ImageLibrarySchema.findOne({}, (err, result)=>{
 		if (err) throw err;
 		if (result){
-			ERUsers[0].fotoLink = "http://5.157.85.78:2000/images/" + result.FullString;
+			for (let i in result.PhotoNames){
+				ERUsers[0].fotoLink = "http://5.157.85.78:2000/images/" + result.PhotoNames[result.Count];
+			}
 		} else{
 			console.log("No Image");
 		}
 	});
 
 	GoNext(CheckDate());
-	//GoHighscore();
-}
-
-let GoHighscore = ()=>{
-	HighscoreSchema.findOne({}, (err, result)=>{
-		if (err) throw err;
-		if (result){
-			ERUsers[0].time = result.Scores[result.Scores.length - 1];
-		}
-	});
-
-	
 }
 
 let GoNext = (date)=>{
