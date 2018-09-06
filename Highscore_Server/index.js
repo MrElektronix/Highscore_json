@@ -111,15 +111,18 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		//RemoveSchemaData(HighscoreSchema);
-		//RemoveSchemaData(DaySchema);
-		//RemoveSchemaData(ImageSchema);
-		//DeleteLocalImage("escape0.jpg");
-		//DeleteLocalImage("escape1.jpg");
-		//DeleteLocalImage("escape2.jpg");
+		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
+		RemoveSchemaData(ImageSchema);
+		DeleteLocalImage("escape0.jpg");
+		DeleteLocalImage("escape1.jpg");
+		DeleteLocalImage("escape6.jpg");
+		DeleteLocalImage("escape7.jpg");
+		DeleteLocalImage("escape8.jpg");
+		DeleteLocalImage("escape9.jpg");
 		//LibrarySetup();
-		CheckDay(CheckDate());
-		CheckImageSchema();
+		//CheckDay(CheckDate());
+		//CheckImageSchema();
 	})
 	
 	socket.on("newEvent", (data)=>{
@@ -293,7 +296,6 @@ let MakeTeam = (teamname, date)=>{
 let AddPlayers = (name, email, date)=>{
 	ClearConsole();
 	DaySchema.findOne({currentDate: date}, (err, day)=>{
-		console.log("new players");
 		if (err) throw err;
 		if (day){
 			let newPlayer = new PlayerSchema();
