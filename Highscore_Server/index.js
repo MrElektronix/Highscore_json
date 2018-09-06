@@ -111,15 +111,15 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		//RemoveSchemaData(HighscoreSchema);
-		//RemoveSchemaData(DaySchema);
+		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
 		//RemoveSchemaData(ImageSchema);
-		//RemoveSchemaData(ImageLibrarySchema)
-		//DeleteLocalImage("escape0.jpg");
+		RemoveSchemaData(ImageLibrarySchema)
+		DeleteLocalImage("escape0.jpg");
 		//DeleteLocalImage("escape1.jpg");
 		//DeleteLocalImage("escape2.jpg");
-		CheckLibrary();
-		CheckDay(CheckDate());
+		//CheckLibrary();
+		//CheckDay(CheckDate());
 		//CheckImageSchema();
 	})
 	
@@ -226,8 +226,8 @@ let SaveInLibrary = (image)=>{
 			result.FullString = result.Name + result.Count + "." + result.Format;
 			result.PhotoNames.push(result.FullString);
 			result.TotalDays.push(25);
-			result.markModified("PhotoNames");
-			result.markModified("TotalDays");
+			//result.markModified("PhotoNames");
+			//result.markModified("TotalDays");
 
 			console.log("hiero: "+ result.FullString);
 			SaveLocalImage(result.FullString, image);
@@ -336,10 +336,9 @@ let CheckImageRemove = ()=>{
 		if (err) throw err;
 
 		if (result){
-			console.log("yuhhh");
 			for (let i in result.TotalDays){
 				if (result.TotalDays[i] <= result.MaximumDays){
-					result.TotalDays[i] -= 1;
+					result.TotalDays[i] - 1;
 					SaveData(result);
 					console.log(result.TotalDays[i]);
 				}
