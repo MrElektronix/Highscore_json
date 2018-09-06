@@ -111,15 +111,15 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		//RemoveSchemaData(HighscoreSchema);
-		//RemoveSchemaData(DaySchema);
+		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
 		//RemoveSchemaData(ImageSchema);
-		//RemoveSchemaData(ImageLibrarySchema)
-		//DeleteLocalImage("escape0.jpg");
-		//DeleteLocalImage("escape1.jpg");
+		RemoveSchemaData(ImageLibrarySchema)
+		DeleteLocalImage("escape0.jpg");
+		DeleteLocalImage("escape1.jpg");
 		//DeleteLocalImage("escape2.jpg");
-		CheckLibrary();
-		CheckDay(CheckDate());
+		//CheckLibrary();
+		//CheckDay(CheckDate());
 		//CheckImageSchema();
 	})
 	
@@ -331,18 +331,18 @@ let CheckLibrary = ()=>{
 
 let CheckImageRemove = ()=>{
 	//ClearConsole();
-	console.log("rewmove");
 	ImageLibrarySchema.findOne({}, (err, result)=>{
 		if (err) throw err;
 
 		if (result){
 			for (let i in result.TotalDays){
-				if (result.TotalDays[i] <= result.MaximumDays){
-					result.TotalDays[i] - 1;
-					SaveData(result);
-					console.log(result.TotalDays[i]);
-				}
+				console.log(result.TotalDays[i]);
 				/*
+				if (result.TotalDays[i] <= result.MaximumDays){
+					//result.TotalDays[i] - 1;
+					//SaveData(result);
+				}
+				
 				if (result.MaximumDays <= 0){
 					DeleteLocalImage(result.PhotoNames[i]);
 					result.TotalDays.splice(i, 1);
@@ -370,7 +370,7 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 			high.Qurantiane_Count = 0;
 			high.TheBunker_Count = 0;
 			high.VietnamVictim_Count = 0;
-			high.maxScore = 2;
+			high.maxScore = 10;
 
 			if (room == roomNames.room_8){high.Room8_Count += 1;}
 			if (room == roomNames.qurantaine){high.Qurantiane_Count += 1;}
