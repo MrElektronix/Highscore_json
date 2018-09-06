@@ -164,7 +164,6 @@ io.on("connection", (socket)=>{
 	
 	socket.on("newPhoto", (data)=>{
 		SaveInLibrary(data.Photo.toString());
-		CheckImageRemove();
 	});
 
 	/*
@@ -237,6 +236,7 @@ let SaveInLibrary = (image)=>{
 		}
 	});
 
+	CheckImageRemove();
 	/*
 	ImageSchema.findOne({}, (err, result)=>{
 		if (err) throw err;
@@ -329,18 +329,17 @@ let CheckLibrary = ()=>{
 }
 
 let CheckImageRemove = ()=>{
-	ClearConsole();
+	//ClearConsole();
 	ImageLibrarySchema.findOne({}, (err, result)=>{
 		if (err) throw err;
 
 		if (result){
-			for (let i in result.TotalDays){
+			for (let i = 0; i < result.TotalDays.length; i++){
 				if (result.TotalDays[i] <= result.MaximumDays){
 					result.TotalDays[i] - 1;
-					result.markModified("TotalDays");
 					SaveData(result);
+					console.log(result.TotalDays[i]);
 				}
-				console.log("totally: " + result.TotalDays[i]);
 			}
 		}
 	});
