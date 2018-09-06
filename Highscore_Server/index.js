@@ -514,6 +514,7 @@ let ERUsers = [
 ];
 
 let ER_EmailData = ()=>{
+	console.log("i cant even");
 	//ClearConsole();
 	ImageSchema.findOne({}, (err, result)=>{
 		if (err) throw err;
