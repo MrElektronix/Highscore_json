@@ -226,8 +226,8 @@ let SaveInLibrary = (image)=>{
 			result.FullString = result.Name + result.Count + "." + result.Format;
 			result.PhotoNames.push(result.FullString);
 			result.TotalDays.push(25);
-			//result.markModified("PhotoNames");
-			//result.markModified("TotalDays");
+			result.markModified("PhotoNames");
+			result.markModified("TotalDays");
 
 			console.log("hiero: "+ result.FullString);
 			SaveLocalImage(result.FullString, image);
@@ -338,11 +338,9 @@ let CheckImageRemove = ()=>{
 		if (result){
 			for (let i in result.TotalDays){
 				if (result.TotalDays[i] <= result.MaximumDays){
+					result.TotalDays[i] - 1;
+					SaveData(result);
 					console.log(result.TotalDays[i]);
-					console.log(result.MaximumDays)
-					//result.TotalDays[i] - 1;
-					//SaveData(result);
-					//console.log(result.TotalDays[i]);
 				}
 				/*
 				if (result.MaximumDays <= 0){
