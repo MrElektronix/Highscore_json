@@ -336,7 +336,7 @@ let CheckImageRemove = ()=>{
 		if (result){
 			for (let i = 0; i < result.TotalDays.length; i++){
 				if (result.TotalDays[i] <= result.MaximumDays){
-					result.TotalDays[i] - 1;
+					result.TotalDays[i] -= 1;
 					SaveData(result);
 					console.log(result.TotalDays[i]);
 				}
