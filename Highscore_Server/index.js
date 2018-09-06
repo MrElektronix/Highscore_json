@@ -144,7 +144,6 @@ io.on("connection", (socket)=>{
 	*/
 	
 	socket.on("newERPlayers", (data)=>{
-		
 		AddPlayers(data.PlayerInfo_names, data.PlayerInfo_email, CheckDate());
 	});
 	
@@ -220,6 +219,8 @@ let CheckImageSchema = ()=>{
 			newImage.FullString = "";
 
 			SaveData(newImage)
+		} else{
+			console.log("image naam bestaat al");
 		}
 	});
 }
@@ -292,6 +293,7 @@ let MakeTeam = (teamname, date)=>{
 let AddPlayers = (name, email, date)=>{
 	ClearConsole();
 	DaySchema.findOne({currentDate: date}, (err, day)=>{
+		console.log("new players");
 		if (err) throw err;
 		if (day){
 			let newPlayer = new PlayerSchema();
@@ -514,7 +516,6 @@ let ERUsers = [
 ];
 
 let ER_EmailData = ()=>{
-	console.log("i cant even");
 	//ClearConsole();
 	ImageSchema.findOne({}, (err, result)=>{
 		if (err) throw err;
@@ -524,6 +525,7 @@ let ER_EmailData = ()=>{
 			console.log("No Image");
 		}
 	});
+
 	GoNext(CheckDate());
 	//GoHighscore();
 }
