@@ -111,15 +111,15 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		//RemoveSchemaData(HighscoreSchema);
-		//RemoveSchemaData(DaySchema);
+		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
 		//RemoveSchemaData(ImageSchema);
-		//RemoveSchemaData(ImageLibrarySchema)
-		//DeleteLocalImage("escape0.jpg");
+		RemoveSchemaData(ImageLibrarySchema)
+		DeleteLocalImage("escape0.jpg");
 		//DeleteLocalImage("escape1.jpg");
 		//DeleteLocalImage("escape2.jpg");
-		CheckLibrary();
-		CheckDay(CheckDate());
+		//CheckLibrary();
+		//CheckDay(CheckDate());
 		//CheckImageSchema();
 	})
 	
@@ -336,10 +336,10 @@ let CheckImageRemove = ()=>{
 
 		if (result){
 			for (let i = 0; i < result.TotalDays.length; i++){
-				if (result.TotalDays[i] <= 0){
+				if (result.MaximumDays <= 0){
 					DeleteLocalImage(result.PhotoNames[i]);
 					result.TotalDays.splice(i, 1);
-					result.markModified("TotalDays");
+					//result.markModified("TotalDays");
 					SaveData(result);
 				} else if (result.TotalDays[i] <= result.MaximumDays){
 					result.TotalDays[i] -= 1;
