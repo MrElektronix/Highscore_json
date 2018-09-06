@@ -331,21 +331,26 @@ let CheckLibrary = ()=>{
 
 let CheckImageRemove = ()=>{
 	//ClearConsole();
+	console.log("rewmove");
 	ImageLibrarySchema.findOne({}, (err, result)=>{
 		if (err) throw err;
 
 		if (result){
-			for (let i = 0; i < result.TotalDays.length; i++){
+			console.log("yuhhh");
+			for (let i = 0; i < result.TotalDays[i].length; i++){
+				if (result.TotalDays[i] <= result.MaximumDays){
+					result.TotalDays[i] -= 1;
+					SaveData(result);
+					console.log(result.TotalDays[i]);
+				}
+				/*
 				if (result.MaximumDays <= 0){
 					DeleteLocalImage(result.PhotoNames[i]);
 					result.TotalDays.splice(i, 1);
 					//result.markModified("TotalDays");
 					SaveData(result);
-				} else if (result.TotalDays[i] <= result.MaximumDays){
-					result.TotalDays[i] -= 1;
-					SaveData(result);
-					console.log(result.TotalDays[i]);
 				}
+				*/
 			}
 		}
 	});
