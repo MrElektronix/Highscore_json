@@ -342,14 +342,14 @@ let CheckImageRemove = ()=>{
 					SaveData(result);
 					console.log(result.TotalDays[i]);
 				}
-				/*
+				
 				if (result.MaximumDays <= 0){
 					DeleteLocalImage(result.PhotoNames[i]);
 					result.TotalDays.splice(i, 1);
 					//result.markModified("TotalDays");
 					SaveData(result);
 				}
-				*/
+				
 			}
 		}
 	});
