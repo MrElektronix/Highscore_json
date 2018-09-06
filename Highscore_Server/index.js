@@ -322,7 +322,7 @@ let CheckLibrary = ()=>{
 			newImage.FullString = "";
 			newImage.PhotoNames = [];
 			newImage.TotalDays = [];
-			newImage.MaximumDays = 25;
+			newImage.MaximumDays = 2;
 			SaveData(newImage)
 		}
 	});
@@ -335,7 +335,10 @@ let CheckImageRemove = ()=>{
 
 		if (result){
 			for (let i = 0; i < result.TotalDays.length; i++){
-				if (result.TotalDays[i] <= result.MaximumDays){
+				if (result.TotalDays[i] <= 0){
+					DeleteLocalImage(result.PhotoNames[i]);
+					result.TotalDays.splice(i, 1);
+				} else if (result.TotalDays[i] <= result.MaximumDays){
 					result.TotalDays[i] -= 1;
 					SaveData(result);
 					console.log(result.TotalDays[i]);
