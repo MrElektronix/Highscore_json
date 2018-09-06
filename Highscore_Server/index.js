@@ -17,7 +17,7 @@ const EventSchema = require("./schemas/userdata/Event.Schema");
 const TeamSchema = require("./schemas/userdata/Team.Schema");
 const PlayerSchema = require("./schemas/userdata/Player.Schema");
 const ImageSchema = require("./schemas/userdata/Image.Schema");
-//const ImageLibrarySchema = require("./schemas/userdata/ImageLibrarySchema.Schema");
+const ImageLibrarySchema = require("./schemas/userdata/ImageLibrarySchema.Schema");
 const HighscoreSchema = require("./schemas/userdata/escaperoom/Highscore.Schema");
 
 
@@ -111,15 +111,15 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		//RemoveSchemaData(HighscoreSchema);
-		//RemoveSchemaData(DaySchema);
-		//RemoveSchemaData(ImageSchema);
-		//DeleteLocalImage("escape0.jpg");
+		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
+		RemoveSchemaData(ImageSchema);
+		DeleteLocalImage("escape0.jpg");
 		//DeleteLocalImage("escape1.jpg");
 		//DeleteLocalImage("escape2.jpg");
 		//LibrarySetup();
-		CheckDay(CheckDate());
-		CheckImageSchema();
+		//CheckDay(CheckDate());
+		//CheckImageSchema();
 	})
 	
 	socket.on("newEvent", (data)=>{
@@ -219,8 +219,6 @@ let CheckImageSchema = ()=>{
 			newImage.FullString = "";
 
 			SaveData(newImage)
-		} else{
-			console.log("image naam bestaat al");
 		}
 	});
 }
