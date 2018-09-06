@@ -123,7 +123,7 @@ io.on("connection", (socket)=>{
 	})
 	
 	socket.on("newEvent", (data)=>{
-		//CheckImageSchema();
+		CheckLibrary();
 		if (data.EventName == "Laser Gamen"){
 			MakeEvent(data.EventName, "Team Deathmatch", CheckDate());
 		} else{
@@ -336,11 +336,11 @@ let CheckImageRemove = ()=>{
 		if (result){
 			for (let i in result.TotalDays){
 				if (result.TotalDays[i] <= result.MaximumDays){
-					result.TotalDays[i] -= 1;
+					result.TotalDays[i] - 1;
 					result.markModified("TotalDays");
-					console.log(result.TotalDays[i]);
 					SaveData(result);
 				}
+				console.log("totally: " + result.TotalDays[i]);
 			}
 		}
 	});
