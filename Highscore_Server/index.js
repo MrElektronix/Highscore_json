@@ -17,7 +17,6 @@ const EventSchema = require("./schemas/userdata/Event.Schema");
 const TeamSchema = require("./schemas/userdata/Team.Schema");
 const PlayerSchema = require("./schemas/userdata/Player.Schema");
 const ImageSchema = require("./schemas/userdata/Image.Schema");
-//const ImageLibrarySchema = require("./schemas/userdata/ImageLibrary.Schema");
 const HighscoreSchema = require("./schemas/userdata/escaperoom/Highscore.Schema");
 
 
@@ -111,15 +110,14 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		//RemoveSchemaData(HighscoreSchema);
-		//RemoveSchemaData(DaySchema);
-		//RemoveSchemaData(ImageSchema);
-		//DeleteLocalImage("escape0.jpg");
-		//DeleteLocalImage("escape1.jpg");
-		//DeleteLocalImage("escape2.jpg");
-		//LibrarySetup();
-		CheckDay(CheckDate());
-		CheckImageSchema();
+		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
+		RemoveSchemaData(ImageSchema);
+		DeleteLocalImage("escape0.jpg");
+		DeleteLocalImage("escape1.jpg");
+		DeleteLocalImage("escape2.jpg");
+		//CheckDay(CheckDate());
+		//CheckImageSchema();
 	})
 	
 	socket.on("newEvent", (data)=>{
@@ -136,13 +134,6 @@ io.on("connection", (socket)=>{
 		MakeTeam(data.TeamName, CheckDate());
 	});
 	
-	/*
-	socket.on("newLGTeam", (data)=>{
-		MakeTeam(data.TeamNameOne, CheckDate());
-		MakeTeam(data.TeamNameTwo, CheckDate());
-	})
-	*/
-	
 	socket.on("newERPlayers", (data)=>{
 		AddPlayers(data.PlayerInfo_names, data.PlayerInfo_email, CheckDate());
 	});
@@ -152,36 +143,13 @@ io.on("connection", (socket)=>{
 	});
 
 	socket.on("newTime", (data)=>{
-		//CheckTeamName(data.TeamName);
 		CheckHighscore(data.GameMode, data.TeamName, data.Minutes, data.Seconds);
-		//console.log(teamNameUsed);
-		/*
-		if (!teamNameUsed) {
-			//CheckHighscore(data.TeamName, data.Minutes, data.Seconds);
-		}
-		*/
 	});
 	
 	socket.on("newPhoto", (data)=>{
 		CheckImageSchema();
 		SaveImage(data.Photo.toString());
 	});
-
-	/*
-	let CheckTeamName = (teamname)=> { // check if teamname exist in the database
-		HighscoreSchema.findOne({TeamNames: teamname}, (err, result)=>{
-			if (err) throw err;
-			if (result) {
-				socket.emit("usedteamname", {alert: "used"});
-				teamNameUsed = true;
-				
-			} else{
-				socket.emit("usedteamname", {alert: "name NOT taken"});
-				teamNameUsed = false;
-			}
-		});
-	}
-	*/
 })
 
 /*-------------------------------------------------------------------------------------*/
@@ -349,7 +317,7 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 				result.Room8_Count += 1;
 				result.Data.push({roomname: room, teamname: team, time: score});
 				result.Data.sort((a, b)=>{
-					return ('' + b.time).localeCompare(a.time);
+					return ('' + a.time).localeCompare(b.time);
 				});
 				SaveData(result);
 			} else if (room == roomNames.qurantaine && result.Qurantiane_Count < result.maxScore){
@@ -357,7 +325,7 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 				result.Qurantiane_Count += 1;
 				result.Data.push({roomname: room, teamname: team, time: score});
 				result.Data.sort((a, b)=>{
-					return ('' + b.time).localeCompare(a.time);
+					return ('' + a.time).localeCompare(b.time);
 				});
 				SaveData(result);	
 			} else if (room == roomNames.the_bunker && result.TheBunker_Count < result.maxScore){
@@ -365,7 +333,7 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 				result.TheBunker_Count += 1;
 				result.Data.push({roomname: room, teamname: team, time: score});
 				result.Data.sort((a, b)=>{
-					return ('' + b.time).localeCompare(a.time);
+					return ('' + a.time).localeCompare(b.time);
 				});
 				SaveData(result);	
 			} else if (room == roomNames.vietnam_victim && result.VietnamVictim_Count < result.maxScore){
@@ -373,7 +341,7 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 				result.VietnamVictim_Count += 1
 				result.Data.push({roomname: room, teamname: team, time: score});
 				result.Data.sort((a, b)=>{
-					return ('' + b.time).localeCompare(a.time);
+					return ('' + a.time).localeCompare(b.time);
 				});
 				SaveData(result);
 			} else { // if scoreboard is full and a new time comes along
@@ -394,33 +362,6 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 		}	
 	});
 }
-
-/*
-let ReplaceStuff = (score, team, room)=>{
-	HighscoreSchema.findOne({}, (err, result)=>{
-		if (room == roomNames.room_8 && result.Room8_Count == result.maxScore){
-			console.log("room 8");
-			for (let i in result.Data){
-				if (score > result.Data[i].time){
-					result.Data[i].time = score;
-					result.Data[i].teamname = team;
-					result.markModified("Data");
-					SaveData(result);
-					//result.Data[i].time = score;
-					//result.Data[i].teamname = team;
-					
-					result.save((err)=>{
-						if (err) throw err;
-						console.log("Saved !" + result);
-					});
-					
-				}
-			}
-		}
-	});
-}
-*/
-
 
 /*-------------------------------------------------------------------------------------*/
 /* SCHEMA FUNCTIONS */
@@ -513,7 +454,7 @@ let ERUsers = [
 ];
 
 let ER_EmailData = ()=>{
-	//ClearConsole();
+	ClearConsole();
 	ImageSchema.findOne({}, (err, result)=>{
 		if (err) throw err;
 		if (result){
@@ -524,18 +465,6 @@ let ER_EmailData = ()=>{
 	});
 
 	GoNext(CheckDate());
-	//GoHighscore();
-}
-
-let GoHighscore = ()=>{
-	HighscoreSchema.findOne({}, (err, result)=>{
-		if (err) throw err;
-		if (result){
-			ERUsers[0].time = result.Scores[result.Scores.length - 1];
-		}
-	});
-
-	
 }
 
 let GoNext = (date)=>{
