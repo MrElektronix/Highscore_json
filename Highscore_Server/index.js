@@ -16,7 +16,7 @@ const DaySchema = require("./schemas/userdata/Day.Schema");
 const EventSchema = require("./schemas/userdata/Event.Schema");
 const TeamSchema = require("./schemas/userdata/Team.Schema");
 const PlayerSchema = require("./schemas/userdata/Player.Schema");
-//const ImageSchema = require("./schemas/userdata/Image.Schema");
+const ImageSchema = require("./schemas/userdata/Image.Schema");
 const ImageLibrarySchema = require("./schemas/userdata/ImageLibrary.Schema");
 const HighscoreSchema = require("./schemas/userdata/escaperoom/Highscore.Schema");
 
@@ -111,6 +111,7 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
+<<<<<<< HEAD
 		//RemoveSchemaData(HighscoreSchema);
 		//RemoveSchemaData(DaySchema);
 		//RemoveSchemaData(ImageSchema);
@@ -120,11 +121,25 @@ io.on("connection", (socket)=>{
 		//DeleteLocalImage("escape2.jpg");
 		CheckLibrary();
 		CheckDay(CheckDate());
+=======
+		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
+		RemoveSchemaData(ImageSchema);
+		DeleteLocalImage("escape0.jpg");
+		//DeleteLocalImage("escape1.jpg");
+		//DeleteLocalImage("escape2.jpg");
+		//LibrarySetup();
+		//CheckDay(CheckDate());
+>>>>>>> parent of 5a68cef... add
 		//CheckImageSchema();
 	})
 	
 	socket.on("newEvent", (data)=>{
+<<<<<<< HEAD
 		CheckLibrary();
+=======
+		CheckImageSchema();
+>>>>>>> parent of 5a68cef... add
 		if (data.EventName == "Laser Gamen"){
 			MakeEvent(data.EventName, "Team Deathmatch", CheckDate());
 		} else{
@@ -133,7 +148,7 @@ io.on("connection", (socket)=>{
 	});
 
 	socket.on("newERTeam", (data)=>{
-		//CountUp();
+		CountUp();
 		MakeTeam(data.TeamName, CheckDate());
 	});
 	
@@ -164,7 +179,12 @@ io.on("connection", (socket)=>{
 	});
 	
 	socket.on("newPhoto", (data)=>{
+<<<<<<< HEAD
 		SaveInLibrary(data.Photo.toString());
+=======
+		CheckImageSchema();
+		SaveImage(data.Photo.toString());
+>>>>>>> parent of 5a68cef... add
 	});
 
 	/*
@@ -204,6 +224,24 @@ let MakeDay = (date)=>{
 	newDay.EventIndex = -1;
 	SaveData(newDay);
 }
+/*-------------------------------------------------------------------------------------*/
+/* MAKE PHOTO Schema */
+
+let CheckImageSchema = ()=>{
+	ImageSchema.findOne({}, (err, result)=>{
+		if (err) throw err;
+
+		if (!result){
+			let newImage = new ImageSchema();
+			newImage.Name = "escape"
+			newImage.Count = -1;
+			newImage.Format = "jpg";
+			newImage.FullString = "";
+
+			SaveData(newImage)
+		}
+	});
+}
 
 let CountUp = ()=>{
 	ImageSchema.findOne({}, (err, result)=>{
@@ -217,28 +255,13 @@ let CountUp = ()=>{
 	});
 }
 
+let SaveImage = (image)=>{
 
-let SaveInLibrary = (image)=>{
-	ImageLibrarySchema.findOne({}, (err, result)=>{
-		if (err) throw err;
-		if (result){
-			result.Count += 1;
-			result.FullString = result.Name + result.Count + "." + result.Format;
-			result.PhotoNames.push(result.FullString);
-			result.TotalDays.push(25);
-			result.markModified("PhotoNames");
-			result.markModified("TotalDays");
-
-			console.log("hiero: "+ result.FullString);
-			SaveLocalImage(result.FullString, image);
-			console.log("photo taken");
-			GetLocalImage(result.FullString);
-			SaveData(result);
-		}
-	});
-
+<<<<<<< HEAD
 	CheckImageRemove();
 	/*
+=======
+>>>>>>> parent of 5a68cef... add
 	ImageSchema.findOne({}, (err, result)=>{
 		if (err) throw err;
 		if (result){
@@ -248,7 +271,6 @@ let SaveInLibrary = (image)=>{
 			GetLocalImage(result.FullString);
 		}
 	});
-	*/	
 }
 
 /*-------------------------------------------------------------------------------------*/
@@ -309,13 +331,12 @@ let AddPlayers = (name, email, date)=>{
 
 /*-------------------------------------------------------------------------------------*/
 /* ADD IMAGE TO LIBRARY */
-
-let CheckLibrary = ()=>{
+let LibrarySetup = ()=>{
 	ClearConsole();
 	ImageLibrarySchema.findOne({}, (err, result)=>{
 		if (err) throw err;
-
 		if (!result){
+<<<<<<< HEAD
 			let newImage = new ImageLibrarySchema();
 			newImage.Name = "escape"
 			newImage.Count = -1;
@@ -354,6 +375,16 @@ let CheckImageRemove = ()=>{
 		}
 	});
 }
+=======
+			let newLibrary = new ImageLibrarySchema();
+			newLibrary.PhotoNames = [];
+			newLibrary.TotalDays = [];
+			newLibrary.MaximumDays = 25;
+			SaveData(newLibrary);
+		}
+	});
+};
+>>>>>>> parent of 5a68cef... add
 
 /*-------------------------------------------------------------------------------------*/
 /* SAVE HIGHSCORES */
@@ -549,17 +580,33 @@ let ERUsers = [
 
 let ER_EmailData = ()=>{
 	//ClearConsole();
-	ImageLibrarySchema.findOne({}, (err, result)=>{
+	ImageSchema.findOne({}, (err, result)=>{
 		if (err) throw err;
 		if (result){
+<<<<<<< HEAD
 			console.log(result.PhotoNames[result.Count + 1]);
 			ERUsers[0].fotoLink = "http://5.157.85.78:2000/images/" + result.PhotoNames[result.Count + 1];
+=======
+			ERUsers[0].fotoLink = "http://5.157.85.78:2000/images/" + result.FullString;
+>>>>>>> parent of 5a68cef... add
 		} else{
 			console.log("No Image");
 		}
 	});
 
 	GoNext(CheckDate());
+	//GoHighscore();
+}
+
+let GoHighscore = ()=>{
+	HighscoreSchema.findOne({}, (err, result)=>{
+		if (err) throw err;
+		if (result){
+			ERUsers[0].time = result.Scores[result.Scores.length - 1];
+		}
+	});
+
+	
 }
 
 let GoNext = (date)=>{
