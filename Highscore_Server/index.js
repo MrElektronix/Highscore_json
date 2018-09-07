@@ -111,15 +111,15 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		//RemoveSchemaData(HighscoreSchema);
-		//RemoveSchemaData(DaySchema);
+		RemoveSchemaData(HighscoreSchema);
+		RemoveSchemaData(DaySchema);
 		//RemoveSchemaData(ImageSchema);
-		//RemoveSchemaData(ImageLibrarySchema)
-		//DeleteLocalImage("escape0.jpg");
+		RemoveSchemaData(ImageLibrarySchema)
+		DeleteLocalImage("escape0.jpg");
 		//DeleteLocalImage("escape1.jpg");
 		//DeleteLocalImage("escape2.jpg");
-		CheckLibrary();
-		CheckDay(CheckDate());
+		//CheckLibrary();
+		//CheckDay(CheckDate());
 		//CheckImageSchema();
 	})
 	
@@ -552,9 +552,8 @@ let ER_EmailData = ()=>{
 	ImageLibrarySchema.findOne({}, (err, result)=>{
 		if (err) throw err;
 		if (result){
-			for (let i in result.PhotoNames){
-				ERUsers[0].fotoLink = "http://5.157.85.78:2000/images/" + result.PhotoNames[result.Count + 1];
-			}
+			console.log(result.PhotoNames[result.Count + 1]);
+			ERUsers[0].fotoLink = "http://5.157.85.78:2000/images/" + result.PhotoNames[result.Count + 1];
 		} else{
 			console.log("No Image");
 		}
