@@ -110,16 +110,16 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		/*
+		
 		RemoveSchemaData(HighscoreSchema);
 		RemoveSchemaData(DaySchema);
 		RemoveSchemaData(ImageSchema);
 		DeleteLocalImage("escape0.jpg");
-		DeleteLocalImage("escape1.jpg");
-		DeleteLocalImage("escape2.jpg");
-		*/
-		CheckDay(CheckDate());
-		CheckImageSchema();
+		//DeleteLocalImage("escape1.jpg");
+		//DeleteLocalImage("escape2.jpg");
+		
+		//CheckDay(CheckDate());
+		//CheckImageSchema();
 	})
 	
 	socket.on("newEvent", (data)=>{
@@ -319,7 +319,7 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 				result.Room8_Count += 1;
 				result.Data.push({roomname: room, teamname: team, time: score});
 				result.Data.sort((a, b)=>{
-					return ('' + a.time).localeCompare(b.time);
+					return ('' + b.time).localeCompare(a.time);
 				});
 				SaveData(result);
 			} else if (room == roomNames.qurantaine && result.Qurantiane_Count < result.maxScore){
@@ -327,7 +327,7 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 				result.Qurantiane_Count += 1;
 				result.Data.push({roomname: room, teamname: team, time: score});
 				result.Data.sort((a, b)=>{
-					return ('' + a.time).localeCompare(b.time);
+					return ('' + b.time).localeCompare(a.time);
 				});
 				SaveData(result);	
 			} else if (room == roomNames.the_bunker && result.TheBunker_Count < result.maxScore){
@@ -335,7 +335,7 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 				result.TheBunker_Count += 1;
 				result.Data.push({roomname: room, teamname: team, time: score});
 				result.Data.sort((a, b)=>{
-					return ('' + a.time).localeCompare(b.time);
+					return ('' + b.time).localeCompare(a.time);
 				});
 				SaveData(result);	
 			} else if (room == roomNames.vietnam_victim && result.VietnamVictim_Count < result.maxScore){
@@ -343,7 +343,7 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 				result.VietnamVictim_Count += 1
 				result.Data.push({roomname: room, teamname: team, time: score});
 				result.Data.sort((a, b)=>{
-					return ('' + a.time).localeCompare(b.time);
+					return ('' + b.time).localeCompare(a.time);
 				});
 				SaveData(result);
 			} else { // if scoreboard is full and a new time comes along
