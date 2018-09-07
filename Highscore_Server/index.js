@@ -31,7 +31,7 @@ const roomNames = {
 	room_8: "Room 8",
 	qurantaine: "Quarantaine",
 	the_bunker: "The Bunker",
-	vietnam_victim: "Vietnam v"
+	vietnam_victim: "Vietnam"
 }
 
 
@@ -110,16 +110,16 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		/*
+		
 		RemoveSchemaData(HighscoreSchema);
 		RemoveSchemaData(DaySchema);
 		RemoveSchemaData(ImageSchema);
 		DeleteLocalImage("escape0.jpg");
-		DeleteLocalImage("escape1.jpg");
-		DeleteLocalImage("escape2.jpg");
-		*/
-		CheckDay(CheckDate());
-		CheckImageSchema();
+		//DeleteLocalImage("escape1.jpg");
+		//DeleteLocalImage("escape2.jpg");
+		
+		//CheckDay(CheckDate());
+		//CheckImageSchema();
 	})
 	
 	socket.on("newEvent", (data)=>{
@@ -350,6 +350,46 @@ let CheckHighscore = (room, team, minutes, seconds)=>{
 				if (room == roomNames.room_8 && result.Room8_Count == result.maxScore){
 					ERUsers[0].time = score;
 					console.log("room 8");
+					for (let i in result.Data){
+						if (score > result.Data[i].time){
+							result.Data[i].time = score;
+							result.Data[i].teamname = team;
+							result.markModified("Data");
+							SaveData(result);
+							break;
+						}
+					}
+				}
+				if (room == roomNames.qurantaine && result.Qurantiane_Count == result.maxScore){
+					ERUsers[0].time = score;
+					console.log("qurantaine");
+					for (let i in result.Data){
+						if (score > result.Data[i].time){
+							result.Data[i].time = score;
+							result.Data[i].teamname = team;
+							result.markModified("Data");
+							SaveData(result);
+							break;
+						}
+					}
+				}
+				if (room == roomNames.the_bunker && result.TheBunker_Count == result.maxScore){
+					ERUsers[0].time = score;
+					console.log("the bunker");
+					for (let i in result.Data){
+						if (score > result.Data[i].time){
+							result.Data[i].time = score;
+							result.Data[i].teamname = team;
+							result.markModified("Data");
+							SaveData(result);
+							break;
+						}
+					}
+				}
+
+				if (room == roomNames.vietnam_victim && result.VietnamVictim_Count == result.maxScore){
+					ERUsers[0].time = score;
+					console.log("vietnam");
 					for (let i in result.Data){
 						if (score > result.Data[i].time){
 							result.Data[i].time = score;
