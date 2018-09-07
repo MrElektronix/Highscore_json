@@ -111,15 +111,15 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-		RemoveSchemaData(HighscoreSchema);
-		RemoveSchemaData(DaySchema);
+		//RemoveSchemaData(HighscoreSchema);
+		//RemoveSchemaData(DaySchema);
 		//RemoveSchemaData(ImageSchema);
-		RemoveSchemaData(ImageLibrarySchema)
-		DeleteLocalImage("escape0.jpg");
+		//RemoveSchemaData(ImageLibrarySchema)
+		//DeleteLocalImage("escape0.jpg");
 		//DeleteLocalImage("escape1.jpg");
 		//DeleteLocalImage("escape2.jpg");
-		//CheckLibrary();
-		//CheckDay(CheckDate());
+		CheckLibrary();
+		CheckDay(CheckDate());
 		//CheckImageSchema();
 	})
 	
