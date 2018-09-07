@@ -17,7 +17,7 @@ const EventSchema = require("./schemas/userdata/Event.Schema");
 const TeamSchema = require("./schemas/userdata/Team.Schema");
 const PlayerSchema = require("./schemas/userdata/Player.Schema");
 const ImageSchema = require("./schemas/userdata/Image.Schema");
-const ImageLibrarySchema = require("./schemas/userdata/ImageLibrary.Schema");
+//const ImageLibrarySchema = require("./schemas/userdata/ImageLibrary.Schema");
 const HighscoreSchema = require("./schemas/userdata/escaperoom/Highscore.Schema");
 
 
@@ -111,17 +111,6 @@ io.on("connection", (socket)=>{
     console.log("user connected");
 
     socket.on("newDay", ()=>{
-<<<<<<< HEAD
-		//RemoveSchemaData(HighscoreSchema);
-		//RemoveSchemaData(DaySchema);
-		//RemoveSchemaData(ImageSchema);
-		//RemoveSchemaData(ImageLibrarySchema)
-		//DeleteLocalImage("escape0.jpg");
-		//DeleteLocalImage("escape1.jpg");
-		//DeleteLocalImage("escape2.jpg");
-		CheckLibrary();
-		CheckDay(CheckDate());
-=======
 		RemoveSchemaData(HighscoreSchema);
 		RemoveSchemaData(DaySchema);
 		RemoveSchemaData(ImageSchema);
@@ -130,16 +119,11 @@ io.on("connection", (socket)=>{
 		//DeleteLocalImage("escape2.jpg");
 		//LibrarySetup();
 		//CheckDay(CheckDate());
->>>>>>> parent of 5a68cef... add
 		//CheckImageSchema();
 	})
 	
 	socket.on("newEvent", (data)=>{
-<<<<<<< HEAD
-		CheckLibrary();
-=======
 		CheckImageSchema();
->>>>>>> parent of 5a68cef... add
 		if (data.EventName == "Laser Gamen"){
 			MakeEvent(data.EventName, "Team Deathmatch", CheckDate());
 		} else{
@@ -179,12 +163,8 @@ io.on("connection", (socket)=>{
 	});
 	
 	socket.on("newPhoto", (data)=>{
-<<<<<<< HEAD
-		SaveInLibrary(data.Photo.toString());
-=======
 		CheckImageSchema();
 		SaveImage(data.Photo.toString());
->>>>>>> parent of 5a68cef... add
 	});
 
 	/*
@@ -257,11 +237,6 @@ let CountUp = ()=>{
 
 let SaveImage = (image)=>{
 
-<<<<<<< HEAD
-	CheckImageRemove();
-	/*
-=======
->>>>>>> parent of 5a68cef... add
 	ImageSchema.findOne({}, (err, result)=>{
 		if (err) throw err;
 		if (result){
@@ -336,46 +311,6 @@ let LibrarySetup = ()=>{
 	ImageLibrarySchema.findOne({}, (err, result)=>{
 		if (err) throw err;
 		if (!result){
-<<<<<<< HEAD
-			let newImage = new ImageLibrarySchema();
-			newImage.Name = "escape"
-			newImage.Count = -1;
-			newImage.Format = "jpg";
-			newImage.FullString = "";
-			newImage.PhotoNames = [];
-			newImage.TotalDays = [];
-			newImage.MaximumDays = 1;
-			SaveData(newImage)
-		}
-	});
-}
-
-let CheckImageRemove = ()=>{
-	//ClearConsole();
-	ImageLibrarySchema.findOne({}, (err, result)=>{
-		if (err) throw err;
-
-		if (result){
-			for (let i in result.TotalDays){
-				console.log(result.TotalDays[i]);
-				/*
-				if (result.TotalDays[i] <= result.MaximumDays){
-					//result.TotalDays[i] - 1;
-					//SaveData(result);
-				}
-				
-				if (result.MaximumDays <= 0){
-					DeleteLocalImage(result.PhotoNames[i]);
-					result.TotalDays.splice(i, 1);
-					//result.markModified("TotalDays");
-					SaveData(result);
-				}
-				*/
-			}
-		}
-	});
-}
-=======
 			let newLibrary = new ImageLibrarySchema();
 			newLibrary.PhotoNames = [];
 			newLibrary.TotalDays = [];
@@ -384,7 +319,6 @@ let CheckImageRemove = ()=>{
 		}
 	});
 };
->>>>>>> parent of 5a68cef... add
 
 /*-------------------------------------------------------------------------------------*/
 /* SAVE HIGHSCORES */
@@ -583,12 +517,7 @@ let ER_EmailData = ()=>{
 	ImageSchema.findOne({}, (err, result)=>{
 		if (err) throw err;
 		if (result){
-<<<<<<< HEAD
-			console.log(result.PhotoNames[result.Count + 1]);
-			ERUsers[0].fotoLink = "http://5.157.85.78:2000/images/" + result.PhotoNames[result.Count + 1];
-=======
 			ERUsers[0].fotoLink = "http://5.157.85.78:2000/images/" + result.FullString;
->>>>>>> parent of 5a68cef... add
 		} else{
 			console.log("No Image");
 		}
